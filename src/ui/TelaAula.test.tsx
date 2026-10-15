@@ -38,6 +38,7 @@ beforeEach(async () => {
   await bancada.repositorio.abrirSessao(SESSAO)
   // `localStorage` é compartilhado pela suíte inteira — ver `preferencias.test.ts`.
   window.localStorage.removeItem('adsum.professor.atual')
+  window.localStorage.removeItem('adsum.chamada.lista')
 })
 
 async function comCrachaDaAna() {
@@ -58,11 +59,9 @@ function montar(pendentes: Matriculado[], daTurma = [ANA, BRENO]) {
   )
 }
 
-/** O painel "Professores" nasce fechado (foco em aluno é o padrão — ver o
-    comentário na Painel dele, em `TelaAula.tsx`), e fechado ele é `inert`:
-    nada dentro dele é alcançável por `getByRole` até abrir. */
-async function abrirProfessores(usuario: ReturnType<typeof userEvent.setup>) {
-  await usuario.click(await screen.findByRole('button', { name: /^Professores/ }))
+/** Os professores ficam no fim da Lista de alunos, que nasce aberta: basta a seção aparecer. */
+async function abrirProfessores(_usuario: ReturnType<typeof userEvent.setup>) {
+  await screen.findByRole('heading', { name: 'Professores' })
 }
 
 describe('a chamada', () => {
@@ -344,6 +343,8 @@ describe('quem falta', () => {
 // não tem. Antes só existia em "Ver presenças", longe de onde o professor
 // está olhando durante a aula. Reproduz o pedido de 17/09/2026.
 describe('a lista de alunos e os créditos', () => {
+  const PROFESSOR_DA_LISTA: Matriculado = { ...pessoa('', 'Helena Duarte'), chave: 'prof-lista', papel: 'professor' }
+
   beforeEach(() => window.localStorage.removeItem('adsum.chamada.lista'))
 
   it('a lista nasce aberta de fábrica', async () => {
@@ -365,6 +366,18 @@ describe('a lista de alunos e os créditos', () => {
 
     montar([BRENO])
     expect(await screen.findByRole('button', { name: /^Lista de alunos/ })).toHaveAttribute('aria-expanded', 'true')
+  })
+
+  it('os professores ficam no fim da Lista de alunos, e não num cartão próprio', async () => {
+    const usuario = userEvent.setup()
+    montar([PROFESSOR_DA_LISTA, BRENO], [PROFESSOR_DA_LISTA, BRENO])
+    const lista = (await screen.findByRole('button', { name: /^Lista de alunos/ })).closest('section')!
+    expect(within(lista).getByRole('heading', { name: 'Professores' })).toBeInTheDocument()
+    expect(within(lista).getByRole('button', { name: 'Cadastrar' })).toBeInTheDocument()
+    expect(screen.queryByRole('button', { name: /^Professores/ })).not.toBeInTheDocument()
+    expect(screen.getByText('1 de 1 sem crachá')).toBeInTheDocument()
+    await usuario.click(within(lista).getByRole('button', { name: /^Lista de alunos/ }))
+    expect(within(lista).getByRole('button', { name: /^Lista de alunos/ })).toHaveAttribute('aria-expanded', 'false')
   })
 
   it('os créditos ficam no fim da chamada, sem abrir nada por cima dela', async () => {
@@ -1154,15 +1167,13 @@ describe('professores têm seção própria', () => {
   it('a seção de professores some enquanto um aluno está chamado, e volta quando a fila termina', async () => {
     const usuario = userEvent.setup()
     montar([PROFESSOR_PENDENTE, BRENO], [PROFESSOR_PENDENTE, BRENO])
-    // A seção inteira (não só o corpo) some e reaparece com o interruptor —
-    // ver a checagem de existência dela primeiro, antes de tentar abri-la.
-    expect(await screen.findByRole('button', { name: /^Professores/ })).toBeInTheDocument()
+    // A seção some com o interruptor e volta, dentro da Lista de alunos.
+    expect(await screen.findByRole('heading', { name: 'Professores' })).toBeInTheDocument()
 
     await usuario.click(screen.getByRole('switch', { name: 'Chamar nomes' }))
-    expect(screen.queryByRole('button', { name: /^Professores/ })).not.toBeInTheDocument()
+    expect(screen.queryByRole('heading', { name: 'Professores' })).not.toBeInTheDocument()
 
     await usuario.click(screen.getByRole('switch', { name: 'Chamar nomes' }))
-    // Painel volta a montar do zero — fechado de novo, como na primeira vez.
     await abrirProfessores(usuario)
     expect(await screen.findByRole('button', { name: 'Cadastrar' })).toBeInTheDocument()
   })
