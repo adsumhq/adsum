@@ -819,3 +819,24 @@ agora tem três camadas: o macOS diz qual processo está na frente, e o rig só
 digita se for o Chrome do teste; a página recebe o foco antes de cada
 crachá; e nenhum teste com rig sai da máquina. Com isso, o `verificar:rig`
 passou inteiro sobre o que está no ar.
+
+## 15/10/2026 — o rig passa a seguir o caminho do crachá
+
+O `pode-publicar` exigia uma aprovação com o rig para cada versão do app.
+Nas duas publicações da v2, 01/10 (`2562c5e`) e 02/10 (`509c3f1`), o autor
+dispensou essa aprovação, pelo mesmo motivo: a mudança estava fora do caminho
+do crachá, e o rig já tinha aprovado esse caminho. Regra com exceção a cada
+uso é regra errada.
+
+Decidido pelo autor: o rig é exigido quando o caminho do crachá
+(`CAMINHO_DA_LEITURA`: `LeitorTeclado`, `digitacao`, `uid`, `hash`) mudou
+desde a última aprovação com o rig. É a mesma lógica do ensaio com o dongle,
+que já se media contra a versão do ar. A comparação ignora comentários.
+Conferido nos dois sentidos: de `4811252` (último rig, 01/10) a `b6931ac`,
+nada mudou e o rig não é exigido; com uma mudança de lógica no
+`LeitorTeclado`, ele volta a ser.
+
+O que o rig prova e o teclado do Playwright não prova é o ritmo do USB e o
+foco do sistema operacional. Botão novo na tela da chamada não precisa dele:
+o Enter que fecha uma rajada é cancelado na captura, antes de qualquer botão.
+

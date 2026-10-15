@@ -5,7 +5,10 @@
 //
 //   - o código do app passou no `verificar` nas últimas 24 horas, sem teste
 //     pulado (teste e documento podem mudar depois; o app, não);
-//   - pelo menos uma vez com o rig S3, como teclado USB de verdade;
+//   - o rig S3, como teclado USB de verdade: uma aprovação deste código com
+//     ele, ou o caminho do crachá igual ao da última aprovação com o rig
+//     (desde 15/10/2026: o rig cobre do USB até a decodificação, e é esse
+//     caminho que precisa ter passado por ele);
 //   - nada do app fora de commit, e o commit já no GitHub.
 //
 // O ensaio com o dongle de verdade só é exigido quando o caminho do crachá
@@ -46,11 +49,29 @@ const noGitHub = (() => {
 const noAr = commitNoAr()
 const mudancasDoApp = git('diff', '--stat', noAr, 'HEAD', '--', 'src', 'public', 'index.html').split('\n').at(-1) || 'nenhuma'
 
+// O rig prova o caminho do crachá; se ele não mudou desde a última vez que
+// passou pelo rig, a prova continua valendo.
+const ultimaComRig = verificacoes.filter((v) => v.rig).sort((a, b) => a.quando.localeCompare(b.quando)).at(-1)
+const leituraDesdeORig = ultimaComRig ? await leituraMudou(ultimaComRig.commit) : []
+const comRig = desteApp.some((v) => v.rig)
+const rigValeAinda = !comRig && Boolean(ultimaComRig) && leituraDesdeORig.length === 0
+const nomes = (caminhos) => caminhos.map((c) => c.split('/').pop()).join(', ')
+
 const criterios = [
   [!appSujo(), 'o app está todo em commit', 'há mudança no app fora de commit: comite, e o verificar recomeça a contar'],
   [noGitHub, `o commit ${commitAtual()} já está no GitHub (${ramo})`, `o commit ${commitAtual()} não está no GitHub: envie antes (git push)`],
   [Boolean(ultima) && idade(ultima) <= 1, ultima ? `este código passou no npm run verificar em ${data(ultima)}` : '', ultima ? `a última aprovação deste código é de ${data(ultima)}: rode npm run verificar de novo agora` : 'este código nunca passou no npm run verificar'],
-  [desteApp.some((v) => v.rig), 'pelo menos uma vez com o rig S3', 'nenhuma aprovação com o rig: rode npm run verificar:rig uma vez'],
+  [
+    comRig || rigValeAinda,
+    comRig
+      ? 'este código passou pelo rig S3'
+      : ultimaComRig
+        ? `o caminho do crachá é o mesmo da última aprovação com o rig S3 (${ultimaComRig.commit}, ${data(ultimaComRig)}): o rig não é exigido`
+        : '',
+    !ultimaComRig
+      ? 'nenhuma aprovação com o rig: rode npm run verificar:rig uma vez'
+      : `o caminho do crachá mudou desde a última aprovação com o rig (${nomes(leituraDesdeORig)}): rode npm run verificar:rig`,
+  ],
 ]
 
 console.log(`\n  Pode publicar ${commitAtual()}? (o que muda no app em relação ao ar: ${mudancasDoApp})\n`)
