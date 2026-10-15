@@ -795,26 +795,34 @@ button:focus-visible {
   margin-top: 28px;
 }
 
-/* Créditos: abaixo de tudo o que se faz na tela, mas legíveis e clicáveis.
-   O chevron na cor de ação é o sinal de "abre mais", como no iOS; sem
-   pílula nem borda, para não disputar com "Começar a chamada". */
+/* Créditos: abaixo de tudo o que se faz na tela, mas legíveis de longe e
+   com cara de coisa que se toca, mesmo com a fonte do sistema pequena. Um
+   cartão no cinza dos painéis, nunca no azul: o azul é de "Começar a
+   chamada", e o crédito não disputa com ela. O chevron na cor de ação é o
+   sinal de "abre mais", como no iOS. */
 .repouso__creditos {
+  position: relative;
   margin-top: 56px;
-  padding: 10px 18px;
+  /* O mesmo respiro dos dois lados: a seta mora no da direita, e o texto
+     fica no centro do cartão, alinhado com o resto da tela. */
+  padding: 14px 44px;
   display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 2px;
-  background: none;
-  border-radius: 14px;
-  font-size: var(--t-menor);
+  justify-content: center;
+  background: var(--fundo-alt);
+  border-radius: 18px;
+  font-size: var(--t-corpo);
   line-height: 1.35;
   color: var(--tinta);
-  transition: background var(--rapido) var(--curva);
+  text-align: center;
+  transition: background var(--rapido) var(--curva), transform var(--rapido) var(--curva);
 }
 
 .repouso__creditos:hover:not(:disabled) {
-  background: var(--fundo-alt);
+  background: var(--acao-fraca);
+}
+
+.repouso__creditos:active:not(:disabled) {
+  transform: scale(0.98);
 }
 
 .repouso__creditos:disabled {
@@ -822,21 +830,49 @@ button:focus-visible {
   cursor: default;
 }
 
+.repouso__creditos-texto {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+}
+
 .repouso__creditos-rotulo {
-  font-size: var(--t-nota);
+  font-size: var(--t-menor);
   font-weight: 600;
   letter-spacing: 0.06em;
   text-transform: uppercase;
   color: var(--tinta-fraca);
 }
 
+.repouso__creditos-nomes {
+  font-weight: 600;
+}
+
 .repouso__creditos-e {
+  font-weight: 400;
   color: var(--tinta-fraca);
 }
 
 .repouso__creditos-seta {
+  position: absolute;
+  right: 20px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: var(--t-titulo);
   color: var(--acao);
   font-weight: 600;
+}
+
+/* Na chamada, os créditos vêm por último, depois de "Encerrar a chamada",
+   centrados e com menos espaço acima que no repouso. */
+.coleta__creditos {
+  display: flex;
+  justify-content: center;
+}
+
+.coleta__creditos .repouso__creditos {
+  margin-top: 40px;
 }
 
 /* "Sobre o Adsum": a marca no alto e uma linha por pessoa, no desenho dos
@@ -3001,8 +3037,9 @@ button:focus-visible {
 
 /* ── O favorito do SIGAA, em Ajustes (`ui/ajustes/CartaoDoFavorito.tsx`) ── */
 /* Um botão de verdade para arrastar, e acima dele o gesto desenhado: uma
-   barra de favoritos e o botão subindo até ela. Sem movimento para quem
-   pediu menos movimento: o desenho fica parado, já no lugar. */
+   barra de favoritos e uma cópia do botão saindo dele até a vaga. Sem
+   movimento para quem pediu menos movimento: a cópia fica parada, já na
+   vaga. */
 .favorito {
   display: flex;
   flex-direction: column;
@@ -3019,15 +3056,19 @@ button:focus-visible {
 
 .favorito__palco {
   position: relative;
-  width: 240px;
-  height: 72px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 44px;
+  padding-bottom: 4px;
 }
 
 .favorito__barra {
   display: flex;
   gap: 8px;
   align-items: center;
-  height: 28px;
+  width: 240px;
+  height: 32px;
   padding: 0 10px;
   border-radius: 8px;
   background: var(--fundo-alt);
@@ -3041,48 +3082,80 @@ button:focus-visible {
   background: var(--separador);
 }
 
+/* A vaga tem o tamanho de um favorito na barra: é nele que o fantasma pousa. */
 .favorito__barra .favorito__destino {
-  width: 56px;
+  width: 60px;
+  height: 20px;
   background: transparent;
   box-shadow: inset 0 0 0 1.5px var(--acao);
   opacity: 0.5;
 }
 
+/* O fantasma nasce em cima do botão, igual a ele, e encolhe até a vaga.
+   As posições vêm medidas (`--x0`… em `CartaoDoFavorito.tsx`); antes de
+   medir, não aparece. */
 .favorito__fantasma {
   position: absolute;
-  left: 50%;
-  bottom: 0;
-  padding: 3px 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
   border-radius: 999px;
   background: var(--acao);
   color: #fff;
-  font-size: var(--t-nota);
   font-weight: 600;
-  transform: translateX(-50%);
-  animation: favorito-arrastar 3.2s ease-in-out infinite;
+  white-space: nowrap;
+  pointer-events: none;
+  visibility: hidden;
+}
+
+.favorito__fantasma--medido {
+  visibility: visible;
+  animation: favorito-arrastar 3.6s ease-in-out infinite;
 }
 
 @keyframes favorito-arrastar {
   0%,
-  15% {
-    transform: translate(-50%, 0);
+  18% {
+    left: var(--x0);
+    top: var(--y0);
+    width: var(--w0);
+    height: var(--h0);
+    font-size: var(--f0);
+    box-shadow: none;
     opacity: 1;
   }
-  55%,
-  80% {
-    transform: translate(22px, -46px) scale(0.9);
+  28% {
+    box-shadow: 0 8px 20px rgb(0 0 0 / 0.18);
+  }
+  60%,
+  84% {
+    left: var(--x1);
+    top: var(--y1);
+    width: var(--w1);
+    height: var(--h1);
+    font-size: 11px;
+    box-shadow: none;
     opacity: 1;
   }
   100% {
-    transform: translate(22px, -46px) scale(0.9);
+    left: var(--x1);
+    top: var(--y1);
+    width: var(--w1);
+    height: var(--h1);
+    font-size: 11px;
     opacity: 0;
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .favorito__fantasma {
+  .favorito__fantasma--medido {
     animation: none;
-    transform: translate(22px, -46px) scale(0.9);
+    left: var(--x1);
+    top: var(--y1);
+    width: var(--w1);
+    height: var(--h1);
+    font-size: 11px;
   }
 }
 

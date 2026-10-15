@@ -44,8 +44,10 @@ test.afterAll(desligarDongle)
 /** Crachás inventados, um por pessoa da jornada. */
 const UID = { a: 'a1000001', b: 'a1000002', d: 'a1000004', e: 'a1000005', f: 'a1000006', x: 'a1000009', professora: 'b2000001' }
 
-/** A linha do aluno na lista da chamada. A tela guarda o nome com só a inicial maiúscula. */
+/** A linha do aluno na lista da chamada, que começa recolhida. A tela guarda o nome com só a inicial maiúscula. */
 async function linha(page: Page, a: AlunoDaBancada) {
+  const lista = page.getByRole('button', { name: /^Lista de alunos/ })
+  if ((await lista.getAttribute('aria-expanded')) === 'false') await lista.click()
   const campo = page.getByLabel(new RegExp(`^nome de ${a.nomeCompleto}$`, 'i'))
   await expect(campo).toBeVisible()
   return page.locator('tr', { has: campo })
