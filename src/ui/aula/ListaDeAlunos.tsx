@@ -1,12 +1,13 @@
 // A turma inteira durante a chamada: apelido editável, papel antes do crachá,
 // e as correções que não precisam sair da aula (Presente/Não presente,
-// Remover crachá). Começa recolhida, como Professores: na chamada a atenção é
-// do crachá e do nome chamado, e a lista é para corrigir. Não mexe em estado:
-// só chama quem manda.
+// Remover crachá). Recolhe como Professores, e abre como o professor a deixou
+// por último neste computador; aberta de fábrica. Não mexe em estado da
+// chamada: só chama quem manda.
 
 import { chaveDeIdentidade } from '../../nucleo/faltas.ts'
 import type { Matriculado, Papel } from '../../nucleo/tipos.ts'
 import { Painel, Selo } from '../componentes/Painel.tsx'
+import { definirListaDaChamadaAberta, listaDaChamadaAberta } from '../../ambiente/preferencias.ts'
 
 export function ListaDeAlunos({
   alunos,
@@ -40,7 +41,13 @@ export function ListaDeAlunos({
   aoRemover: (p: Matriculado) => void
 }) {
   return (
-    <Painel titulo="Lista de alunos" recolhivel legenda={`${chavesPendentes.size} de ${alunos.length} sem crachá`}>
+    <Painel
+      titulo="Lista de alunos"
+      recolhivel
+      abertoDeInicio={listaDaChamadaAberta()}
+      aoRecolher={definirListaDaChamadaAberta}
+      legenda={`${chavesPendentes.size} de ${alunos.length} sem crachá`}
+    >
       <table className="tabela">
         <thead>
           <tr>
