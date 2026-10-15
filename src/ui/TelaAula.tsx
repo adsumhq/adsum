@@ -50,7 +50,6 @@ export function TelaAula({
   aoRegistrar,
   aoEncerrar,
   retidas,
-  aoAbrirSobre,
 }: {
   sessao: Sessao
   /** Quem está na turma e ainda não tem crachá: a fila de "Chamar nomes". */
@@ -67,8 +66,6 @@ export function TelaAula({
   aoEncerrar?: (presentes: number, duracaoMs: number, intervalos?: EstatisticaDeIntervalos) => void
   /** Leituras que chegaram enquanto a chamada abria. Ver `antessala.ts`. */
   retidas?: () => Leitura[]
-  /** Os créditos, abaixo da lista, abrem "Sobre o Adsum". */
-  aoAbrirSobre?: () => void
 }) {
   const { leitor, repositorio, config } = useAdsum()
   const ensaio = modoDev()
@@ -620,8 +617,10 @@ export function TelaAula({
         )}
       </footer>
 
+      {/* Só o crédito, sem abrir nada: uma folha por cima da chamada é um caso
+          a mais no caminho do crachá, e não vale a complexidade. */}
       <div className="coleta__creditos">
-        <Creditos aoAbrir={aoAbrirSobre} />
+        <Creditos />
       </div>
     </section>
   )

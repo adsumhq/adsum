@@ -22,6 +22,7 @@ const CHAVES = {
   modoDeGrade: 'adsum.grade.modo',
   auditoriaDeUids: 'adsum.auditoria.uids',
   turmasDoSigaa: 'adsum.sigaa.turmas',
+  listaDaChamada: 'adsum.chamada.lista',
 } as const
 
 function ler(chave: string): string | undefined {
@@ -246,6 +247,19 @@ export function modoDeGrade(): ModoDeGrade {
 
 export function definirModoDeGrade(modo: ModoDeGrade): void {
   gravar(CHAVES.modoDeGrade, modo)
+}
+
+/**
+ * A lista de alunos da chamada aberta ou fechada, como o professor a deixou
+ * por último. Aberta de fábrica: é como era antes de ela poder fechar, e
+ * quem nunca mexeu não encontra a tela diferente.
+ */
+export function listaDaChamadaAberta(): boolean {
+  return ler(CHAVES.listaDaChamada) !== 'fechada'
+}
+
+export function definirListaDaChamadaAberta(aberta: boolean): void {
+  gravar(CHAVES.listaDaChamada, aberta ? undefined : 'fechada')
 }
 
 /** Apaga as preferências desta máquina, junto com o recomeçar do zero: "meio zerado" não se explica. */

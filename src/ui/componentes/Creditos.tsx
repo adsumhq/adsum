@@ -1,7 +1,7 @@
-// "Criado por": no repouso, na chamada (abaixo da lista), e nas telas de quem
-// está conhecendo o Adsum (escolher a pasta, o conselho do navegador, a
-// primeira turma). Abre "Sobre o Adsum"; sem `aoAbrir` (vitrine), aparece sem
-// abrir.
+// "Criado por": no repouso, e nas telas de quem está conhecendo o Adsum
+// (escolher a pasta, o conselho do navegador, a primeira turma), onde abre
+// "Sobre o Adsum". Sem `aoAbrir` (no fim da chamada, e na vitrine), aparece
+// sem abrir.
 
 export function Creditos({ aoAbrir }: { aoAbrir?: () => void }) {
   return (

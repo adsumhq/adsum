@@ -344,24 +344,32 @@ describe('quem falta', () => {
 // não tem. Antes só existia em "Ver presenças", longe de onde o professor
 // está olhando durante a aula. Reproduz o pedido de 17/09/2026.
 describe('a lista de alunos e os créditos', () => {
-  it('a lista nasce recolhida, como Professores, e abre com um toque', async () => {
-    const usuario = userEvent.setup()
+  beforeEach(() => window.localStorage.removeItem('adsum.chamada.lista'))
+
+  it('a lista nasce aberta de fábrica', async () => {
     montar([BRENO])
+    expect(await screen.findByRole('button', { name: /^Lista de alunos/ })).toHaveAttribute('aria-expanded', 'true')
+  })
+
+  it('volta como o professor a deixou por último neste computador', async () => {
+    const usuario = userEvent.setup()
+    const { unmount } = montar([BRENO])
+    await usuario.click(await screen.findByRole('button', { name: /^Lista de alunos/ }))
+    unmount()
+
+    const segunda = montar([BRENO])
     const gatilho = await screen.findByRole('button', { name: /^Lista de alunos/ })
     expect(gatilho).toHaveAttribute('aria-expanded', 'false')
     await usuario.click(gatilho)
-    expect(gatilho).toHaveAttribute('aria-expanded', 'true')
+    segunda.unmount()
+
+    montar([BRENO])
+    expect(await screen.findByRole('button', { name: /^Lista de alunos/ })).toHaveAttribute('aria-expanded', 'true')
   })
 
-  it('os créditos ficam no fim da chamada e abrem "Sobre o Adsum"', async () => {
-    const usuario = userEvent.setup()
-    const aoAbrirSobre = vi.fn()
-    renderizarCom(
-      bancada,
-      <TelaAula sessao={SESSAO} pendentes={[BRENO]} daTurma={[ANA, BRENO]} aoMudarBase={() => {}} aoAbrirSobre={aoAbrirSobre} />,
-    )
-    await usuario.click(await screen.findByRole('button', { name: /Criado por/ }))
-    expect(aoAbrirSobre).toHaveBeenCalledTimes(1)
+  it('os créditos ficam no fim da chamada, sem abrir nada por cima dela', async () => {
+    montar([BRENO])
+    expect(await screen.findByRole('button', { name: /Criado por/ })).toBeDisabled()
   })
 })
 

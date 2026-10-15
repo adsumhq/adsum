@@ -409,7 +409,6 @@ export function Fluxo() {
           aoMudarBase={() => semDono('base mudou', () => mudou(sessao.turma))}
           aoRegistrar={gravarLinha}
           retidas={entregarRetidas}
-          aoAbrirSobre={() => setFolha('sobre')}
           aoEncerrar={(presentes, duracaoMs, intervalos) => {
             // Sem esta marca o relógio reabriria a aula que acabou de fechar.
             marcarEncerrada(sessao.turma, new Date().toISOString())

@@ -24,6 +24,7 @@ export function Painel({
   recolhivel = false,
   abertoDeInicio = false,
   aoAbrir,
+  aoRecolher,
   children,
 }: {
   titulo: string
@@ -40,6 +41,8 @@ export function Painel({
    * mora na própria folha de Presenças.
    */
   aoAbrir?: () => void
+  /** Avisa quando o professor abre ou fecha, para quem quer lembrar a escolha. */
+  aoRecolher?: (aberto: boolean) => void
   children?: ReactNode
 }) {
   const [aberto, setAberto] = useState(abertoDeInicio)
@@ -83,7 +86,10 @@ export function Painel({
             type="button"
             className="painel__gatilho"
             aria-expanded={aberto}
-            onClick={() => setAberto((a) => !a)}
+            onClick={() => {
+              setAberto(!aberto)
+              aoRecolher?.(!aberto)
+            }}
           >
             {cabecalho}
           </button>
