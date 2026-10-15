@@ -1,10 +1,12 @@
-// Professores têm painel próprio, acima dos alunos: o cadastro deles é sempre
-// um clique em "Cadastrar", nunca a fila de "Chamar nomes".
+// Os professores, no fim da Lista de alunos: uma seção simples, não um cartão
+// próprio, porque se usa uma vez por turma e ocupava a tela da chamada. O
+// cadastro deles continua um clique em "Cadastrar", nunca a fila de "Chamar
+// nomes".
 
 import type { Matriculado, Vinculo } from '../../nucleo/tipos.ts'
-import { Painel, Selo } from '../componentes/Painel.tsx'
+import { Selo } from '../componentes/Painel.tsx'
 
-export function PainelDeProfessores({
+export function SecaoDeProfessores({
   professores,
   vinculoDe,
   efetivo,
@@ -26,10 +28,9 @@ export function PainelDeProfessores({
   aoRemover: (p: Matriculado) => void
   aoMarcarComoEu: (uidHash: string | undefined) => void
 }) {
-  const vinculados = professores.filter((p) => vinculoDe(p)).length
-
   return (
-    <Painel titulo="Professores" recolhivel legenda={`${vinculados} de ${professores.length} com crachá`}>
+    <section className="lista__professores" aria-labelledby="lista-professores">
+      <h3 id="lista-professores">Professores</h3>
       <table className="tabela">
         <thead>
           <tr>
@@ -99,6 +100,6 @@ export function PainelDeProfessores({
           })}
         </tbody>
       </table>
-    </Painel>
+    </section>
   )
 }

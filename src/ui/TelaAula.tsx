@@ -34,7 +34,7 @@ import { CartaoDoChamado } from './aula/CartaoDoChamado.tsx'
 import { ContadorDaChamada } from './aula/ContadorDaChamada.tsx'
 import { ListaDeAlunos } from './aula/ListaDeAlunos.tsx'
 import { Creditos } from './componentes/Creditos.tsx'
-import { PainelDeProfessores } from './aula/PainelDeProfessores.tsx'
+import { SecaoDeProfessores } from './aula/SecaoDeProfessores.tsx'
 import { Busca } from './componentes/Busca.tsx'
 import { useFocoDaJanela } from './hooks/useFocoDaJanela.ts'
 
@@ -556,22 +556,7 @@ export function TelaAula({
         />
       )}
 
-      {/* Some enquanto alguém está chamado: a atenção é da fila. */}
-      {professoresDaTurma.length > 0 && !chamadoAluno && (
-        <PainelDeProfessores
-          professores={professoresDaTurma}
-          vinculoDe={vinculoDe}
-          efetivo={efetivo}
-          chamadoChave={chamadoChave}
-          professorAtual={professorAtualHash}
-          aoChamar={setChamadoChave}
-          aoEditarNome={(p, nome) => editarAntesDoCracha(p, { nome })}
-          aoRemover={removerCracha}
-          aoMarcarComoEu={marcarComoEu}
-        />
-      )}
-
-      {alunosDaTurma.length > 0 && (
+      {(alunosDaTurma.length > 0 || professoresDaTurma.length > 0) && (
         <ListaDeAlunos
           alunos={alunosDaTurma}
           chavesPendentes={chavesPendentes}
@@ -588,6 +573,23 @@ export function TelaAula({
             semDono(presente ? 'marcar presença' : 'tirar presença', () => alterarPresenca(p, presente))
           }
           aoRemover={removerCracha}
+          professores={
+            // Some enquanto alguém está chamado: a atenção é da fila.
+            professoresDaTurma.length > 0 &&
+            !chamadoAluno && (
+              <SecaoDeProfessores
+                professores={professoresDaTurma}
+                vinculoDe={vinculoDe}
+                efetivo={efetivo}
+                chamadoChave={chamadoChave}
+                professorAtual={professorAtualHash}
+                aoChamar={setChamadoChave}
+                aoEditarNome={(p, nome) => editarAntesDoCracha(p, { nome })}
+                aoRemover={removerCracha}
+                aoMarcarComoEu={marcarComoEu}
+              />
+            )
+          }
         />
       )}
 

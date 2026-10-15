@@ -492,10 +492,30 @@ button:focus-visible {
   font-size: var(--t-menor);
 }
 
+/* Os professores no fim da Lista de alunos: um subtítulo e a mesma tabela,
+   separados dos alunos por espaço e uma linha fina, sem cartão próprio. */
+.lista__professores {
+  margin-top: 28px;
+  padding-top: 20px;
+  border-top: 1px solid var(--separador);
+}
+
+.lista__professores h3 {
+  margin: 0 0 8px;
+  font-size: var(--t-corpo);
+  font-weight: 600;
+}
+
+.painel__corpo-interno > .lista__professores:first-child {
+  margin-top: 0;
+  padding-top: 0;
+  border-top: 0;
+}
+
 /* Onde toda linha da tabela virou input — sem texto puro pra alinhar com —
    o motivo do padding-esquerdo zero acima deixa de existir. Sem isto, o
    texto nascia colado na borda arredondada do campo. Só a lista de alunos
-   de `TelaAula` usa esta classe hoje: o painel de Professores ainda mistura
+   de `TelaAula` usa esta classe hoje: a seção dos professores ainda mistura
    texto puro (vinculado) com input (pendente), e ali o zero continua certo. */
 .entrada--recuada {
   padding-left: 10px;

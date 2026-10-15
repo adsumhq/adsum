@@ -159,11 +159,12 @@ test('do zero ao SIGAA: cadastro, três aulas com cada tipo de presença, e o la
     await page.getByRole('button', { name: 'Continuar' }).click()
     await page.getByRole('button', { name: 'Depois' }).click()
     await abrirChamada(page, '2026.2 - CIN9999 - TURMA B')
-    // O crachá da professora, cadastrado nesta turma, pelo painel de professores.
-    await page.getByRole('heading', { name: /Professores/ }).click()
-    await page.getByRole('button', { name: 'Cadastrar', exact: true }).click()
+    // O crachá da professora, cadastrado nesta turma, na seção dos professores
+    // (no fim da Lista de alunos, que começa aberta).
+    const professores = page.locator('section.lista__professores')
+    await professores.getByRole('button', { name: 'Cadastrar', exact: true }).click()
     await encostar(page, UID.professora)
-    await expect(page.getByText('1 de 1 com crachá')).toBeVisible()
+    await expect(professores.getByText('Vinculado')).toBeVisible()
     await crachaNovoPelaBusca(page, UID.x, { matricula: '20269990001', nomeCompleto: 'DAVI SOUZA COSTA' })
     await encerrar(page, 1)
   })
