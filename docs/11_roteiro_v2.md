@@ -593,6 +593,21 @@ genérico, sem o ícone do Adsum. O Chrome não busca ícone para favorito
 5 s, e caía sob a suíte inteira. Medido antes da mudança (4,77 s): não era
 dela. O arquivo ganhou limite próprio de 30 s.
 
+### 31 · SIGAA de demonstração
+
+Pedido do autor (15/10): mostrar a um professor, no Chrome e à mão, que o
+lançamento funciona, sem tocar no SIGAA de verdade. `npm run demonstracao`
+abre o Chrome num perfil próprio (`../Adsum_demonstracao_chrome`), com
+`sigaa.ufpe.br` e `willianrupert.github.io/adsum` atendidos na máquina, como
+na jornada: a planilha anonimizada da bancada com os scripts do SIGAA, uma
+página de participantes com os mesmos alunos inventados (para colar a turma
+com ⌘A), e o build de um commit. O favorito é o publicado, arrastado de
+Ajustes para a barra; a planilha vem sem o botão de ensaio da bancada. No
+terminal: `c 1 2 3` encosta crachás inventados, `dia AAAA-MM-DD` muda o
+relógio do Chrome para simular outras aulas, `sigaa` desfaz os Gravar.
+Conferido: o texto copiado da página de participantes é lido sem problema
+nenhum, e os comandos rodam.
+
 ## Fora das fases
 
 - A rota por dia ("Lançar Frequência"): fora por decisão do autor (29/09).
