@@ -1,6 +1,8 @@
 // A turma inteira durante a chamada: apelido editável, papel antes do crachá,
 // e as correções que não precisam sair da aula (Presente/Não presente,
-// Remover crachá). Não mexe em estado: só chama quem manda.
+// Remover crachá). Começa recolhida, como Professores: na chamada a atenção é
+// do crachá e do nome chamado, e a lista é para corrigir. Não mexe em estado:
+// só chama quem manda.
 
 import { chaveDeIdentidade } from '../../nucleo/faltas.ts'
 import type { Matriculado, Papel } from '../../nucleo/tipos.ts'
@@ -38,7 +40,7 @@ export function ListaDeAlunos({
   aoRemover: (p: Matriculado) => void
 }) {
   return (
-    <Painel titulo="Lista de alunos" legenda={`${chavesPendentes.size} de ${alunos.length} sem crachá`}>
+    <Painel titulo="Lista de alunos" recolhivel legenda={`${chavesPendentes.size} de ${alunos.length} sem crachá`}>
       <table className="tabela">
         <thead>
           <tr>

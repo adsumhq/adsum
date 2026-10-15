@@ -33,6 +33,7 @@ import { gravarDecisao, gravarPresencaManual, vincularCracha } from './aula/acoe
 import { CartaoDoChamado } from './aula/CartaoDoChamado.tsx'
 import { ContadorDaChamada } from './aula/ContadorDaChamada.tsx'
 import { ListaDeAlunos } from './aula/ListaDeAlunos.tsx'
+import { Creditos } from './componentes/Creditos.tsx'
 import { PainelDeProfessores } from './aula/PainelDeProfessores.tsx'
 import { Busca } from './componentes/Busca.tsx'
 import { useFocoDaJanela } from './hooks/useFocoDaJanela.ts'
@@ -49,6 +50,7 @@ export function TelaAula({
   aoRegistrar,
   aoEncerrar,
   retidas,
+  aoAbrirSobre,
 }: {
   sessao: Sessao
   /** Quem está na turma e ainda não tem crachá: a fila de "Chamar nomes". */
@@ -65,6 +67,8 @@ export function TelaAula({
   aoEncerrar?: (presentes: number, duracaoMs: number, intervalos?: EstatisticaDeIntervalos) => void
   /** Leituras que chegaram enquanto a chamada abria. Ver `antessala.ts`. */
   retidas?: () => Leitura[]
+  /** Os créditos, abaixo da lista, abrem "Sobre o Adsum". */
+  aoAbrirSobre?: () => void
 }) {
   const { leitor, repositorio, config } = useAdsum()
   const ensaio = modoDev()
@@ -615,6 +619,10 @@ export function TelaAula({
           </button>
         )}
       </footer>
+
+      <div className="coleta__creditos">
+        <Creditos aoAbrir={aoAbrirSobre} />
+      </div>
     </section>
   )
 }

@@ -343,6 +343,28 @@ describe('quem falta', () => {
 // Presente/Não presente na própria lista — pra quem tem crachá e pra quem
 // não tem. Antes só existia em "Ver presenças", longe de onde o professor
 // está olhando durante a aula. Reproduz o pedido de 17/09/2026.
+describe('a lista de alunos e os créditos', () => {
+  it('a lista nasce recolhida, como Professores, e abre com um toque', async () => {
+    const usuario = userEvent.setup()
+    montar([BRENO])
+    const gatilho = await screen.findByRole('button', { name: /^Lista de alunos/ })
+    expect(gatilho).toHaveAttribute('aria-expanded', 'false')
+    await usuario.click(gatilho)
+    expect(gatilho).toHaveAttribute('aria-expanded', 'true')
+  })
+
+  it('os créditos ficam no fim da chamada e abrem "Sobre o Adsum"', async () => {
+    const usuario = userEvent.setup()
+    const aoAbrirSobre = vi.fn()
+    renderizarCom(
+      bancada,
+      <TelaAula sessao={SESSAO} pendentes={[BRENO]} daTurma={[ANA, BRENO]} aoMudarBase={() => {}} aoAbrirSobre={aoAbrirSobre} />,
+    )
+    await usuario.click(await screen.findByRole('button', { name: /Criado por/ }))
+    expect(aoAbrirSobre).toHaveBeenCalledTimes(1)
+  })
+})
+
 describe('presença manual na lista de alunos', () => {
   it('marcar presente quem não tem crachá grava evento manual, sem exigir vínculo', async () => {
     const usuario = userEvent.setup()
