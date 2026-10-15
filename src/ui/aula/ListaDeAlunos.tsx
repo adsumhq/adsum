@@ -1,8 +1,8 @@
 // A turma inteira durante a chamada: apelido editável, papel antes do crachá,
 // e as correções que não precisam sair da aula (Presente/Não presente,
-// Remover crachá), e no fim os professores (`professores`). Recolhe, e abre
-// como o professor a deixou por último neste computador; aberta de fábrica.
-// Não mexe em estado da chamada: só chama quem manda.
+// Remover crachá), e no fim os professores (`professores`) e o Encerrar.
+// Recolhe, e abre como o professor a deixou por último neste computador;
+// aberta de fábrica. Não mexe em estado da chamada: só chama quem manda.
 
 import type { ReactNode } from 'react'
 import { chaveDeIdentidade } from '../../nucleo/faltas.ts'
@@ -25,6 +25,7 @@ export function ListaDeAlunos({
   aoAlterarPresenca,
   aoRemover,
   professores,
+  rodape,
 }: {
   alunos: Matriculado[]
   /** Quem ainda não tem crachá. */
@@ -43,6 +44,8 @@ export function ListaDeAlunos({
   aoRemover: (p: Matriculado) => void
   /** A seção dos professores, no fim do cartão. */
   professores?: ReactNode
+  /** O que fecha a lista, centrado: "Encerrar a chamada", para quem rolou até o fim. */
+  rodape?: ReactNode
 }) {
   return (
     <Painel
@@ -125,6 +128,7 @@ export function ListaDeAlunos({
         </table>
       )}
       {professores}
+      {rodape && <div className="lista__rodape">{rodape}</div>}
     </Painel>
   )
 }
