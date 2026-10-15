@@ -380,6 +380,14 @@ describe('a lista de alunos e os créditos', () => {
     expect(within(lista).getByRole('button', { name: /^Lista de alunos/ })).toHaveAttribute('aria-expanded', 'false')
   })
 
+  it('"Encerrar a chamada" fica no fim da lista, e o "Encerrar" do topo continua', async () => {
+    montar([BRENO])
+    const lista = (await screen.findByRole('button', { name: /^Lista de alunos/ })).closest('section')!
+    expect(within(lista).getByRole('button', { name: 'Encerrar a chamada' })).toBeInTheDocument()
+    expect(screen.getAllByRole('button', { name: 'Encerrar a chamada' })).toHaveLength(1)
+    expect(screen.getByRole('button', { name: 'Encerrar' })).toBeInTheDocument()
+  })
+
   it('os créditos ficam no fim da chamada, sem abrir nada por cima dela', async () => {
     montar([BRENO])
     expect(await screen.findByRole('button', { name: /Criado por/ })).toBeDisabled()

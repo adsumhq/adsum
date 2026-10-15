@@ -513,6 +513,13 @@ export function TelaAula({
     if (vinculo) semDono('renomear vínculo', () => repositorio.gravarVinculo({ ...vinculo, nome: efetivo(p).nome }))
   }
 
+  const temLista = alunosDaTurma.length > 0 || professoresDaTurma.length > 0
+  const encerrarNoFim = (
+    <button className="botao--acento coleta__encerrar" onClick={() => aoEncerrarAgora()}>
+      Encerrar a chamada
+    </button>
+  )
+
   return (
     <section className="coleta">
       <header className="coleta__topo">
@@ -556,7 +563,7 @@ export function TelaAula({
         />
       )}
 
-      {(alunosDaTurma.length > 0 || professoresDaTurma.length > 0) && (
+      {temLista && (
         <ListaDeAlunos
           alunos={alunosDaTurma}
           chavesPendentes={chavesPendentes}
@@ -573,6 +580,7 @@ export function TelaAula({
             semDono(presente ? 'marcar presença' : 'tirar presença', () => alterarPresenca(p, presente))
           }
           aoRemover={removerCracha}
+          rodape={encerrarNoFim}
           professores={
             // Some enquanto alguém está chamado: a atenção é da fila.
             professoresDaTurma.length > 0 &&
@@ -603,21 +611,20 @@ export function TelaAula({
         />
       )}
 
-      {/* O recado, quando há, fala mais alto que o botão: é resposta a um toque. */}
-      <footer className="coleta__rodape">
-        {recado ? (
-          <span className="coleta__recado">{recado}</span>
-        ) : (
-          <button className="botao--acento coleta__encerrar" onClick={() => aoEncerrarAgora()}>
-            Encerrar a chamada
-          </button>
-        )}
-        {simular && (
-          <button className="coleta__simular" onClick={simular}>
-            Simular
-          </button>
-        )}
-      </footer>
+      {/* O recado é resposta a um toque, e fica onde sempre apareceu. O
+          "Encerrar a chamada" daqui foi para o fim da lista: com ela
+          recolhível, o do topo basta para não rolar a tela. Sem lista (turma
+          sem ninguém), ele fica aqui. */}
+      {(recado || simular || !temLista) && (
+        <footer className="coleta__rodape">
+          {recado ? <span className="coleta__recado">{recado}</span> : !temLista && encerrarNoFim}
+          {simular && (
+            <button className="coleta__simular" onClick={simular}>
+              Simular
+            </button>
+          )}
+        </footer>
+      )}
 
       {/* Só o crédito, sem abrir nada: uma folha por cima da chamada é um caso
           a mais no caminho do crachá, e não vale a complexidade. */}
