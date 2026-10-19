@@ -40,7 +40,7 @@ export function ResumoDaBase({
           apoio={sinteticos > 0 ? `${professores} de professor · ${sinteticos} sem crachá` : `${professores} de professor`}
         />
         <Cartao icone="☰" tom={aulas > 0 ? 'ok' : 'neutro'} titulo={plural(aulas, 'aula', 'aulas')} apoio="na grade" />
-        <Cartao icone="↓" tom="neutro" titulo={plural(registros, 'registro', 'registros')} apoio="nunca reescritos" />
+        <Cartao icone="↓" tom="neutro" titulo={plural(registros, 'registro', 'registros')} apoio="de todas as chamadas" />
       </div>
 
       {turmas.length > 0 && (

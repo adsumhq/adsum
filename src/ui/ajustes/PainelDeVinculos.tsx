@@ -141,7 +141,7 @@ export function PainelDeVinculos({
                   </td>
                   <td>
                     {/* O hash sintético parece o de um crachá lido; mostrá-lo diria que alguém encostou. */}
-                    {v.sintetico ? <Selo tom="alerta">sem crachá — pelo botão</Selo> : <code>{v.uidHash}</code>}
+                    {v.sintetico ? <Selo tom="alerta">Marcado à mão</Selo> : <code>{v.uidHash}</code>}
                   </td>
                   <td>
                     <button

@@ -20,7 +20,7 @@ export function PainelChamadasRecentes() {
   return (
     <Painel
       titulo="Chamadas recentes"
-      legenda="Duração e intervalo entre crachás — o dado para calibrar o limite contra dois crachás na mesma mão."
+      legenda="Quanto durou cada chamada e o tempo entre crachás."
     >
       {historico.length === 0 ? (
         <p className="vazio">Nenhuma chamada encerrada ainda neste computador.</p>

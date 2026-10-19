@@ -93,8 +93,8 @@ export function TelaColarTurma({
       tom: docentes === 0 || ambiguos > 0 ? 'alerta' : 'ok',
       texto:
         `${preparados.length} pessoas, ${docentes === 1 ? '1 professor' : `${docentes} professores`}.` +
-        (docentes === 0 ? ' Ninguém marcado como professor — corrija na chamada, antes de encostar o primeiro crachá.' : '') +
-        (ambiguos > 0 ? ` ${ambiguos} com nomes iguais — edite antes de chamar.` : ''),
+        (docentes === 0 ? ' Ninguém está marcado como professor. Marque na chamada antes do primeiro crachá.' : '') +
+        (ambiguos > 0 ? ` ${ambiguos === 1 ? '1 aluno tem' : `${ambiguos} alunos têm`} o mesmo nome de outro. Mude antes de chamar.` : ''),
     })
   }, [colado, turma, repositorio, aoMudarBase])
 

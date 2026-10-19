@@ -83,7 +83,7 @@ describe('colar a turma', () => {
   it('avisa quando ninguém está marcado como professor', async () => {
     const semDocente = ['Discentes (2)', disc('BRENO OLIVEIRA FILHO', '20250000001'), disc('CARLA REGINA DO NASCIMENTO', '20250000002')].join('\n')
     await colar(semDocente)
-    expect(await screen.findByText(/Ninguém marcado como professor/)).toBeInTheDocument()
+    expect(await screen.findByText(/Ninguém está marcado como professor\. Marque na chamada antes do primeiro crachá\./)).toBeInTheDocument()
   })
 
   // Chamar nomes e vincular crachás não é mais tarefa desta tela — é a

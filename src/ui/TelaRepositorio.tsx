@@ -100,7 +100,7 @@ export function TelaRepositorio({
       const partes = [`os ${total} ${total === 1 ? 'nome' : 'nomes'} cadastrados`]
       if (naGrade > 0) partes.push(`${naGrade} ${naGrade === 1 ? 'horário' : 'horários'} na grade`)
       confirmarOuCancelar(
-        `Excluir a turma ${turma}? Saem ${partes.join(' e ')}. O histórico de presença já gravado continua intacto — não se apaga.`,
+        `Excluir a turma ${turma}? Saem ${partes.join(' e ')}. As presenças já gravadas continuam na pasta.`,
       )
       await repositorio.zerarTurma(turma)
       await repositorio.definirHorarioDaTurma(turma, [])

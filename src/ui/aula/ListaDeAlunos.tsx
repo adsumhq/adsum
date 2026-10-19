@@ -103,7 +103,7 @@ export function ListaDeAlunos({
                       <Selo tom="ok">Chamando</Selo>
                     ) : (
                       <>
-                        {vinculado && <Selo tom="ok">Vinculado</Selo>}
+                        {vinculado && <Selo tom="ok">Com crachá</Selo>}
                         {!vinculado && pulados.has(p.chave) && <Selo tom="neutro">Pulado</Selo>}
                         {!vinculado && <button onClick={() => aoChamar(p.chave)}>Chamar</button>}
                         {presente ? (

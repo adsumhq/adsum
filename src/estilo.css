@@ -1524,15 +1524,18 @@ button:focus-visible {
 }
 
 .quadrado--presente {
-  background: var(--acao);
-  color: white;
+  background: var(--acao-fraca);
+  color: var(--acao);
 }
 
-/* Vermelho, não âmbar: falta é falta, sem meio-termo — o número já diz se
-   foi um período ou dois, a cor não precisa repetir a gravidade. */
+/* A falta é o que se confere, e por isso é o elemento forte: cheio, com o
+   número em branco, como na barra do favorito no SIGAA. A presença, o
+   normal, fica no azul claro. O vermelho é o mesmo nos dois temas: o claro
+   do escuro (#ff453a) não segura texto branco, e sobre o fundo preto este
+   ainda se destaca. */
 .quadrado--ausente {
-  background: var(--grave-fraca);
-  color: var(--grave);
+  background: #d70015;
+  color: #ffffff;
 }
 
 /* Só faltas (>0) viram botão em modo Editar — ver `GradeDePresencas`. */
@@ -2769,6 +2772,14 @@ button:focus-visible {
   font-size: var(--t-menor);
   color: var(--tinta-fraca);
   max-width: 60ch;
+}
+
+.resumo__proximo {
+  margin: 8px 0 0;
+  font-size: var(--t-menor);
+  color: var(--tinta-fraca);
+  max-width: 46ch;
+  text-align: center;
 }
 
 .resumo__arquivo--sem {

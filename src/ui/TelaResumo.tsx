@@ -2,8 +2,9 @@
 //
 // Antes, encerrar devolvia direto ao repouso — e a chamada que acabou de ser
 // feita desaparecia sem uma palavra. Não é questão de comemorar: é que o
-// professor precisa saber **quantos ficaram registrados** e **onde o arquivo
-// está**, e essa é a única hora em que ele vai olhar.
+// professor precisa saber **quantos ficaram registrados**, **que ficou salvo**
+// e **o que vem depois** (lançar no SIGAA), e essa é a única hora em que ele
+// vai olhar.
 //
 // Com pasta, isto é confirmação de que não há passo nenhum: o arquivo já foi
 // gravado, e `Concluir` é a ação. **Sem pasta, há um passo** — e ele é o único
@@ -56,10 +57,10 @@ export function TelaResumo({
         {presentes === 1 ? 'presença registrada' : 'presenças registradas'}
       </p>
 
+      {/* O caminho do arquivo responde uma pergunta que o professor não fez;
+          ele continua em "Ver presenças", no alto da planilha. */}
       {arquivo ? (
-        <p className="resumo__arquivo">
-          Já está gravado na <code>{arquivo}</code>
-        </p>
+        <p className="resumo__arquivo">Salvo na sua pasta.</p>
       ) : salvo === 'baixado' ? (
         // O Safari baixa **sem diálogo**, direto na pasta de downloads. Sem esta
         // linha o clique não produz sinal nenhum na tela, e o professor clica de
@@ -76,6 +77,13 @@ export function TelaResumo({
           {riscoDeApagar()
             ? 'Esta chamada existe só neste navegador, que apaga os dados do site depois de sete dias de uso sem você voltar aqui. Salve o arquivo agora.'
             : 'Esta chamada existe só neste navegador. Salve o arquivo antes de fechar.'}
+        </p>
+      )}
+
+      {/* O próximo passo, dito sem botão: o gesto mora na planilha do SIGAA. */}
+      {(arquivo || salvo === 'gravado' || salvo === 'baixado') && (
+        <p className="resumo__proximo">
+          Para lançar, abra a planilha de frequência do SIGAA e clique em Adsum na barra de favoritos.
         </p>
       )}
 

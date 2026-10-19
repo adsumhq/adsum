@@ -28,7 +28,15 @@ describe('o fim da aula', () => {
     )
 
     expect(acento()).toBe('Concluir')
-    expect(screen.getByText(/Já está gravado na/)).toBeInTheDocument()
+    expect(screen.getByText('Salvo na sua pasta.')).toBeInTheDocument()
+    // O próximo passo é dito, e o caminho do arquivo não aparece aqui.
+    expect(screen.getByText(/Para lançar, abra a planilha de frequência do SIGAA/)).toBeInTheDocument()
+    expect(screen.queryByText(/registros\/IF685-T01\.csv/)).not.toBeInTheDocument()
+  })
+
+  it('sem salvar ainda, o próximo passo é salvar, e o SIGAA fica para depois', () => {
+    render(<TelaResumo sessao={SESSAO} presentes={41} aoSalvarCopia={async () => 'baixado'} aoConcluir={() => {}} />)
+    expect(screen.queryByText(/Para lançar/)).not.toBeInTheDocument()
   })
 
   it('sem pasta, a ação é salvar, e sair diz que sai sem salvar', () => {

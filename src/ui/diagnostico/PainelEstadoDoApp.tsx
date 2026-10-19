@@ -40,7 +40,7 @@ export function PainelEstadoDoApp({
     <Painel
       titulo="Estado do app"
       recolhivel
-      legenda="Armazenamento, versão e instalação — não presença."
+      legenda="Armazenamento, versão e instalação."
       acoes={
         <>
           {/* Semear inventa gente e presença: nunca no app publicado. */}

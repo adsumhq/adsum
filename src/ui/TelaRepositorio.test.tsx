@@ -170,7 +170,7 @@ describe('ver presenças', () => {
 // leitura era "encostei um crachá e ele tá aqui", quando ninguém encostou
 // nada. Ver o comentário em `Vinculo.sintetico`, em `nucleo/tipos.ts`.
 describe('vínculo sintético', () => {
-  it('mostra "sem crachá — pelo botão" no lugar do uid_hash', async () => {
+  it('mostra "Marcado à mão" no lugar do uid_hash', async () => {
     const usuario = userEvent.setup()
     await bancada.repositorio.gravarVinculo({
       uidHash: 'aaaa1111bbbb2222',
@@ -183,7 +183,7 @@ describe('vínculo sintético', () => {
     renderizarCom(bancada, <TelaRepositorio />)
     await usuario.click(await screen.findByRole('button', { name: /Vínculos/ }))
 
-    expect(await screen.findByText('sem crachá — pelo botão')).toBeInTheDocument()
+    expect(await screen.findByText('Marcado à mão')).toBeInTheDocument()
     expect(screen.queryByText('aaaa1111bbbb2222')).not.toBeInTheDocument()
   })
 

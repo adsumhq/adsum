@@ -100,7 +100,7 @@ export function TelaProblema({
       <p className="pasta__nota">
         {diag?.motivo
           ? diag.motivo
-          : `O ${leitor.nome} não está lendo. Confira se o dongle está no USB e tente de novo.`}
+          : 'O leitor de crachá não está lendo. Confira se ele está na porta USB e toque em Tentar de novo.'}
       </p>
 
       <button className="botao--acento pasta__botao" onClick={tentar} disabled={tentando}>

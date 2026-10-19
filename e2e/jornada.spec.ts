@@ -71,7 +71,7 @@ async function encerrar(page: Page, presencas: number) {
   await page.getByRole('button', { name: 'Encerrar', exact: true }).click()
   await expect(page.getByText(/^Chamada encerrada/)).toBeVisible({ timeout: 15_000 })
   await expect(page.getByText(`${presencas}`, { exact: true })).toBeVisible()
-  await expect(page.getByText(/Já está gravado na/)).toBeVisible()
+  await expect(page.getByText('Salvo na sua pasta.')).toBeVisible()
   await page.getByRole('button', { name: 'Concluir' }).click()
 }
 
@@ -168,7 +168,7 @@ test('do zero ao SIGAA: cadastro, três aulas com cada tipo de presença, e o la
     const professores = page.locator('section.lista__professores')
     await professores.getByRole('button', { name: 'Cadastrar', exact: true }).click()
     await encostar(page, UID.professora)
-    await expect(professores.getByText('Vinculado')).toBeVisible()
+    await expect(professores.getByText('Com crachá')).toBeVisible()
     await crachaNovoPelaBusca(page, UID.x, { matricula: '20269990001', nomeCompleto: 'DAVI SOUZA COSTA' })
     await encerrar(page, 1)
   })

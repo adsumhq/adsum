@@ -71,7 +71,7 @@ export function SecaoDeProfessores({
                     </>
                   ) : (
                     <>
-                      {vinculo && <Selo tom="ok">Vinculado</Selo>}
+                      {vinculo && <Selo tom="ok">Com crachá</Selo>}
                       {!vinculo && <button onClick={() => aoChamar(p.chave)}>Cadastrar</button>}
                       {vinculo && (
                         <button className="botao--grave" onClick={() => aoRemover(p)}>

@@ -74,9 +74,9 @@ export function GradeDePresencas({
   /** Tira uma presença marcada por engano, num dia que estava presente. */
   aoRemover?: (aluno: Matriculado, dia: string) => void | Promise<void>
   /**
-   * Nome da pasta escolhida, para dizer onde no disco esta planilha mora —
-   * mesma ideia de "Já está gravado em" no fim da aula, só que aqui embaixo,
-   * porque quem abre "Ver presenças" pode não ter acabado de encerrar nada.
+   * Nome da pasta escolhida, para dizer onde no disco esta planilha mora. É
+   * aqui que o caminho do arquivo fica: o fim da aula diz só "Salvo na sua
+   * pasta", e quem quer o arquivo vem a "Ver presenças".
    * Sem pasta (Safari, Firefox, ou ainda não escolhida), não existe arquivo
    * nenhum no disco para apontar.
    */
