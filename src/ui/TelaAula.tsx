@@ -33,7 +33,6 @@ import { gravarDecisao, gravarPresencaManual, vincularCracha } from './aula/acoe
 import { CartaoDoChamado } from './aula/CartaoDoChamado.tsx'
 import { ContadorDaChamada } from './aula/ContadorDaChamada.tsx'
 import { ListaDeAlunos } from './aula/ListaDeAlunos.tsx'
-import { Creditos } from './componentes/Creditos.tsx'
 import { SecaoDeProfessores } from './aula/SecaoDeProfessores.tsx'
 import { Busca } from './componentes/Busca.tsx'
 import { useFocoDaJanela } from './hooks/useFocoDaJanela.ts'
@@ -618,12 +617,6 @@ export function TelaAula({
           </button>
         )}
       </footer>
-
-      {/* Só o crédito, sem abrir nada: uma folha por cima da chamada é um caso
-          a mais no caminho do crachá, e não vale a complexidade. */}
-      <div className="coleta__creditos">
-        <Creditos />
-      </div>
     </section>
   )
 }
