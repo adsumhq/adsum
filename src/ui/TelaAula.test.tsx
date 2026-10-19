@@ -388,9 +388,10 @@ describe('a lista de alunos e os créditos', () => {
     expect(screen.getByRole('button', { name: 'Encerrar' })).toBeInTheDocument()
   })
 
-  it('os créditos ficam no fim da chamada, sem abrir nada por cima dela', async () => {
+  it('a chamada não mostra os créditos: a tela é de quem confere o próprio nome', async () => {
     montar([BRENO])
-    expect(await screen.findByRole('button', { name: /Criado por/ })).toBeDisabled()
+    await screen.findByRole('button', { name: /^Lista de alunos/ })
+    expect(screen.queryByRole('button', { name: /Criado por/ })).not.toBeInTheDocument()
   })
 })
 

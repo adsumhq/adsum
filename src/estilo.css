@@ -890,17 +890,6 @@ button:focus-visible {
   font-weight: 600;
 }
 
-/* Na chamada, os créditos vêm por último, depois de "Encerrar a chamada",
-   centrados e com menos espaço acima que no repouso. */
-.coleta__creditos {
-  display: flex;
-  justify-content: center;
-}
-
-.coleta__creditos .repouso__creditos {
-  margin-top: 40px;
-}
-
 /* "Sobre o Adsum": a marca no alto e uma linha por pessoa, no desenho dos
    Mushroom cards — círculo colorido à esquerda, nome, papel e apoio. */
 .sobre {
