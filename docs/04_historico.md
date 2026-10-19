@@ -863,3 +863,13 @@ tecla, nenhuma letra depois da terceira entra. O conserto é no leitor, que é
 o caminho do crachá e pede o rig. Fica aberto, com um `it.fails` no mesmo
 arquivo que roda sempre e vira teste normal quando o leitor for consertado.
 O campo "Buscar na turma" divide o mesmo teclado e não foi conferido.
+
+**O cofre de 19/10 e o crachá sem dono.** O zip mais recente do Prof. Paulo
+(diário até 13/10) foi lido com `npm run ler-zip`. Duas coisas apareceram, e
+nenhuma é defeito: em 08/10, três crachás demoraram até 432 ms na tela no
+mesmo minuto de três gravações lentas da pasta (mediana 17 ms, 24 presenças,
+nenhuma recusa); e, em 01/10, um crachá desconhecido teve a busca abandonada.
+Esse crachá está no `auditoria/uids.csv` sem vínculo, e o teste de
+atualização supunha que todo crachá do arquivo tinha dono: esperava 92 e
+contava 91. A premissa saiu do teste, que agora conta só os crachás com
+vínculo no cofre. Com isso, os três cenários passam sobre a pasta de hoje.
