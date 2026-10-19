@@ -4,7 +4,9 @@
 // nomes".
 
 import type { Matriculado, Vinculo } from '../../nucleo/tipos.ts'
+import { useRef } from 'react'
 import { Selo } from '../componentes/Painel.tsx'
+import { criarProtecaoDoCracha } from './protegerDoCracha.ts'
 
 export function SecaoDeProfessores({
   professores,
@@ -28,6 +30,7 @@ export function SecaoDeProfessores({
   aoRemover: (p: Matriculado) => void
   aoMarcarComoEu: (uidHash: string | undefined) => void
 }) {
+  const proteger = useRef(criarProtecaoDoCracha()).current
   return (
     <section className="lista__professores" aria-labelledby="lista-professores">
       <h3 id="lista-professores">Professores</h3>
@@ -55,6 +58,7 @@ export function SecaoDeProfessores({
                       className="entrada--celula"
                       value={e.nome}
                       onChange={(evento) => aoEditarNome(p, evento.target.value)}
+                      onKeyDown={proteger(p.chave, e.nome, (antes) => aoEditarNome(p, antes))}
                       aria-label={`nome de ${p.nomeCompleto}`}
                     />
                   )}

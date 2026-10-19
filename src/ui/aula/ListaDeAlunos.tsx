@@ -4,7 +4,8 @@
 // Recolhe, e abre como o professor a deixou por último neste computador;
 // aberta de fábrica. Não mexe em estado da chamada: só chama quem manda.
 
-import type { ReactNode } from 'react'
+import { useRef, type ReactNode } from 'react'
+import { criarProtecaoDoCracha } from './protegerDoCracha.ts'
 import { chaveDeIdentidade } from '../../nucleo/faltas.ts'
 import type { Matriculado, Papel } from '../../nucleo/tipos.ts'
 import { Painel, Selo } from '../componentes/Painel.tsx'
@@ -47,6 +48,7 @@ export function ListaDeAlunos({
   /** O que fecha a lista, centrado: "Encerrar a chamada", para quem rolou até o fim. */
   rodape?: ReactNode
 }) {
+  const proteger = useRef(criarProtecaoDoCracha()).current
   return (
     <Painel
       titulo="Lista de alunos"
@@ -78,6 +80,7 @@ export function ListaDeAlunos({
                       className="entrada--celula entrada--recuada"
                       value={e.nome}
                       onChange={(evento) => aoEditarNome(p, evento.target.value, vinculado)}
+                      onKeyDown={proteger(p.chave, e.nome, (antes) => aoEditarNome(p, antes, vinculado))}
                       onBlur={() => vinculado && aoGravarNome(p)}
                       aria-label={`nome de ${p.nomeCompleto}`}
                     />

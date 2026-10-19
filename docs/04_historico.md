@@ -819,6 +819,29 @@ agora tem três camadas: o macOS diz qual processo está na frente, e o rig só
 digita se for o Chrome do teste; a página recebe o foco antes de cada
 crachá; e nenhum teste com rig sai da máquina. Com isso, o `verificar:rig`
 passou inteiro sobre o que está no ar.
+## 19/10/2026 — o apelido e o crachá no mesmo teclado
+
+Numa chamada montada no Chrome para a revisão de design, dois defeitos
+apareceram na lista de alunos. Os dois estão na versão do ar.
+
+**Um crachá lido com o cursor num apelido mudava o nome.** O `LeitorTeclado`
+escuta a janela inteira e só reconhece a rajada como crachá na quarta tecla,
+e as três primeiras caíam no campo: "Alice Moreira350", gravado no vínculo ao
+sair do campo. A presença contava normalmente. Conserto só no campo, a pedido
+do autor, sem tocar no leitor (`ui/aula/protegerDoCracha.ts`): o campo guarda
+o nome de antes de cada sequência rápida de teclas e volta a ele quando o
+leitor marca a rajada com `preventDefault`. Vale para o apelido dos alunos e
+o dos professores. Teste que falhava antes: `ApelidoComOLeitor.test.tsx`, com
+o `LeitorTeclado` de verdade, conferido também no Chrome.
+
+**O professor não consegue digitar o apelido no ritmo normal.** O leitor
+marca com `preventDefault` a partir da quarta tecla de qualquer sequência
+com menos de 400 ms entre elas, e não só no ritmo de máquina: a 120 ms por
+tecla, nenhuma letra depois da terceira entra. O conserto é no leitor, que é
+o caminho do crachá e pede o rig. Fica aberto, com um `it.fails` no mesmo
+arquivo que roda sempre e vira teste normal quando o leitor for consertado.
+O campo "Buscar na turma" divide o mesmo teclado e não foi conferido.
+
 ## 20/10/2026 — a versão nova não esperava a chamada, e a hora decidia o teste
 
 O teste de atualização passou às 00:30 e às 08:40 e falhou em toda rodada
