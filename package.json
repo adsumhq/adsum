@@ -22,7 +22,8 @@
     "relatorio": "playwright show-report",
     "conferir-no-ar": "playwright test -c playwright.no-ar.config.ts",
     "pode-publicar": "node scripts/pode-publicar.mjs",
-    "demonstracao": "node scripts/sigaa_de_demonstracao.mjs"
+    "demonstracao": "node scripts/sigaa_de_demonstracao.mjs",
+    "ler-zip": "node scripts/ler_zip.mjs"
   },
   "dependencies": {
     "dexie": "^4.4.5",

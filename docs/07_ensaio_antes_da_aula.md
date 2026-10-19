@@ -220,7 +220,11 @@ régua da primeira semana de uso real, a semana estável (`CLAUDE.md`, desde
 01/10/2026): uma semana só conta como limpa depois de lida, e problema nela
 é voltar atrás, não consertar às pressas.
 
-No `diagnostico/*.log` da semana:
+No `diagnostico/*.log` da semana. Desde 18/10/2026, `npm run ler-zip --
+ARQUIVO.zip` faz esta leitura: um dia por linha, com a versão que rodou, os
+crachás e as chamadas, e embaixo só o que é problema. Imprime contagens e
+tempos, nunca nome, matrícula, hash ou UID, e apaga o que abriu. O que ele
+confere:
 
 - nenhuma `recusa` de crachá de verdade (digitação num campo não aparece);
 - nenhum `desconhecido_durante_busca` fora do esperado, e nenhuma busca
