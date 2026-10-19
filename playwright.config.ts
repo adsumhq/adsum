@@ -8,8 +8,9 @@
 import { existsSync } from 'node:fs'
 import { join, resolve } from 'node:path'
 import { defineConfig, devices } from '@playwright/test'
+import { FORA_DO_GIT } from './scripts/foraDoGit.mjs'
 
-export const PASTA_DA_BANCADA = resolve(process.env.ADSUM_BANCADA ?? '../Adsum_bancada_sigaa')
+export const PASTA_DA_BANCADA = resolve(process.env.ADSUM_BANCADA ?? join(FORA_DO_GIT, 'bancada-sigaa'))
 const temPagina = existsSync(join(PASTA_DA_BANCADA, 'planilha.html'))
 export const VER = Number(process.env.ADSUM_VER) || 0
 

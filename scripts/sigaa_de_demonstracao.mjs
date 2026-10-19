@@ -7,11 +7,12 @@
 // do SIGAA). O que o Gravar enviaria aparece neste terminal.
 //
 // Nada sai da máquina: toda outra requisição é recusada. O perfil do Chrome é
-// próprio (fora do repositório), e a base do Adsum dele não é a sua.
+// próprio (em fora-do-git/, ignorado pelo git), e a base do Adsum dele não é a sua.
 //
 // Uso:
 //   npm run demonstracao [-- --professor "NOME"] [--versao REF] [--perfil PASTA]
-// Precisa da página da bancada em ../Adsum_bancada_sigaa (ou ADSUM_BANCADA).
+// Precisa da página da bancada em fora-do-git/bancada-sigaa, na pasta
+// principal do repositório (ou ADSUM_BANCADA).
 
 import { spawn } from 'node:child_process'
 import { existsSync } from 'node:fs'
@@ -21,6 +22,7 @@ import { createInterface } from 'node:readline'
 import { chromium } from '@playwright/test'
 import { atenderEnderecos, SIGAA, SITE } from '../e2e/apoio/enderecos.ts'
 import { versao } from '../e2e/apoio/versoes.ts'
+import { FORA_DO_GIT } from './foraDoGit.mjs'
 import { alunosDaBancada, codigoDaBancada, paginaDeParticipantes } from '../e2e/apoio/turmaDaBancada.ts'
 
 const RAIZ = resolve(import.meta.dirname, '..')
@@ -32,8 +34,8 @@ const opcao = (nome, padrao) => {
   const i = argumentos.indexOf(`--${nome}`)
   return i >= 0 ? argumentos[i + 1] : padrao
 }
-const PASTA_DA_BANCADA = resolve(RAIZ, process.env.ADSUM_BANCADA ?? '../Adsum_bancada_sigaa')
-const PERFIL = resolve(RAIZ, opcao('perfil', '../Adsum_demonstracao_chrome'))
+const PASTA_DA_BANCADA = resolve(RAIZ, process.env.ADSUM_BANCADA ?? join(FORA_DO_GIT, 'bancada-sigaa'))
+const PERFIL = resolve(RAIZ, opcao('perfil', join(FORA_DO_GIT, 'demonstracao-chrome')))
 const PROFESSOR = opcao('professor', 'HELENA DUARTE LIMA')
 const REFERENCIA = opcao('versao', 'HEAD')
 

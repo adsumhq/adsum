@@ -9,7 +9,7 @@ Plano de execução em aberto, com causa raiz já investigada por item:
 >
 > Não há aparelho ESP32. O leitor é um **dongle USB** ligado ao computador do
 > professor; ler pelo **celular Android com NFC** é caminho experimental e não
-> é o foco. **O repositório `../Adsum` é histórico**, não fonte da verdade —
+> é o foco. **O repositório do aparelho (`Adsum`, hoje em `Projetos Arquivados/Adsum`) é histórico**, não fonte da verdade —
 > exceto pelas regras de crachá e privacidade, que continuam valendo por si e
 > estão listadas abaixo.
 >
@@ -28,7 +28,7 @@ Pilha: React + Vite + TypeScript + Dexie, publicado no GitHub Pages.
 
 ## Regras que não devem ser quebradas
 
-Herdadas do aparelho (justificativa em `../Adsum/CLAUDE.md`):
+Herdadas do aparelho (justificativa no `CLAUDE.md` do repositório do aparelho, em `Projetos Arquivados/Adsum`):
 
 - **Só o UID público.** Nunca autenticar setores, nunca tocar em Crypto1.
 - **UID é campo de tamanho variável** — 4, 7 ou 10 bytes. Código que assume 4
@@ -260,7 +260,7 @@ cards* (Home Assistant), iPadOS.
 ## Convenções
 
 - Documentação, comentários **e identificadores de domínio** em português. É
-  divergência deliberada do `../Adsum/CLAUDE.md`, que pede identificadores em
+  divergência deliberada do `CLAUDE.md` do repositório do aparelho, que pede identificadores em
   inglês: aqui as duas portas se chamam `LeitorDeCracha` e `Repositorio`, e
   metade em cada idioma seria pior que qualquer das duas escolhas inteiras.
 - Comentário explica **por que**, não o quê, em uma ou duas frases. **O código
@@ -371,8 +371,10 @@ a entender que os dados estão seguros** neles.
   instalado. Sem ele o navegador pode apagar a base sob pressão de espaço — por
   isso o diagnóstico mostra o estado e oferece o botão de pedir.
 - **`base` do Vite é `/adsum/`**, para `github.com/willianrupert/adsum`. A pasta
-  local continua `Adsum_web` — nome de pasta e nome de repositório não precisam
-  bater, e o do site é o que aparece na URL. Renomear o repositório sem ajustar
+  local se chama `Adsum` (até 19/10/2026, `Adsum_web`), com `fora-do-git/`
+  dentro dela para a bancada do SIGAA e o perfil da demonstração, ignorada pelo
+  `.git/info/exclude`. Nome de pasta e nome de repositório não precisam bater, e
+  o do site é o que aparece na URL. Renomear o repositório sem ajustar
   `vite.config.ts` publica um site que não carrega nada.
 - **O firmware ainda não é repositório.** Se um dia for, `adsum` já estará
   ocupado por este — o nome natural para ele é `adsum-a1`, que é a nomenclatura

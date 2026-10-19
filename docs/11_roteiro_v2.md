@@ -597,7 +597,7 @@ dela. O arquivo ganhou limite próprio de 30 s.
 
 Pedido do autor (15/10): mostrar a um professor, no Chrome e à mão, que o
 lançamento funciona, sem tocar no SIGAA de verdade. `npm run demonstracao`
-abre o Chrome num perfil próprio (`../Adsum_demonstracao_chrome`), com
+abre o Chrome num perfil próprio (`fora-do-git/demonstracao-chrome`, na pasta principal do repositório), com
 `sigaa.ufpe.br` e `willianrupert.github.io/adsum` atendidos na máquina, como
 na jornada: a planilha anonimizada da bancada com os scripts do SIGAA, uma
 página de participantes com os mesmos alunos inventados (para colar a turma
@@ -656,7 +656,7 @@ favorito não depende das telas).
    janela deixada aberta; e o Prototype trocando os nativos. Reintroduzidos
    um por vez, os três defeitos de 29/09 (sem iframe, envio pelo iframe, sem
    `?leitura=`) derrubam o teste. A página fica fora do repositório
-   (`ADSUM_BANCADA`, padrão `../Adsum_bancada_sigaa`); sem ela, os testes se
+   (`ADSUM_BANCADA`, padrão `fora-do-git/bancada-sigaa` na pasta principal do repositório, ignorada pelo `.git/info/exclude`); sem ela, os testes se
    pulam, e por isso não rodam no CI. Mudança no favorito pede esse comando
    antes do commit, no lugar do ensaio à mão.
 6. **~~O esboço inteiro no estado atual.~~ Feito em 30/09:** as telas da
