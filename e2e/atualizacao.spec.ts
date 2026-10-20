@@ -10,13 +10,15 @@
 //   ADSUM_NOVA         a que vai ao ar (padrão: HEAD, o commit, não a pasta de trabalho)
 //   ADSUM_RIG          os crachás pelo rig S3, como teclado USB de verdade:
 //                      o caminho da porta, ou "auto" (a primeira da Espressif)
+//   ADSUM_HORA         o relógio da página (ISO), para repetir uma rodada:
+//                      a grade escolhe a turma pela hora (20/10/2026)
 // Sem o cofre, os testes se pulam: é dado real de turma, fora do repositório.
 
 import { existsSync } from 'node:fs'
 import { homedir } from 'node:os'
 import { join } from 'node:path'
 import { expect, test, type Page } from '@playwright/test'
-import { commitNoAr, hospedar, versao, PAGINA_VAZIA, type Hospedagem, type Versao } from './apoio/versoes.ts'
+import { commitNoAr, esperaAChamada, hospedar, republicar, versao, PAGINA_VAZIA, type Hospedagem, type Versao } from './apoio/versoes.ts'
 import { comArquivosDeFora, contarBase, eventosDaBase, lerCofre, lerPasta, semear, trocarSeletor, type ArquivosDoCofre } from './apoio/cofre.ts'
 import { COM_RIG, desligarDongle, encostar, ligarDongle } from './apoio/dongle.ts'
 
@@ -79,8 +81,49 @@ function crachasDoCofre(): { uid: string; uidHash: string }[] {
   return [...vistos].map(([uid, uidHash]) => ({ uid, uidHash }))
 }
 
+/** O script de entrada que a página rodou, e a publicação quando é uma republicação (`republicar`). */
 const versaoRodando = (page: Page) =>
-  page.evaluate(() => [...document.querySelectorAll<HTMLScriptElement>('script[type=module][src]')].map((s) => s.src.split('/').pop()).join())
+  page.evaluate(() =>
+    [
+      ...[...document.querySelectorAll<HTMLScriptElement>('script[type=module][src]')].map((s) => s.src.split('/').pop()),
+      document.querySelector('meta[name=adsum-publicacao]')?.getAttribute('content') ?? '',
+    ].join(),
+  )
+
+/**
+ * O do topo, que está sempre lá. O do rodapé some enquanto há recado, e o de
+ * um crachá de outra turma fica: com a turma que a grade escolhe pela hora, o
+ * clique esperava, e caía na versão seguinte (20/10/2026).
+ */
+const botaoEncerrar = (page: Page) => page.getByRole('button', { name: 'Encerrar', exact: true })
+
+type Janela = { __estaPagina?: boolean; __controleAntes?: ServiceWorker | null }
+
+/**
+ * O `update()` de hora em hora do app, agora: o navegador acha a versão
+ * publicada e o service worker dela assume. Volta quando ele assumiu, ou
+ * quando a página recarregou: a marca posta nela some.
+ */
+async function buscarVersaoNova(page: Page) {
+  await page.evaluate(() => {
+    const janela = window as unknown as Janela
+    janela.__estaPagina = true
+    janela.__controleAntes = navigator.serviceWorker.controller
+    void navigator.serviceWorker.getRegistration().then((r) => r?.update())
+  })
+  const assumiu = () =>
+    page
+      .evaluate(() => {
+        const janela = window as unknown as Janela
+        return !janela.__estaPagina || navigator.serviceWorker.controller !== janela.__controleAntes
+      })
+      .catch(() => false) // no meio da recarga
+  await expect.poll(assumiu, { timeout: 30_000 }).toBe(true)
+  // O plugin recarrega no `activated`, um instante depois de o novo assumir.
+  await page.waitForTimeout(3000)
+}
+
+const mesmaPagina = (page: Page) => page.evaluate(() => (window as unknown as Janela).__estaPagina === true)
 
 /** Quem cada crachá é, para a base: o mesmo crachá tem de ser a mesma pessoa nas duas versões. */
 async function quemECada(page: Page, desde: Set<string>) {
@@ -92,6 +135,10 @@ async function quemECada(page: Page, desde: Set<string>) {
 async function abrirNaVersaoDoAr(page: Page, erros: string[]) {
   page.on('pageerror', (e) => erros.push(e.message))
   site.publicar(noAr)
+  if (process.env.ADSUM_HORA) {
+    await page.clock.install({ time: new Date(process.env.ADSUM_HORA) })
+    await page.clock.resume()
+  }
   await trocarSeletor(page)
   await page.goto(site.url + PAGINA_VAZIA)
   await semear(page, cofre)
@@ -106,7 +153,7 @@ async function abrirNaVersaoDoAr(page: Page, erros: string[]) {
 
 async function chamada(page: Page, crachas: { uid: string }[]) {
   await page.getByRole('button', { name: /Começar a chamada/ }).click()
-  await expect(page.getByRole('button', { name: 'Encerrar a chamada' })).toBeVisible({ timeout: 15_000 })
+  await expect(botaoEncerrar(page)).toBeVisible({ timeout: 15_000 })
   for (const c of crachas) await encostar(page, c.uid)
 }
 
@@ -142,7 +189,7 @@ async function conferirDepois(page: Page, antes: { base: Record<string, number>;
   return pasta
 }
 
-test('com a chamada aberta, a versão nova espera; encerrada, entra sozinha, e os crachás continuam sendo as mesmas pessoas', async ({ page }) => {
+test('a versão nova chega com a chamada aberta; encerrada, a chamada termina nela, e os crachás continuam sendo as mesmas pessoas', async ({ page }) => {
   const erros: string[] = []
   await abrirNaVersaoDoAr(page, erros)
   const crachas = crachasDoCofre()
@@ -153,17 +200,29 @@ test('com a chamada aberta, a versão nova espera; encerrada, entra sozinha, e o
   await expect.poll(async () => (await quemECada(page, antesDaAula)).size, { timeout: 15_000 }).toBe(crachas.length)
   const naVersaoDoAr = await quemECada(page, antesDaAula)
 
-  // Deploy no meio da aula, e o professor recarrega.
+  // Deploy no meio da aula, e o app aberto acha a versão nova.
   site.publicar(nova)
-  await page.reload()
-  await expect(page.getByRole('button', { name: 'Encerrar a chamada' })).toBeVisible({ timeout: 20_000 })
-  expect(await versaoRodando(page), 'no meio da chamada, a versão do ar continua').toContain(noAr.entrada)
+  await buscarVersaoNova(page)
+  const espera = esperaAChamada(noAr)
+  if (espera) {
+    expect(await mesmaPagina(page), 'no meio da chamada, nada recarrega').toBe(true)
+    expect(await versaoRodando(page)).toContain(noAr.entrada)
+  } else {
+    // A versão do ar não sabe esperar: a nova entra já. A chamada sobrevive
+    // à recarga (`chamadaViva`), e é o que se confere aqui.
+    await expect.poll(() => versaoRodando(page), { timeout: 30_000 }).toContain(nova.entrada)
+  }
+  await expect(botaoEncerrar(page)).toBeVisible({ timeout: 20_000 })
   await encostar(page, crachas[0].uid) // a fila não parou
 
   const antes = { base: await contarBase(page), pasta: await lerPasta(page) }
-  await page.getByRole('button', { name: 'Encerrar a chamada' }).click()
-  // A versão nova entra sozinha depois que a chamada termina (confere a cada 30 s).
-  await expect.poll(() => versaoRodando(page), { timeout: 90_000, intervals: [2000] }).toContain(nova.entrada)
+  await botaoEncerrar(page).click()
+  if (espera) {
+    // A versão nova entra sozinha depois que a chamada termina (confere a cada 30 s).
+    await expect.poll(() => versaoRodando(page), { timeout: 90_000, intervals: [2000] }).toContain(nova.entrada)
+  } else {
+    await page.getByRole('button', { name: 'Concluir' }).click()
+  }
   await expect(page.getByRole('button', { name: /Começar a chamada/ })).toBeVisible({ timeout: 20_000 })
   await page.waitForTimeout(3000)
   await conferirDepois(page, antes)
@@ -178,9 +237,43 @@ test('com a chamada aberta, a versão nova espera; encerrada, entra sozinha, e o
 
   // Recarregar no meio da chamada, já na versão nova, não a fecha.
   await page.reload()
-  await expect(page.getByRole('button', { name: 'Encerrar a chamada' })).toBeVisible({ timeout: 20_000 })
-  await page.getByRole('button', { name: 'Encerrar a chamada' }).click()
+  await expect(botaoEncerrar(page)).toBeVisible({ timeout: 20_000 })
+  await botaoEncerrar(page).click()
 
+  expect(erros).toEqual([])
+})
+
+test('com a chamada aberta, a versão seguinte espera; encerrada, entra sozinha', async ({ page }) => {
+  // HEAD dos dois lados: a espera é da versão que já está no computador, e a
+  // do ar pode ser de antes dela (`esperaAChamada`).
+  const seguinte = republicar(nova, 'seguinte')
+  const erros: string[] = []
+  page.on('pageerror', (e) => erros.push(e.message))
+  site.publicar(nova)
+  await trocarSeletor(page)
+  await page.goto(site.url + PAGINA_VAZIA)
+  await semear(page, cofre)
+  await page.goto(site.url + '/adsum/')
+  await page.getByRole('button', { name: 'Escolher pasta' }).click()
+  await expect(page.getByRole('button', { name: /Começar a chamada/ })).toBeVisible({ timeout: 20_000 })
+  await page.waitForFunction(() => navigator.serviceWorker.controller !== null, undefined, { timeout: 20_000 })
+  await page.waitForTimeout(3000)
+  const crachas = crachasDoCofre().slice(0, 6)
+  await chamada(page, crachas.slice(0, 5))
+
+  site.publicar(seguinte)
+  await buscarVersaoNova(page)
+  expect(await mesmaPagina(page), 'a versão seguinte recarregou a página no meio da chamada').toBe(true)
+  expect(await versaoRodando(page)).not.toContain(seguinte.publicacao)
+
+  // A fila continua, já com o service worker da seguinte no controle.
+  const antesDoCracha = new Set((await eventosDaBase(page)).map((e) => e.id))
+  await encostar(page, crachas[5].uid)
+  await expect.poll(async () => (await eventosDaBase(page)).filter((e) => !antesDoCracha.has(e.id)).length, { timeout: 15_000 }).toBe(1)
+
+  await botaoEncerrar(page).click()
+  await expect.poll(() => versaoRodando(page), { timeout: 90_000, intervals: [2000] }).toContain(seguinte.publicacao)
+  await expect(page.getByRole('button', { name: /Começar a chamada/ })).toBeVisible({ timeout: 20_000 })
   expect(erros).toEqual([])
 })
 

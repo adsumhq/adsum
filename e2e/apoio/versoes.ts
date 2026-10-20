@@ -4,7 +4,8 @@
 // Pages serve: trocar a pasta servida é publicar.
 
 import { execFileSync } from 'node:child_process'
-import { cpSync, existsSync, mkdirSync, readFileSync, rmSync, statSync } from 'node:fs'
+import { createHash } from 'node:crypto'
+import { cpSync, existsSync, mkdirSync, readFileSync, rmSync, statSync, writeFileSync } from 'node:fs'
 import { createServer, type Server } from 'node:http'
 import { extname, join, resolve } from 'node:path'
 
@@ -17,6 +18,8 @@ export interface Versao {
   pasta: string
   /** O script de entrada do build (`index-<hash>.js`): é como a página diz qual versão está rodando. */
   entrada: string
+  /** Só numa republicação (`republicar`): o mesmo código, outra publicação. */
+  publicacao?: string
 }
 
 /**
@@ -58,6 +61,40 @@ export function versao(referencia: string): Versao {
   const entrada = /src="\/adsum\/assets\/(index-[^"]+\.js)"/.exec(readFileSync(join(pasta, 'index.html'), 'utf-8'))?.[1]
   if (!entrada) throw new Error(`build de ${commit} sem script de entrada`)
   return { commit, pasta, entrada }
+}
+
+/**
+ * O mesmo build publicado de novo, com um `index.html` que se distingue
+ * (`<meta name="adsum-publicacao">`) e o service worker que o anuncia: para o
+ * navegador, uma versão nova. É como se testa a atualização com o código de
+ * HEAD dos dois lados, sem um segundo commit.
+ */
+export function republicar(v: Versao, publicacao: string): Versao {
+  const pasta = join(CACHE, `${v.commit}-${publicacao}`)
+  rmSync(pasta, { recursive: true, force: true })
+  cpSync(v.pasta, pasta, { recursive: true })
+  const html = readFileSync(join(pasta, 'index.html'), 'utf-8').replace('<head>', `<head><meta name="adsum-publicacao" content="${publicacao}">`)
+  writeFileSync(join(pasta, 'index.html'), html)
+  const revisao = createHash('md5').update(html).digest('hex')
+  const sw = readFileSync(join(pasta, 'sw.js'), 'utf-8')
+  const novo = sw.replace(/(\{url:"index\.html",revision:")[0-9a-f]+"/, `$1${revisao}"`)
+  if (novo === sw) throw new Error(`sw.js de ${v.commit} sem a revisão do index.html`)
+  writeFileSync(join(pasta, 'sw.js'), novo)
+  return { ...v, pasta, publicacao }
+}
+
+/**
+ * Se a versão espera a chamada terminar para trocar de versão. As de antes de
+ * 20/10/2026 diziam que sim e não esperavam: com `registerType: 'autoUpdate'`
+ * o plugin recarrega a página sozinho, e o `onNeedRefresh` delas nunca era
+ * chamado. Ver `docs/04_historico.md`.
+ */
+export function esperaAChamada(v: Versao): boolean {
+  try {
+    return git('show', `${v.commit}:src/main.tsx`).includes('onNeedReload')
+  } catch {
+    return false
+  }
 }
 
 const TIPOS: Record<string, string> = {
