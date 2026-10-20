@@ -34,7 +34,9 @@ sai intacta e não vira erro.
 
 **Publicar** é levar a versão para a `main`: o GitHub roda os testes de
 unidade, monta e publica. A máquina do professor pega a versão nova na
-próxima recarga, e espera a chamada terminar se houver uma aberta.
+próxima recarga, ou na busca de hora em hora com o app aberto, e espera a
+chamada terminar se houver uma aberta. As versões de antes de 20/10/2026
+não esperavam: a nova entrava no meio, e a chamada continuava aberta.
 
 **Depois**, assim que o GitHub terminar: `npm run conferir-no-ar`. Num
 Chrome de perfil limpo, só lendo o site público: o último deploy é o commit
@@ -58,7 +60,7 @@ O commit anterior é o que `npm run conferir-no-ar` confirmou da última vez
 (ou o primeiro de `git log origin/main`, antes do deploy). Sem
 reescrever história: a volta é um commit novo. Na máquina do professor, como
 na ida, a versão anterior entra na próxima recarga, esperando a chamada
-terminar. Depois, `npm run conferir-no-ar` de novo, sabendo que os pontos da
+terminar se a que está no computador já sabe esperar. Depois, `npm run conferir-no-ar` de novo, sabendo que os pontos da
 versão nova vão falhar.
 
 ## Antes de começar
@@ -169,9 +171,12 @@ são servidas no mesmo endereço, e no Google Chrome instalado:
    no controle;
 2. abre a chamada e encosta, como o dongle, cada crachá do
    `auditoria/uids.csv` do cofre;
-3. publica a nova e recarrega no meio da chamada: a nova espera, a chamada
-   continua, a fila conta;
-4. encerra: a nova entra sozinha, sem gesto;
+3. publica a nova no meio da chamada, e o app a busca (o `update()` de hora
+   em hora, chamado na hora): se a do ar sabe esperar, nada recarrega; se não
+   sabe (antes de 20/10/2026), a nova entra já, e a chamada continua aberta.
+   A fila conta;
+4. encerra: a nova entra sozinha, sem gesto. E a espera em si, com a versão
+   nova dos dois lados (`republicar`), em teste próprio;
 5. confere: nada sumiu da base, o log só cresceu, a planilha de faltas de
    cada turma tem a coluna `matricula`, o diário de hoje não tem erro;
 6. a mesma chamada na nova: cada crachá é a mesma pessoa que era na do ar;

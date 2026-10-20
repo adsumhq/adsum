@@ -819,3 +819,51 @@ agora tem três camadas: o macOS diz qual processo está na frente, e o rig só
 digita se for o Chrome do teste; a página recebe o foco antes de cada
 crachá; e nenhum teste com rig sai da máquina. Com isso, o `verificar:rig`
 passou inteiro sobre o que está no ar.
+## 20/10/2026 — a versão nova não esperava a chamada, e a hora decidia o teste
+
+O teste de atualização passou às 00:30 e às 08:40 e falhou em toda rodada
+às 10:45 e às 11:20, na v2 e na `v2/chamada-minima`. Antes de publicar, a
+pergunta era se a troca de versão corria com o encerrar. Uma sonda no teste
+(o `sessionStorage`, os eventos do service worker e o diário) mostrou outra
+coisa: a versão nova entrava **no meio da chamada**, 1,6 s depois do
+recarregar, com `adsum.chamada.viva=sim`.
+
+A espera de `main.tsx` nunca tinha rodado. Com `registerType: 'autoUpdate'`
+o service worker gerado chama `skipWaiting()` e `clientsClaim()`, e o
+`register.js` do plugin, nesse modo, recarrega a página quando o novo
+assume, sem chamar `onNeedRefresh`. O teste não via: conferia "a versão do
+ar continua" 60 ms depois de recarregar, antes de o navegador achar a nova.
+
+A hora entrava pelo teste. A grade escolhe a turma: 08:40 de terça é a aula
+da CIN0144; 10:45 é a próxima, a CIN0114 das 13:00. O crachá de "a fila não
+parou" é de um aluno da CIN0144: na CIN0114 ele dá `outra_turma`, e o recado
+dele, que fica, toma o lugar do "Encerrar a chamada" do rodapé. O clique
+esperava o botão por 2,4 s, a versão nova entrava nesse meio, e o clique
+caía nela: encerrava lá e mostrava o resumo, sem recarga que o tirasse da
+tela. Às 08:40 o crachá dá `repetido`, o clique sai em 30 ms, antes da troca.
+Com o relógio da página fixo (`ADSUM_HORA`), 08:40 passa e 10:45 falha, toda vez.
+
+Na sala: desde que o `main.tsx` existe, um deploy pode recarregar a página no
+meio da fila, na busca de hora em hora. A chamada não fecha (o diário da
+rodada diz `chamada_mantida_ao_recarregar`) e nenhum evento sumiu ou repetiu
+nas rodadas. O que se arrisca é o que o comentário queria evitar: o crachá
+encostado durante a recarga, sem bipe. Nos diários do cofre (24, 25 e 29/09)
+não há troca no meio de chamada.
+
+O conserto é o gancho `onNeedReload`: o service worker novo continua
+assumindo já, e quem espera a chamada terminar é a recarga. A página segue
+com o código dela até lá, o que é seguro porque o app é um arquivo só e o
+service worker não serve nada além dele. Descartado `registerType: 'prompt'`:
+protegeria até a troca da versão do ar, mas ela nunca pede a troca, e a nova
+só entraria com todas as janelas fechadas. E o voltar atrás, para uma versão
+`autoUpdate`, deixaria a página sem recarregar.
+
+Vale a partir da versão que o traz. A troca que a leva ao ar ainda entra no
+meio de uma chamada aberta, porque quem recarrega é o código da versão do ar;
+publicar logo depois da aula, com a chamada encerrada, é o caso de sempre.
+
+No teste: a busca é o `update()` do app, chamado na hora, e não a corrida
+com o recarregar; o clique é no "Encerrar" do topo, que nenhum recado
+esconde; e a espera ganhou teste próprio, com HEAD dos dois lados
+(`republicar` publica o mesmo build com outro `index.html`). Ele falhou
+antes do conserto, apontando a recarga no meio da chamada.
