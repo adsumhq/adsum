@@ -400,7 +400,13 @@ sem conversa antes.
   outro soma à mão. O desenho de um Adsum que soma sozinho (chave por aula,
   livro-razão por computador, compare-and-set na página, e o caso de
   concorrência que nenhum número revela) está guardado em
-  `docs/13_dia_compartilhado.md`, da seção 5 em diante.
+  `docs/13_dia_compartilhado.md`, da seção 5 em diante. **A ideia mais forte
+  para voltar, guardada pelo autor em 20/10/2026:** sem memória nenhuma, a
+  folha do Adsum, numa aula já lançada por outro professor, só lista "Faltaram
+  no seu bloco: fulano, beltrano. Some 2 a cada um". Não pinta o SIGAA, não
+  escreve e não reconhece depois; o professor soma olhando a lista. O amarelo
+  com reconhecimento foi recusado (15/10) porque exige lembrar o número do
+  outro professor. Ver `docs/13`, §4.
 - **`INTERVALO_MINIMO_MS` (400 ms, contra dois crachás na mesma mão) continua
   chutado.** O diagnóstico já mostra o intervalo entre leituras; dava para
   guardar esse histórico localmente e sugerir um valor medido, a partir do

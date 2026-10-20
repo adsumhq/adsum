@@ -71,6 +71,18 @@ professores, quem lança depois soma a sua parte à mão.
   na folha. Nada é escrito, mas o aviso aparece. Se incomodar, o cartão
   "lance à mão", com uma pergunta ao professor, é a primeira ideia guardada
   a voltar.
+- **A lista do bloco, sem memória** (guardada pelo autor em 20/10/2026, para
+  depois da semana estável). Numa aula já lançada por outro professor, a
+  folha mostra só quem faltou no bloco de quem está lançando, e quanto somar:
+  "Faltaram no seu bloco: fulano, beltrano. Some 2 a cada um." Não pinta a
+  página do SIGAA, não escreve e não tenta reconhecer depois se a soma foi
+  feita. É a versão que não guarda nada. A outra, conversada com o Prof.
+  Paulo no mesmo dia, pintaria de amarelo a célula com o valor sugerido e
+  reconheceria a soma feita à mão, mas para isso precisa anotar o número do
+  outro professor antes da soma: só olhando um 2 na página, não se sabe se é
+  a falta do Ricardo sem a soma do Paulo ou a presença no Ricardo mais a
+  falta no Paulo. Essa anotação é a memória recusada em 15/10, e se perde com
+  a pasta ou num computador sem ela.
 
 ## 5. Um sistema distribuído sem rede
 
