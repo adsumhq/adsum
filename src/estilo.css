@@ -3046,9 +3046,8 @@ button:focus-visible {
 
 /* ── O favorito do SIGAA, em Ajustes (`ui/ajustes/CartaoDoFavorito.tsx`) ── */
 /* Um botão de verdade para arrastar, e acima dele o gesto desenhado: uma
-   barra de favoritos e uma cópia do botão saindo dele até a vaga. Sem
-   movimento para quem pediu menos movimento: a cópia fica parada, já na
-   vaga. */
+   barra de favoritos e o botão subindo até ela. Sem movimento para quem
+   pediu menos movimento: o desenho fica parado, já no lugar. */
 .favorito {
   display: flex;
   flex-direction: column;
@@ -3065,19 +3064,15 @@ button:focus-visible {
 
 .favorito__palco {
   position: relative;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 44px;
-  padding-bottom: 4px;
+  width: 240px;
+  height: 72px;
 }
 
 .favorito__barra {
   display: flex;
   gap: 8px;
   align-items: center;
-  width: 240px;
-  height: 32px;
+  height: 28px;
   padding: 0 10px;
   border-radius: 8px;
   background: var(--fundo-alt);
@@ -3091,80 +3086,48 @@ button:focus-visible {
   background: var(--separador);
 }
 
-/* A vaga tem o tamanho de um favorito na barra: é nele que o fantasma pousa. */
 .favorito__barra .favorito__destino {
-  width: 60px;
-  height: 20px;
+  width: 56px;
   background: transparent;
   box-shadow: inset 0 0 0 1.5px var(--acao);
   opacity: 0.5;
 }
 
-/* O fantasma nasce em cima do botão, igual a ele, e encolhe até a vaga.
-   As posições vêm medidas (`--x0`… em `CartaoDoFavorito.tsx`); antes de
-   medir, não aparece. */
 .favorito__fantasma {
   position: absolute;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  box-sizing: border-box;
+  left: 50%;
+  bottom: 0;
+  padding: 3px 12px;
   border-radius: 999px;
   background: var(--acao);
   color: #fff;
+  font-size: var(--t-nota);
   font-weight: 600;
-  white-space: nowrap;
-  pointer-events: none;
-  visibility: hidden;
-}
-
-.favorito__fantasma--medido {
-  visibility: visible;
-  animation: favorito-arrastar 3.6s ease-in-out infinite;
+  transform: translateX(-50%);
+  animation: favorito-arrastar 3.2s ease-in-out infinite;
 }
 
 @keyframes favorito-arrastar {
   0%,
-  18% {
-    left: var(--x0);
-    top: var(--y0);
-    width: var(--w0);
-    height: var(--h0);
-    font-size: var(--f0);
-    box-shadow: none;
+  15% {
+    transform: translate(-50%, 0);
     opacity: 1;
   }
-  28% {
-    box-shadow: 0 8px 20px rgb(0 0 0 / 0.18);
-  }
-  60%,
-  84% {
-    left: var(--x1);
-    top: var(--y1);
-    width: var(--w1);
-    height: var(--h1);
-    font-size: 11px;
-    box-shadow: none;
+  55%,
+  80% {
+    transform: translate(22px, -46px) scale(0.9);
     opacity: 1;
   }
   100% {
-    left: var(--x1);
-    top: var(--y1);
-    width: var(--w1);
-    height: var(--h1);
-    font-size: 11px;
+    transform: translate(22px, -46px) scale(0.9);
     opacity: 0;
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .favorito__fantasma--medido {
+  .favorito__fantasma {
     animation: none;
-    left: var(--x1);
-    top: var(--y1);
-    width: var(--w1);
-    height: var(--h1);
-    font-size: 11px;
+    transform: translate(22px, -46px) scale(0.9);
   }
 }
 
