@@ -60,13 +60,21 @@ test.afterAll(async () => {
   await site?.fechar()
 })
 
-/** Os crachás que o dongle leu nesta turma, do `auditoria/uids.csv` do cofre. */
+/**
+ * Os crachás que o dongle leu nesta turma, do `auditoria/uids.csv` do cofre,
+ * e que têm dono no `vinculos.json`. O arquivo anota todo crachá lido,
+ * inclusive o que nunca foi cadastrado (a busca abandonada de 01/10/2026, no
+ * cofre de 19/10): esse não é "a mesma pessoa" em versão nenhuma.
+ */
 function crachasDoCofre(): { uid: string; uidHash: string }[] {
-  const csv = Buffer.from(cofre['auditoria/uids.csv'] ?? '', 'base64').toString('utf-8').replace(/^﻿/, '')
+  const csv = Buffer.from(cofre['auditoria/uids.csv'] ?? '', 'base64').toString('utf-8').replace(/^\uFEFF/, '')
+  const vinculos: unknown = JSON.parse(Buffer.from(cofre['vinculos.json'] ?? '', 'base64').toString('utf-8') || '[]')
+  const lista = (Array.isArray(vinculos) ? vinculos : ((vinculos as { conteudo?: unknown[] }).conteudo ?? [])) as { uidHash?: string }[]
+  const comDono = new Set(lista.map((v) => v.uidHash))
   const vistos = new Map<string, string>()
   for (const linha of csv.split(/\r?\n/).slice(1)) {
     const [uid, uidHash] = linha.split(';')
-    if (uid && uidHash) vistos.set(uid, uidHash)
+    if (uid && uidHash && comDono.has(uidHash)) vistos.set(uid, uidHash)
   }
   return [...vistos].map(([uid, uidHash]) => ({ uid, uidHash }))
 }
@@ -127,9 +135,10 @@ async function conferirDepois(page: Page, antes: { base: Record<string, number>;
   for (const c of faltas) expect(/^nome;matricula;/.test(pasta[c].replace(/^\uFEFF/, '')), `${c} com a coluna matricula`).toBe(true)
   // O que não é do Adsum continua lá, igual: nem apagado, nem reescrito.
   for (const c of deFora) expect(pasta[c] === antes.pasta[c], `${c} intacto`).toBe(true)
-  // O diário de hoje sem erro nenhum.
-  const hoje = Object.keys(pasta).filter((c) => /^diagnostico\/.*\.log$/.test(c)).sort().at(-1)!
-  expect(pasta[hoje].split('\n').filter((l) => /erro_/.test(l)).length, `${hoje} sem erro`).toBe(0)
+  // O diário de hoje sem erro nenhum. Uma pasta de antes do diário (22/09/2026),
+  // aberta e logo conferida, ainda não tem o primeiro lote gravado: nada a ler.
+  const hoje = Object.keys(pasta).filter((c) => /^diagnostico\/.*\.log$/.test(c)).sort().at(-1)
+  if (hoje) expect(pasta[hoje].split('\n').filter((l) => /erro_/.test(l)).length, `${hoje} sem erro`).toBe(0)
   return pasta
 }
 
