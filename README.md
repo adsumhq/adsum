@@ -22,6 +22,12 @@ tudo volta.
 ![rede: nenhuma](https://img.shields.io/badge/rede-nenhuma-1d1d1f)
 [![licença: MIT](https://img.shields.io/badge/licen%C3%A7a-MIT-0071e3)](LICENSE)
 
+<br>
+
+<img src="docs/leque.png" alt="Três janelas do Adsum: a tela inicial com a turma do dia, a chamada com dois nomes entrando, e o favorito do SIGAA com uma aula para lançar" width="900">
+
+<sub>Antes, durante e depois da aula. Gente inventada, da <a href="https://willianrupert.github.io/adsum/#/vitrine">vitrine</a>.</sub>
+
 </div>
 
 ---

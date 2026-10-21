@@ -206,7 +206,9 @@ Duas regras que ele segue: **nenhum número que envelhece** (contagem de testes
 em badge vira mentira na semana seguinte, como a coluna `login` virou), e
 **imagens geradas por script** — `scripts/gerar_icone.py`,
 `gerar_diagrama.py`, `gerar_arquitetura.py`. Versiona-se o desenho, nunca a
-captura, que é a mesma regra que mantém dado real de turma fora daqui.
+captura, que é a mesma regra que mantém dado real de turma fora daqui. O
+leque do topo (`gerar_leque.mjs`) é captura, mas da vitrine, de gente
+inventada, e o script a refaz: é a captura que essa regra permite.
 
 ## Palavras que não se usam
 
