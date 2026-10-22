@@ -232,12 +232,19 @@ function guia(t) {
   .capa .lead { font-size: 17pt; max-width: 150mm; color: var(--fraca); }
   .capa .leque { margin: 0 -18mm; display: flex; justify-content: center; align-items: flex-start; gap: 0; }
   .capa .leque .janela { width: 64mm; }
-  .capa .leque .janela img { max-height: 110mm; object-fit: cover; object-position: top; }
+  .capa .leque .janela img { max-height: 98mm; object-fit: cover; object-position: top; }
   .capa .leque .meio { width: 76mm; z-index: 2; margin: 0 -8mm; }
   .capa .leque .esq { transform: rotate(-4deg); margin-top: 10mm; }
   .capa .leque .dir { transform: rotate(4deg); margin-top: 10mm; }
-  .capa .pe { display: flex; justify-content: space-between; align-items: flex-end; font-size: 9.5pt; color: var(--fraca); }
+  .capa .pe { display: flex; justify-content: space-between; align-items: center; font-size: 9.5pt; color: var(--fraca); }
   .capa .pe b { color: var(--tinta); }
+  /* O cartão de créditos da tela inicial do app (Creditos.tsx), sem a seta. */
+  .creditos { display: flex; flex-direction: column; align-items: center; gap: .5mm; text-align: center;
+    background: var(--fundo-alt); border-radius: 4.5mm; padding: 3.4mm 9mm; color: var(--tinta); }
+  .creditos__rotulo { font-size: 8pt; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; color: var(--fraca); }
+  .creditos__nomes { font-size: 11.5pt; font-weight: 600; }
+  .creditos__e { font-weight: 400; color: var(--fraca); }
+  .creditos__onde { font-size: 8.5pt; color: var(--fraca); }
 
   /* Janela de app desenhada em volta da captura */
   .janela { margin: 0; overflow: hidden; border-radius: 3mm; background: #fff;
@@ -333,7 +340,11 @@ function guia(t) {
   </div>
   <div class="pe">
     <div><b>Guia de uso</b><br>Para professores do CIn/UFPE e para a coordenação</div>
-    <div style="text-align:right">Willian Rupert<br>com o Prof. Paulo Freitas de Araujo Filho</div>
+    <div class="creditos">
+      <span class="creditos__rotulo">Criado por</span>
+      <span class="creditos__nomes">Prof. Paulo Freitas <span class="creditos__e">e</span> Willian Rupert</span>
+      <span class="creditos__onde">Centro de Informática · UFPE</span>
+    </div>
   </div>
 </div>
 
