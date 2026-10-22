@@ -91,6 +91,9 @@ async function capturar(navegador) {
   telas.turma = await tela('A turma')
   telas.cronograma = await tela('O cronograma')
   telas.repouso = await tela('Repouso')
+  // O passo 8 é o "Chamar nomes" ligado: nome grande, esperando o crachá.
+  await cena('A aula, com gente pendente').getByLabel('Chamar nomes').click()
+  await pagina.waitForTimeout(600)
   telas.pendentes = await tela('A aula, com gente pendente')
   telas.busca = await tela('Crachá novo')
 
@@ -457,7 +460,7 @@ function guia(t) {
       ${dica('Ligou o crachá à pessoa errada? <b>Remover crachá</b>, ao lado do nome, desfaz ali mesmo. A presença já gravada continua no registro.')}`,
       janela(t.busca, 'Adsum', 'recorte'))}
     ${passo(8, 'Chamar nomes, para uma fila grande', `
-      <p>Com a turma inteira chegando de uma vez, ligue <b>Chamar nomes</b>. A tela mostra um nome grande e o próximo crachá desconhecido vira daquela pessoa, sem busca. Em seguida vem a próxima pessoa sem crachá; as setas do teclado andam pela fila.</p>
+      <p>Com a turma inteira chegando de uma vez, ligue <b>Chamar nomes</b>. A tela mostra um nome grande e o próximo crachá desconhecido vira daquela pessoa, sem busca. Em seguida vem a próxima pessoa sem crachá. <b>Pular</b> e as setas do teclado andam pela fila.</p>
       <p>Dois crachás encostados quase juntos não contam dois: a tela avisa, e o professor, que está na sala, decide.</p>`,
       janela(t.pendentes, 'Adsum · IF685 · T01', 'recorte'))}
   </div>
