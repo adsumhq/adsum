@@ -14,7 +14,7 @@ const pessoa = (matricula: string, nome: string, completo: string): Matriculado 
 })
 
 const TURMA = [
-  pessoa('1', 'Amanda Trinity', 'AMANDA TRINITY GOMES NASCIMENTO'),
+  pessoa('1', 'Ana Clara', 'ANA CLARA MOURA SANTOS'),
   pessoa('2', 'João Pedro', 'JOAO PEDRO ALVES'),
   pessoa('3', 'Carla Regina', 'CARLA REGINA DO NASCIMENTO'),
 ]
@@ -36,7 +36,7 @@ describe('busca pelo teclado', () => {
 
   it('começa com o primeiro destacado, para Enter resolver direto', () => {
     montar()
-    expect(destacado()).toContain('Amanda Trinity')
+    expect(destacado()).toContain('Ana Clara')
   })
 
   it('as setas andam pela lista', async () => {
@@ -50,7 +50,7 @@ describe('busca pelo teclado', () => {
   it('as setas param nas pontas em vez de dar a volta', async () => {
     const { usuario } = montar()
     await usuario.keyboard('{ArrowUp}{ArrowUp}')
-    expect(destacado()).toContain('Amanda Trinity')
+    expect(destacado()).toContain('Ana Clara')
     await usuario.keyboard('{ArrowDown}{ArrowDown}{ArrowDown}{ArrowDown}')
     expect(destacado()).toContain('Carla Regina')
   })

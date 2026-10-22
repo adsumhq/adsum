@@ -30,9 +30,9 @@ const diaHoje = diaLocal(new Date().toISOString())
 const TURMA = 'IF685 · T01'
 
 const PENDENTES: Matriculado[] = [
-  ['20250022729', 'Amanda Trinity', 'AMANDA TRINITY GOMES NASCIMENTO'],
-  ['20240004932', 'Andre Vinicius', 'ANDRE VINICIUS NASCIMENTO CRUZ'],
-  ['20250023181', 'Antonio Goncalves', 'ANTONIO GONCALVES DE ALBUQUERQUE NETO'],
+  ['20259900104', 'Ana Clara', 'ANA CLARA MOURA SANTOS'],
+  ['20249900217', 'Arthur Davi', 'ARTHUR DAVI FERREIRA LINS'],
+  ['20259900330', 'Augusto Cesar', 'AUGUSTO CESAR DE MELO NETO'],
 ].map(([matricula, nome, nomeCompleto]) => ({
   turma: TURMA,
   chave: matricula,
