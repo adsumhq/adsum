@@ -91,7 +91,7 @@ async function capturar(navegador) {
   telas.turma = await tela('A turma')
   telas.cronograma = await tela('O cronograma')
   telas.repouso = await tela('Repouso')
-  // O passo 8 é o "Chamar nomes" ligado: nome grande, esperando o crachá.
+  // O passo 6 é o "Chamar nomes" ligado: nome grande, esperando o crachá.
   await cena('A aula, com gente pendente').getByLabel('Chamar nomes').click()
   await pagina.waitForTimeout(600)
   telas.pendentes = await tela('A aula, com gente pendente')
@@ -429,40 +429,40 @@ function guia(t) {
   <div class="rodape"><span>Adsum · guia de uso</span><span>4</span></div>
 </div>
 
-<!-- 5 · A aula -->
+<!-- 5 · A primeira chamada -->
 <div class="folha">
-  <p class="sobretitulo">Toda aula</p>
-  <h2>Fazer a chamada</h2>
-  <p class="lead">Abrir, deixar a fila passar, encerrar. A tela muda sozinha conforme o momento.</p>
+  <p class="sobretitulo">A primeira chamada da turma</p>
+  <h2>Abrir e cadastrar todos</h2>
+  <p class="lead">Não há tela de cadastro à parte. Na primeira chamada, cada aluno liga o próprio crachá ao nome, com o professor olhando.</p>
   <div class="passos">
     ${passo(5, 'Abra a chamada', `
       <p>A tela inicial já mostra a turma da hora. Abra a chamada com <b>Enter</b>, no botão, ou encostando o <b>seu crachá</b>.</p>
       <p>Ela não abre sozinha de propósito: a aula de fato quase nunca começa na hora da grade. Há <b>uma chamada por turma por dia</b>, como no SIGAA: encerrar e reabrir continua de onde parou.</p>`,
       janela(t.repouso, 'Adsum', 'recorte-baixo'))}
-    ${passo(6, 'Os alunos encostam o crachá', `
-      <p>Cada crachá mostra o nome e conta presença. Encostar duas vezes não conta duas. Esquecer o crachá não é problema: <b>Presente</b> na linha do aluno marca à mão.</p>
-      <p>A lista da turma fica sempre à vista, para conferir quem chegou.</p>
-      <div class="atencao">Durante a chamada, a janela do Adsum precisa estar <b>na frente</b>. O leitor digita onde estiver o cursor, como um teclado.</div>`,
-      janela(t.chamada, 'Adsum · IF685 · T01', 'recorte'))}
+    ${passo(6, 'Ligue Chamar nomes', `
+      <p>Na primeira chamada ninguém tem crachá ligado. Ligue <b>Chamar nomes</b>: a tela mostra um nome grande, a pessoa chamada encosta o crachá, e ele passa a ser dela. Presença contada e crachá ligado, de uma vez.</p>
+      <p>Em seguida vem a próxima pessoa sem crachá. Quem não está na sala, <b>Pular</b>; as setas do teclado também andam pela fila.</p>
+      ${dica('Ligou o crachá à pessoa errada? <b>Remover crachá</b>, ao lado do nome, desfaz ali mesmo. A presença já gravada continua no registro.')}`,
+      janela(t.pendentes, 'Adsum · IF685 · T01', 'recorte'))}
   </div>
   <div class="rodape"><span>Adsum · guia de uso</span><span>5</span></div>
 </div>
 
-<!-- 6 · Primeiro dia e crachá novo -->
+<!-- 6 · O dia a dia -->
 <div class="folha">
-  <p class="sobretitulo">Primeiro dia, e quem chega depois</p>
-  <h2>Ligar crachá e aluno</h2>
-  <p class="lead">Não há tela de cadastro à parte. O vínculo acontece na própria chamada, com o aluno na frente do professor.</p>
+  <p class="sobretitulo">Toda aula, daí em diante</p>
+  <h2>Fazer a chamada</h2>
+  <p class="lead">Abrir, deixar a fila passar, encerrar. Com os crachás ligados, o professor não precisa tocar em nada.</p>
   <div class="passos">
-    ${passo(7, 'Crachá desconhecido abre a busca', `
-      <p>No primeiro dia ninguém tem crachá ligado. Quando um crachá desconhecido é lido, o Adsum abre uma busca: o aluno diz o nome, o professor digita as primeiras letras e confirma. Presença contada e crachá ligado, de uma vez.</p>
-      <p>O mesmo vale semanas depois: quem faltou no primeiro dia, ou trouxe uma segunda via, se cadastra no dia em que aparece. Quem ainda não tem crachá aparece primeiro na busca.</p>
-      ${dica('Ligou o crachá à pessoa errada? <b>Remover crachá</b>, ao lado do nome, desfaz ali mesmo. A presença já gravada continua no registro.')}`,
+    ${passo(7, 'Os alunos encostam o crachá', `
+      <p>Cada crachá mostra o nome e conta presença. Encostar duas vezes não conta duas. Esquecer o crachá não é problema: <b>Presente</b> na linha do aluno marca à mão.</p>
+      <p>Dois crachás encostados quase juntos não contam dois: a tela avisa, e o professor, que está na sala, decide.</p>
+      <div class="atencao">Durante a chamada, a janela do Adsum precisa estar <b>na frente</b>. O leitor digita onde estiver o cursor, como um teclado.</div>`,
+      janela(t.chamada, 'Adsum · IF685 · T01', 'recorte'))}
+    ${passo(8, 'Crachá desconhecido abre a busca', `
+      <p>Quem faltou na primeira chamada, ou trouxe uma segunda via, se cadastra no dia em que aparece. Com <b>Chamar nomes</b> desligado, um crachá desconhecido abre a busca: a pessoa diz o nome, o professor digita as primeiras letras e confirma.</p>
+      <p>A busca cobre a turma inteira, e quem ainda não tem crachá aparece primeiro.</p>`,
       janela(t.busca, 'Adsum', 'recorte'))}
-    ${passo(8, 'Chamar nomes, para uma fila grande', `
-      <p>Com a turma inteira chegando de uma vez, ligue <b>Chamar nomes</b>. A tela mostra um nome grande e o próximo crachá desconhecido vira daquela pessoa, sem busca. Em seguida vem a próxima pessoa sem crachá. <b>Pular</b> e as setas do teclado andam pela fila.</p>
-      <p>Dois crachás encostados quase juntos não contam dois: a tela avisa, e o professor, que está na sala, decide.</p>`,
-      janela(t.pendentes, 'Adsum · IF685 · T01', 'recorte'))}
   </div>
   <div class="rodape"><span>Adsum · guia de uso</span><span>6</span></div>
 </div>
@@ -551,6 +551,7 @@ function guia(t) {
   <ul class="lista" style="margin-top:4mm">
     <li><span><b>Uma vez:</b> Chrome, leitor na USB, pasta Adsum no Drive, favorito na barra.</span></li>
     <li><span><b>Por turma:</b> colar Turma › Participantes do SIGAA e marcar-se como professor.</span></li>
+    <li><span><b>Primeira chamada:</b> Chamar nomes ligado; cada um encosta o crachá quando é chamado.</span></li>
     <li><span><b>Toda aula:</b> Enter ou o seu crachá abre; a fila encosta; o seu crachá encerra.</span></li>
     <li><span><b>Quando quiser:</b> planilha do SIGAA, favorito, Preencher, Gravar Frequências, favorito de novo.</span></li>
   </ul>
