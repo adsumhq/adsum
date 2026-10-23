@@ -568,7 +568,7 @@ function guia(t) {
 
   <div class="cartao" style="margin-top:auto; margin-bottom:6mm">
     <h3>Privacidade, em uma frase</h3>
-    <p>A frequência guarda nome e matrícula, que vêm do SIGAA, e um resumo criptográfico do crachá. Login e senha do SIGAA nunca. Nesta fase de testes, o número do crachá fica também num arquivo à parte da pasta, sem nome, para não obrigar a turma a recadastrar; o professor o desliga no Diagnóstico. Tudo fica no computador do professor. O manual completo, com o tratamento para fins de LGPD, está nos Ajustes, em <b>Manual e LGPD</b>.</p>
+    <p>A frequência guarda nome e matrícula, que vêm do SIGAA, e um resumo criptográfico do crachá. Login e senha do SIGAA nunca. Nesta fase de testes, o número do crachá fica também num arquivo à parte da pasta, sem nome, para não obrigar a turma a recadastrar; o professor o desliga no Diagnóstico. Tudo fica no computador do professor. A descrição completa do tratamento, para fins de LGPD, está no manual do projeto, em <span class="mono">github.com/willianrupert/adsum</span>.</p>
   </div>
   <div class="rodape"><span>Adsum · guia de uso · ${ENDERECO_DO_SITE}</span><span>10</span></div>
 </div>

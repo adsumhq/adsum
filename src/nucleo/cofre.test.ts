@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import {
-  MANUAL_URL,
+  GUIA_URL,
   NOMES,
   VERSAO,
   deJsonCompartilhado,
@@ -102,13 +102,13 @@ describe('o LEIA-ME da pasta', () => {
     expect(texto).toContain('Já tenho uma pasta do Adsum')
   })
 
-  // O manual não vai dentro da pasta — pesaria o cofre à toa, e o próprio
+  // O guia não vai dentro da pasta — pesaria o cofre à toa, e o próprio
   // Adsum já tem um botão pra buscar a versão atual. O LEIA-ME só precisa
   // dizer onde achar, para quem abrir a pasta sem o app por perto.
-  it('diz onde achar o manual, mesmo sem o app por perto', () => {
+  it('diz onde achar o guia, mesmo sem o app por perto', () => {
     const texto = paraLeiaMe()
-    expect(texto).toMatch(/MANUAL/)
-    expect(texto).toContain('Manual')
-    expect(texto).toContain(MANUAL_URL)
+    expect(texto).toMatch(/GUIA DE USO/)
+    expect(texto).toContain('"Guia"')
+    expect(texto).toContain(GUIA_URL)
   })
 })

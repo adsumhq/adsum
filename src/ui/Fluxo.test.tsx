@@ -15,7 +15,7 @@ import { calcularUidHash } from '../nucleo/hash.ts'
 import { hexParaUid } from '../nucleo/uid.ts'
 import type { Matriculado } from '../nucleo/tipos.ts'
 import * as arquivos from '../ambiente/arquivos.ts'
-import { MANUAL_URL } from '../nucleo/cofre.ts'
+import { GUIA_URL } from '../nucleo/cofre.ts'
 import { diaLocal } from '../nucleo/faltas.ts'
 import { NOVIDADES } from '../nucleo/novidades.ts'
 
@@ -1275,12 +1275,12 @@ describe('os Ajustes se recolhem', () => {
   })
 })
 
-// O único botão do Adsum que fala com a internet: o manual vive no GitHub,
+// O único botão do Adsum que fala com a internet: o guia vive no GitHub,
 // não dentro do app. `fetch` é mockado aqui de propósito — não é porta do
 // Adsum, é infraestrutura de terceiro, sem "adaptador de verdade" pra testar
 // contra (a suíte não bate no GitHub de verdade). Fica no rodapé dos Ajustes,
 // ao lado de Diagnóstico — não é mais um botão solto entre painéis.
-describe('manual e LGPD', () => {
+describe('guia de uso', () => {
   afterEach(() => vi.unstubAllGlobals())
 
   it('busca do GitHub e oferece pra salvar', async () => {
@@ -1293,14 +1293,14 @@ describe('manual e LGPD', () => {
     renderizarCom(bancada, <Fluxo />)
     await screen.findByText(/Bom dia|Boa tarde|Boa noite/)
     await usuario.click(screen.getByRole('button', { name: 'Ajustes' }))
-    await usuario.click(await screen.findByRole('button', { name: 'Manual' }))
+    await usuario.click(await screen.findByRole('button', { name: 'Guia' }))
 
     await waitFor(() => expect(salvarBinario).toHaveBeenCalled())
-    expect(fetch).toHaveBeenCalledWith(MANUAL_URL)
+    expect(fetch).toHaveBeenCalledWith(GUIA_URL)
     const [nomeArquivo, dados] = salvarBinario.mock.calls[0]
-    expect(nomeArquivo).toBe('Adsum-manual-e-LGPD.docx')
+    expect(nomeArquivo).toBe('Adsum-guia.pdf')
     expect(dados).toBe(blobDeMentira)
-    expect(await screen.findByText(/Manual gravado/)).toBeInTheDocument()
+    expect(await screen.findByText(/Guia gravado/)).toBeInTheDocument()
   })
 
   // Arquivo movido, repositório renomeado, ou simplesmente sem internet — a
@@ -1314,17 +1314,15 @@ describe('manual e LGPD', () => {
     renderizarCom(bancada, <Fluxo />)
     await screen.findByText(/Bom dia|Boa tarde|Boa noite/)
     await usuario.click(screen.getByRole('button', { name: 'Ajustes' }))
-    await usuario.click(await screen.findByRole('button', { name: 'Manual' }))
+    await usuario.click(await screen.findByRole('button', { name: 'Guia' }))
 
-    expect(await screen.findByText((texto) => texto.includes(MANUAL_URL))).toBeInTheDocument()
+    expect(await screen.findByText((texto) => texto.includes(GUIA_URL))).toBeInTheDocument()
   })
 })
 
-// Fase 2, item 5 (docs/05_plano_execucao.md): rodapé ganha um terceiro
-// botão, e o "Manual e LGPD" encurta pra "Manual" — o rodapé já deixa o
-// contexto claro.
+// O rodapé de Ajustes: três links que não são uso do dia a dia.
 describe('rodapé de Ajustes', () => {
-  it('tem Diagnóstico, Manual e GitHub, nessa ordem, e o crédito de autoria embaixo', async () => {
+  it('tem Diagnóstico, Guia e GitHub, nessa ordem, e o crédito de autoria embaixo', async () => {
     const usuario = userEvent.setup()
     await turmaInteiraComCracha()
 
@@ -1339,7 +1337,7 @@ describe('rodapé de Ajustes', () => {
       .getAllByRole('button')
       .concat(within(rodape).getAllByRole('link'))
       .map((el) => el.textContent)
-    expect(rotulos).toEqual(['Diagnóstico', 'Manual', 'GitHub'])
+    expect(rotulos).toEqual(['Diagnóstico', 'Guia', 'GitHub'])
 
     const linkGitHub = within(rodape).getByRole('link', { name: 'GitHub' })
     expect(linkGitHub).toHaveAttribute('href', 'https://github.com/willianrupert/adsum')

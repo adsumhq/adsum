@@ -1,9 +1,9 @@
 // O conteúdo da folha de Ajustes: a base (`TelaRepositorio`) e, no pé, os
-// links que não são uso do dia a dia — Diagnóstico, Manual, GitHub.
+// links que não são uso do dia a dia — Diagnóstico, Guia, GitHub.
 
 import { type ComponentProps, useState } from 'react'
 import { semDono } from '../ambiente/diario.ts'
-import { baixarManual } from '../ambiente/manual.ts'
+import { baixarGuia } from '../ambiente/guia.ts'
 import { REPOSITORIO_URL } from '../nucleo/cofre.ts'
 import { TelaRepositorio } from './TelaRepositorio.tsx'
 
@@ -11,7 +11,7 @@ export function FolhaDeAjustes({
   aoAbrirDiagnostico,
   ...base
 }: ComponentProps<typeof TelaRepositorio> & { aoAbrirDiagnostico: () => void }) {
-  const [recadoManual, setRecadoManual] = useState<string>()
+  const [recadoGuia, setRecadoGuia] = useState<string>()
 
   return (
     <>
@@ -23,17 +23,17 @@ export function FolhaDeAjustes({
         <button
           className="botao--quieto"
           onClick={() => {
-            setRecadoManual(undefined)
-            semDono('baixar manual', async () => setRecadoManual(await baixarManual()))
+            setRecadoGuia(undefined)
+            semDono('baixar guia', async () => setRecadoGuia(await baixarGuia()))
           }}
         >
-          Manual
+          Guia
         </button>
         <a className="botao--quieto" href={REPOSITORIO_URL} target="_blank" rel="noopener noreferrer">
           GitHub
         </a>
       </div>
-      {recadoManual && <p className="ferramentas__nota">{recadoManual}</p>}
+      {recadoGuia && <p className="ferramentas__nota">{recadoGuia}</p>}
       <p className="ajustes__creditos">© 2026 Adsum</p>
     </>
   )

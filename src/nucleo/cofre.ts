@@ -79,19 +79,19 @@ export const NOMES = {
 } as const
 
 /**
- * O manual não vem embutido no app — ele vive no GitHub, versionado junto
- * com o código, e o botão em Ajustes ("Manual e LGPD") busca uma cópia de
- * lá na hora. Único lugar do Adsum que precisa de internet: todo o resto
+ * O guia de uso não vem embutido no app — ele vive no GitHub, versionado junto
+ * com o código, e o botão "Guia" em Ajustes busca uma cópia de lá na hora.
+ * O manual com o tratamento de dados (LGPD) continua no repositório, mas o app
+ * não o oferece: o professor aprende pelo guia. Único lugar do Adsum que precisa de internet: todo o resto
  * — chamada, planilha, cofre — continua funcionando offline. `raw.
  * githubusercontent.com` serve o arquivo puro, sem a página do GitHub em
  * volta, e libera o pedido de qualquer origem (CORS), como qualquer
  * arquivo público de um repositório.
  */
-export const MANUAL_URL =
-  'https://raw.githubusercontent.com/willianrupert/adsum/main/docs/Adsum-manual-e-LGPD.docx'
+export const GUIA_URL = 'https://raw.githubusercontent.com/willianrupert/adsum/main/docs/Adsum-guia.pdf'
 
 /** O botão "GitHub" do rodapé de Ajustes — a página do repositório, não o
-    arquivo cru como `MANUAL_URL`: aqui quem abre é gente, não `fetch`. */
+    arquivo cru como `GUIA_URL`: aqui quem abre é gente, não `fetch`. */
 export const REPOSITORIO_URL = 'https://github.com/willianrupert/adsum'
 
 /**
@@ -121,14 +121,13 @@ pasta que tudo volta.
 Formato versão ${VERSAO}. Gerado pelo Adsum — não precisa editar nada.
 
 
-MANUAL DE USO E LGPD
---------------------
+GUIA DE USO
+-----------
 
-  O manual completo — como usar, e o tratamento de dado pessoal campo
-  por campo — não fica nesta pasta. Baixe uma cópia em Ajustes →
-  "Manual", ou direto daqui:
+  O guia, com o passo a passo e as telas, não fica nesta pasta. Baixe
+  uma cópia em Ajustes → "Guia", ou direto daqui:
 
-  ${MANUAL_URL}
+  ${GUIA_URL}
 
 
 O QUE TEM AQUI

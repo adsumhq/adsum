@@ -12,6 +12,7 @@ tudo volta.
 
 [**Abrir o app**](https://willianrupert.github.io/adsum/) ·
 [**Ver todas as telas**](https://willianrupert.github.io/adsum/#/vitrine) ·
+[**Guia de uso**](docs/Adsum-guia.pdf) ·
 [**Manual e LGPD**](docs/Adsum-manual-e-LGPD.docx) ·
 [**Documentação**](docs/README.md)
 
@@ -209,7 +210,8 @@ em ESP32) ficam em [`ferramentas/`](ferramentas/).
 | | |
 |---|---|
 | [`docs/README.md`](docs/README.md) | O índice: o que é cada documento e por onde começar |
-| [**Manual e LGPD**](docs/Adsum-manual-e-LGPD.docx) | Para o professor e para a instituição: uso, e o tratamento de dados campo por campo |
+| [**Guia de uso**](docs/Adsum-guia.pdf) | O passo a passo com as telas, do primeiro dia ao SIGAA: é o que o app oferece ao professor |
+| [**Manual e LGPD**](docs/Adsum-manual-e-LGPD.docx) | Para a instituição: o tratamento de dados campo por campo |
 | [`CLAUDE.md`](CLAUDE.md) | O contrato do projeto: as regras que não se quebram e o que cada decisão custou |
 | [`docs/00_roadmap.md`](docs/00_roadmap.md) | Onde o projeto está e o que vem depois |
 | [`docs/01_cofre.md`](docs/01_cofre.md) | A pasta como dona dos dados, o prazo do Safari, o chaveiro de sais |

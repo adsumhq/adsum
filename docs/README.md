@@ -46,8 +46,8 @@ envelheceu também é informação.
 | [`11_roteiro_v2.md`](11_roteiro_v2.md) | vivo | O passo a passo da v2 que não depende do HTML do SIGAA, com peso e andamento |
 | [`12_planilha_sigaa.md`](12_planilha_sigaa.md) | vivo | A planilha e o calendário do SIGAA da UFPE, por dentro: modelo de dados, clique, coleta, salvamento automático |
 | [`13_dia_compartilhado.md`](13_dia_compartilhado.md) | especificação | Aula com mais de um professor: o professor escolhe quanto vale a falta. E, guardadas, a soma sobre o número do outro, o livro-razão e o que a concorrência esconde |
-| [`Adsum-manual-e-LGPD.docx`](Adsum-manual-e-LGPD.docx) | vivo | Manual do professor e descrição do tratamento de dados. Gerado por `scripts/gerar_manual.cjs`; o app baixa este arquivo da `main` |
-| [`Adsum-guia.pdf`](Adsum-guia.pdf) | vivo | Guia de uso com as telas, para professores e coordenação. Gerado por `scripts/gerar_guia.mjs`: telas da vitrine e da bancada do SIGAA, que precisa estar na máquina |
+| [`Adsum-manual-e-LGPD.docx`](Adsum-manual-e-LGPD.docx) | vivo | Manual do professor e descrição do tratamento de dados. Gerado por `scripts/gerar_manual.cjs` |
+| [`Adsum-guia.pdf`](Adsum-guia.pdf) | vivo | Guia de uso com as telas, para professores e coordenação. Gerado por `scripts/gerar_guia.mjs`: telas da vitrine e da bancada do SIGAA, que precisa estar na máquina. O app baixa este arquivo da `main` |
 
 As imagens (`arquitetura.png`, `cracha-para-hash.png`, `mapa-estados.png`,
 `esboco_sigaa/*.png`) saem de scripts em `scripts/`. Versiona-se o desenho,
@@ -69,5 +69,5 @@ nunca a captura.
   da pasta, que tem teste amarrando o texto aos nomes reais dos arquivos.
 - **Nenhum dado real de turma.** O repositório é público. Nomes, matrículas,
   hashes e sais de verdade só entram por `scripts/anonimizar_cofre.py`.
-- **Documento que o app baixa não muda de lugar.** `MANUAL_URL`
-  (`nucleo/cofre.ts`) aponta para `docs/Adsum-manual-e-LGPD.docx` na `main`.
+- **Documento que o app baixa não muda de lugar.** `GUIA_URL`
+  (`nucleo/cofre.ts`) aponta para `docs/Adsum-guia.pdf` na `main`.
