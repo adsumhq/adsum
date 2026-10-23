@@ -4,11 +4,11 @@
 
 import { execFileSync } from 'node:child_process'
 import { expect, test, type Page } from '@playwright/test'
+import { GUIA_URL } from '../../src/nucleo/cofre.ts'
 
 // `ADSUM_SITE` aponta para outro endereço (um build servido localmente, para conferir este próprio teste).
 const SITE = process.env.ADSUM_SITE ?? 'https://willianrupert.github.io/adsum/'
 const NO_AR = !process.env.ADSUM_SITE
-const MANUAL = 'https://raw.githubusercontent.com/willianrupert/adsum/main/docs/Adsum-manual-e-LGPD.docx'
 
 const git = (...args: string[]) => execFileSync('git', args, { encoding: 'utf-8' }).trim()
 
@@ -60,9 +60,9 @@ test('a janela do SIGAA abre (e pede para ser aberta pela planilha)', async ({ p
   expect(erros).toEqual([])
 })
 
-test('o manual que o botão "Manual e LGPD" abre está lá', async ({ request }) => {
+test('o guia que o botão "Guia" baixa está lá', async ({ request }) => {
   test.skip(!NO_AR, 'só faz sentido contra o site publicado')
-  const resposta = await request.get(MANUAL)
+  const resposta = await request.get(GUIA_URL)
   expect(resposta.status()).toBe(200)
-  expect((await resposta.body()).subarray(0, 2).toString()).toBe('PK')
+  expect((await resposta.body()).subarray(0, 5).toString()).toBe('%PDF-')
 })
