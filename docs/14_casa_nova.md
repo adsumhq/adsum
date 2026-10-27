@@ -105,6 +105,25 @@ sai do código **antes** da transferência.
   antes publicava um site quebrado no endereço antigo: o merge na `main`
   disparava o deploy de um app montado para `/`. Agora o merge leva `[skip ci]`.
 
+## Estado em 27/10/2026, à tarde: a mudança feita
+
+Feita logo depois da aula das 13:00 de terça, com a de quinta às 10:00 como
+a primeira no endereço novo. O zip de hoje estava limpo (67 crachás, nenhuma
+recusa; só a divergência conhecida dos `evento_id` repetidos de 22/09).
+
+- [x] `adsum.cin.ufpe.br` serve o app, de `adsumhq/adsum`, com HTTPS e o
+  domínio verificado. `npm run conferir-no-ar` passou.
+- [x] `willianrupert.github.io/adsum/` serve a ponte, do repositório novo
+  `willianrupert/adsum` (Pages por branch), montada do commit `7fea094`. Num
+  navegador com o app antigo no cache, o `sw.js` novo assumiu sozinho.
+- [x] `adsumhq/pagina-provisoria` arquivada.
+- [x] Os dois ensaios da mudança passaram sobre o zip de hoje, com a
+  auditoria do SIGAA real.
+- [ ] O Paulo: escolher a mesma pasta em `adsum.cin.ufpe.br`, instalar o app
+  novo, desinstalar o antigo e trocar o favorito.
+- [ ] O Paulo como owner da `adsumhq` (`pfreitasaf`).
+- [ ] Ensaio à mão do app instalado no Safari.
+
 ## O pedido ao CIn
 
 O DNS de `cin.ufpe.br` é da TI do CIn (`dns1`, `dns2`, `dns3.cin.ufpe.br`).

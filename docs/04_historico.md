@@ -961,3 +961,21 @@ a passo no `docs/14`. Escrevê-lo achou um defeito na ordem combinada em
 01/10: o merge na `main`, ainda no repositório pessoal, dispararia o deploy
 de um app montado para `/` no endereço antigo, e o Pages o serviria em
 `/adsum/` sem os arquivos. O merge da janela leva `[skip ci]`.
+
+## 27/10/2026, tarde — a mudança para adsum.cin.ufpe.br
+
+Pedida pelo autor logo depois da aula das 13:00, para o Paulo trocar hoje e a
+aula de quinta já correr no endereço novo. O roteiro do `docs/14` seguido na
+ordem, com três desvios:
+
+- **O autor decidiu migrar antes de ler o zip do dia.** O zip chegou no meio
+  da janela e estava limpo, antes de qualquer passo no GitHub.
+- **O `jornada.spec.ts` montava o build com base `/adsum/`** e o servia no
+  endereço de verdade, que passou a ser a raiz. Agora `versao()` recebe o
+  caminho.
+- **Criar repositório público e convidar owner são cliques do autor**: o
+  modo automático do Claude recusa os dois. O resto foi pela API.
+
+O guia saiu de novo com o endereço oficial em destaque. As sombras com
+desfoque viravam molduras cinzas no Pré-Visualização do Mac, e foram tiradas.
+
