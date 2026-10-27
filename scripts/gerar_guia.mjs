@@ -229,17 +229,19 @@ function guia(t) {
   .lead { font-size: 12.5pt; color: var(--fraca); line-height: 1.4; margin-bottom: 7mm; max-width: 150mm; }
   .sobretitulo { font-size: 9pt; font-weight: 600; color: var(--acao); text-transform: uppercase; letter-spacing: .08em; margin-bottom: 2mm; }
   /* O endereço é a primeira coisa que o professor precisa: grande, azul, clicável no PDF. */
-  .endereco { display: inline-block; margin-top: 5mm; padding: 2.2mm 6mm; border-radius: 99mm;
+  .endereco { display: block; width: fit-content; margin: 5mm auto 0; padding: 2.2mm 6mm; border-radius: 99mm;
     background: var(--acao-fraca); color: var(--acao); font-size: 17pt; font-weight: 650;
     letter-spacing: -.01em; text-decoration: none; }
-  .endereco--passo { margin: 1mm 0 2mm; font-size: 13pt; padding: 1.6mm 5mm; }
+  .endereco--passo { margin: 1mm auto 2mm; font-size: 13pt; padding: 1.6mm 5mm; }
   kbd, .mono { font-family: ui-monospace, 'SF Mono', Menlo, monospace; font-size: 9pt;
     background: var(--fundo-alt); border-radius: 4px; padding: 0 1.2mm; }
   b { font-weight: 600; }
 
   /* Capa */
   .capa { justify-content: space-between; padding-top: 34mm; }
-  .capa .icone { width: 30mm; height: 30mm; border-radius: 7mm; box-shadow: 0 4mm 10mm rgba(0,0,0,.12); }
+  /* Sem sombra com desfoque: o Chrome a grava como imagem com máscara, e o
+     Pré-Visualização do Mac pinta a máscara inteira de cinza. */
+  .capa .icone { width: 30mm; height: 30mm; border-radius: 7mm; }
   .capa h1 { font-size: 46pt; font-weight: 700; letter-spacing: -0.035em; margin: 10mm 0 3mm; }
   .capa .lead { font-size: 17pt; max-width: 150mm; color: var(--fraca); }
   .capa .leque { margin: 0 -18mm; display: flex; justify-content: center; align-items: flex-start; gap: 0; }
@@ -260,7 +262,7 @@ function guia(t) {
 
   /* Janela de app desenhada em volta da captura */
   .janela { margin: 0; overflow: hidden; border-radius: 3mm; background: #fff;
-    box-shadow: 0 0 0 .25mm rgba(0,0,0,.12), 0 2.5mm 7mm rgba(0,0,0,.10); }
+    box-shadow: 0 0 0 .25mm rgba(0,0,0,.16); }
   .janela header { display: flex; align-items: center; gap: 1.4mm; height: 6.4mm; padding: 0 2.6mm;
     background: var(--fundo-alt); border-bottom: .25mm solid #e5e5ea; position: relative; }
   .janela header i { width: 2.3mm; height: 2.3mm; border-radius: 50%; background: #ff5f57; }
@@ -315,7 +317,7 @@ function guia(t) {
 
   /* Chrome desenhado em volta da página do SIGAA */
   .chrome { margin: 0; overflow: hidden; border-radius: 3mm; background: #fff;
-    box-shadow: 0 0 0 .25mm rgba(0,0,0,.14), 0 3mm 9mm rgba(0,0,0,.12); }
+    box-shadow: 0 0 0 .25mm rgba(0,0,0,.18); }
   .chrome__abas { display: flex; align-items: flex-end; gap: 1.4mm; height: 8mm; padding: 0 3mm; background: #dee1e6; }
   .chrome__abas i { width: 2.3mm; height: 2.3mm; border-radius: 50%; background: #ff5f57; align-self: center; }
   .chrome__abas i:nth-child(2) { background: #febc2e; }
