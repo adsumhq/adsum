@@ -97,6 +97,13 @@ sai do código **antes** da transferência.
 - [x] Item 3 do código, a ponte, com o ensaio de duas origens
   (`e2e/mudanca.spec.ts`) passando sobre a cópia real de um cofre. O porquê
   de cada escolha está no `04_historico.md`, 27/10/2026.
+- [x] O caminho do backup ensaiado no WebKit (`e2e/mudancaNoSafari.spec.ts`).
+- [x] Item 5, menos os testes em todo PR: `CONTRIBUTING.md`, `SECURITY.md`,
+  `CITATION.cff`, os modelos de issue e o `CODEOWNERS`. Os testes no PR mexem
+  no CI que publica, e ficam para depois da janela.
+- [x] A janela da migração passo a passo, abaixo. Ao escrevê-la, a ordem de
+  antes publicava um site quebrado no endereço antigo: o merge na `main`
+  disparava o deploy de um app montado para `/`. Agora o merge leva `[skip ci]`.
 
 ## O pedido ao CIn
 
@@ -159,7 +166,8 @@ reconstrói o site.
    avisaria a outro servidor que o professor abriu o Adsum. Foto e contatos
    do Paulo entram com o sim dele. Isto reverte o "© 2026 Adsum" de
    `f25b58a`, e o porquê vai para o `04_historico.md`.
-5. **Arquivos de comunidade:** `CONTRIBUTING.md` (as regras do `CLAUDE.md` e
+5. **Arquivos de comunidade.** Feito em 27/10/2026, menos os testes em todo
+   PR. O desenho: `CONTRIBUTING.md` (as regras do `CLAUDE.md` e
    "como uma mudança chega à sala", e que dá para desenvolver sem dongle com o
    `LeitorSimulado`), `SECURITY.md` (sal e `auditoria/uids.csv` pedem canal
    privado), `CITATION.cff`, templates de issue (o de "falha em sala" já pede
@@ -179,40 +187,92 @@ reconstrói o site.
 
 ## A janela da migração
 
-Longe de aula, pelas regras do `CLAUDE.md`. Tudo de uma vez:
+Longe de aula, pelas regras do `CLAUDE.md`: logo depois de uma, nunca na
+véspera. Cada passo diz como desfazê-lo.
 
-1. Registros do CIn no ar; domínio verificado na organização.
-2. Merge desta branch, ainda no repositório pessoal, com o endereço novo já
-   no código: `CASA = CIN` em `endereco.ts`.
-3. Transferir `willianrupert/adsum` para `adsumhq`.
-4. Recriar `willianrupert/adsum` e publicar a ponte nele: `npm run
-   build:ponte` com `CASA` ainda em `PESSOAL` ou já em `CIN` (a ponte só lê
-   `MUDANCA`), e o conteúdo de `dist-ponte/` no Pages do repositório novo.
-5. Em `adsumhq/adsum`: Pages por GitHub Actions, domínio
-   `adsum.cin.ufpe.br`, **Enforce HTTPS** assim que o certificado sair.
-6. O ensaio.
+### Antes do dia
 
-Entre 3 e 4 o endereço antigo fica alguns minutos em 404. Quem estiver com o
-app aberto não percebe: o service worker serve do cache, e uma falha ao
-buscar o `sw.js` só adia a atualização.
+1. **Domínio verificado na organização**: `TXT` no nome certo, e Verify em
+   `adsumhq` › Settings › Pages. Sem isso, os minutos sem site no passo 4
+   deixam o subdomínio livre para outra conta.
+2. **O Paulo como owner** da `adsumhq`.
+3. **Ensaios verdes** sobre o zip mais recente de um professor:
+   `npm run verificar` nas últimas 24 horas, sem teste pulado (ele roda
+   `e2e/mudanca.spec.ts` e `e2e/mudancaNoSafari.spec.ts` junto). E à mão, com
+   o Safari de verdade: o app instalado no Dock, a ponte e o backup.
+4. **Avisar quem usa** (hoje, o Paulo): o dia, e que no primeiro uso depois
+   dele o Adsum pede para levar os dados.
+
+### Na branch
+
+5. Em `src/nucleo/endereco.ts`: `CASA = CIN` e `REPOSITORIO =
+   'adsumhq/adsum'`. O `endereco.test.ts` garante que nenhum outro arquivo do
+   app ficou com o endereço antigo.
+6. À mão, o que o teste não vê: os links do `README.md`, o `CLAUDE.md` (a
+   pendência do `base` do Vite) e o `docs/README.md`. Os documentos de
+   registro (`04`, `05`) ficam como estão: contam o que era.
+7. `npm run verificar` de novo, já com o endereço novo.
+8. **A ponte**: `npm run build:ponte`, e uma cópia de `dist-ponte/` fora do
+   git (`fora-do-git/casa-nova/ponte-<commit>/`). A ponte lê só `MUDANCA`,
+   que não muda com `CASA`.
+
+### A troca
+
+9. **Tirar o domínio da página provisória**: `adsumhq/pagina-provisoria` ›
+   Settings › Pages › Custom domain › Remove. Desfazer: pô-lo de volta. Daqui
+   até o passo 12, `adsum.cin.ufpe.br` não tem site, e o domínio verificado
+   é o que o protege.
+10. **Merge na `main` com `[skip ci]` na mensagem**, e push. Sem o `[skip
+    ci]`, o push publicaria no endereço antigo um app montado para `/`: o
+    Pages o serviria em `/adsum/`, sem os arquivos. Desfazer: reverter o
+    merge, também com `[skip ci]`.
+11. **Transferir** `willianrupert/adsum` para `adsumhq`: Settings › Danger
+    Zone › Transfer. O endereço antigo passa a dar 404, e quem está com o
+    app aberto não percebe (o service worker serve do cache). Desfazer:
+    transferir de volta.
+12. **O app no endereço novo**: em `adsumhq/adsum`, Settings › Pages, Source
+    "GitHub Actions" e Custom domain `adsum.cin.ufpe.br`. Depois, Actions ›
+    publicar › Run workflow. Quando o certificado sair, **Enforce HTTPS**.
+    Desfazer: tirar o domínio e voltar ao passo 9 na página provisória.
+13. **A ponte no endereço antigo**: criar o repositório público
+    `willianrupert/adsum`, com o conteúdo de `dist-ponte/` na raiz da `main`
+    e um `.nojekyll`, e Pages em "Deploy from a branch", `main`, `/`. Isso
+    desliga os redirecionamentos do repositório transferido, e por isso vem
+    depois do passo 5. Desfazer: apagar este repositório antes de transferir
+    o outro de volta.
+14. **Arquivar** `adsumhq/pagina-provisoria`.
+
+### Conferir
+
+15. `npm run conferir-no-ar`, que agora lê o endereço novo.
+16. No endereço antigo: `/adsum/`, `/adsum/#/vitrine` e `/adsum/#/sigaa`
+    mostram a ponte, e `/adsum/sw.js` responde 200. Nunca 404.
+17. O ensaio abaixo.
+
+Até o passo 11, desfazer é reverter. Depois dele, cada passo tem a sua volta.
+A base de quem já levou os dados não volta sozinha, e por isso a ponte só
+copia: a base antiga continua no navegador, e voltar o endereço antigo ao app
+a devolve inteira.
 
 ## O ensaio
 
 O do `07_ensaio_antes_da_aula.md`, com a cópia do cofre e o dongle, em
 `adsum.cin.ufpe.br`, e mais:
 
-- **Chrome**: escolher a pasta de novo e conferir que tudo voltou.
-- **Safari**, com base só no navegador: Levar meus dados, e conferir turmas,
-  vínculos e presenças contra o backup.
-- **PWA instalado no endereço antigo**: abrir, ver o aviso da ponte, levar os
-  dados. O caso do Chrome, sem o app instalado, já roda sozinho em
-  `e2e/mudanca.spec.ts`; o app instalado e o Safari, ainda não.
-- **O endereço antigo nunca dá 404**, nem em `#/vitrine`.
-- **Os botões Manual e GitHub** abrem `adsumhq`.
+- **Chrome**: Levar meus dados, depois escolher a mesma pasta, e conferir que
+  nada duplicou. Roda sozinho em `e2e/mudanca.spec.ts`, com o service worker
+  de verdade.
+- **Safari**, com base só no navegador: Baixar o backup na ponte, e "Tenho um
+  backup do Adsum" no endereço novo. Roda sozinho no WebKit em
+  `e2e/mudancaNoSafari.spec.ts`.
+- **O app instalado no endereço antigo**, no Chrome e no Dock do Safari:
+  abrir, ver a ponte, levar os dados. Ainda só à mão: o Playwright não
+  instala app.
+- **O endereço antigo nunca dá 404**, nem em `#/vitrine` ou `#/sigaa`.
+- **Os botões Guia e GitHub** abrem `adsumhq`.
 
 ## Se precisar voltar atrás
 
-Antes do passo 3, desfazer é reverter o merge. Depois dele, o repositório
-pode voltar para a conta pessoal, e o domínio sai das configurações do Pages.
-O que não volta sozinho é a base de quem já levou os dados para o endereço
-novo: por isso a ponte só **copia**, nunca apaga a base antiga.
+Cada passo da janela diz a sua volta. O que não volta sozinho é a base de
+quem já levou os dados para o endereço novo: por isso a ponte só **copia**,
+nunca apaga a base antiga.

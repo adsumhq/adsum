@@ -954,3 +954,10 @@ endereço novo com os crachás do cofre: cada um reconhecido, e a mesma pessoa
 que era no antigo. Passou com o cofre de 19/10 (2 turmas, 133 crachás, 512
 registros). O de unidade (`ambiente/mudanca.test.ts`) roda sobre o cofre
 anonimizado de 22/09, com os `evento_id` renumerados e auditoria do SIGAA.
+
+No mesmo dia, o caminho do backup ganhou ensaio no WebKit
+(`e2e/mudancaNoSafari.spec.ts`), e a janela da migração ganhou roteiro passo
+a passo no `docs/14`. Escrevê-lo achou um defeito na ordem combinada em
+01/10: o merge na `main`, ainda no repositório pessoal, dispararia o deploy
+de um app montado para `/` no endereço antigo, e o Pages o serviria em
+`/adsum/` sem os arquivos. O merge da janela leva `[skip ci]`.

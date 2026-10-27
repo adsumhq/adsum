@@ -72,7 +72,7 @@ describe('participantes do SIGAA', () => {
       DOCENTE('ANA PAULA MENDES DE SOUZA', 'ana.mendes'),
       '',
       'Docência Assistida (1)',
-      ASSISTIDA('PATRICIA DRAPAL DA SILVA', 'pdrapal'),
+      ASSISTIDA('LUCIANA TAVARES DE MELO', 'luciana.tm'),
       '',
       'Discentes (1)',
       DISCENTE('BRENO OLIVEIRA FILHO', '1', 'breno.of'),
@@ -88,7 +88,7 @@ describe('participantes do SIGAA', () => {
     // A docência assistida também dá aula: entra como dica de docente.
     expect(pessoas.filter((p) => p.docenteNoSigaa).map((p) => p.nomeCompleto)).toEqual([
       'ANA PAULA MENDES DE SOUZA',
-      'PATRICIA DRAPAL DA SILVA',
+      'LUCIANA TAVARES DE MELO',
     ])
   })
 

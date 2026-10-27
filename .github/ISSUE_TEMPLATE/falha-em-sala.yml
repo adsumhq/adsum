@@ -1,0 +1,42 @@
+name: Falha em sala
+description: Algo deu errado numa chamada de verdade.
+labels: ["falha em sala"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        **Nada de dado real aqui.** Nome, matrícula, login, e-mail, print do SIGAA ou da lista: o repositório é público.
+        Se a pasta do Adsum ajudar, anonimize antes com `scripts/anonimizar_cofre.py` e anexe só o JSON que ele gera.
+  - type: input
+    id: quando
+    attributes:
+      label: Quando
+      description: Dia e hora da aula.
+      placeholder: 22/09/2026, 10h
+    validations:
+      required: true
+  - type: input
+    id: onde
+    attributes:
+      label: Navegador e sistema
+      placeholder: Chrome 141 no macOS, app instalado
+    validations:
+      required: true
+  - type: input
+    id: versao
+    attributes:
+      label: Versão do Adsum
+      description: Em Ajustes, Diagnóstico. O carimbo e o commit.
+  - type: textarea
+    id: aconteceu
+    attributes:
+      label: O que aconteceu
+      description: O que você fez, o que esperava e o que viu.
+    validations:
+      required: true
+  - type: textarea
+    id: diario
+    attributes:
+      label: Diário do dia
+      description: O arquivo `diagnostico/<dia>.log` da pasta. Ele não tem nome nem UID, e pode ser colado aqui.
+      render: text

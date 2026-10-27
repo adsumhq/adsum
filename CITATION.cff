@@ -1,0 +1,22 @@
+cff-version: 1.2.0
+message: "Se usar o Adsum num trabalho, cite assim."
+title: "Adsum: chamada por crachá"
+abstract: >-
+  Aplicativo web de chamada por leitura do UID público do crachá, que guarda
+  tudo numa pasta do computador do professor e lança as faltas na planilha de
+  frequência do SIGAA. Sem servidor, sem conta e sem login.
+type: software
+authors:
+  - given-names: Willian
+    family-names: Neves Rupert Jones
+    affiliation: "Centro de Informática, Universidade Federal de Pernambuco"
+  - given-names: Paulo
+    family-names: Freitas
+    affiliation: "Centro de Informática, Universidade Federal de Pernambuco"
+license: MIT
+keywords:
+  - chamada
+  - frequência
+  - NFC
+  - PWA
+  - SIGAA

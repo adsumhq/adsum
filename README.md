@@ -218,6 +218,8 @@ em ESP32) ficam em [`ferramentas/`](ferramentas/).
 | [`docs/04_historico.md`](docs/04_historico.md) | As decisões, datadas, na ordem em que aconteceram |
 | [`docs/08_lancar_no_sigaa.md`](docs/08_lancar_no_sigaa.md) | A próxima versão: levar as presenças ao SIGAA, com o Gravar sempre do professor |
 | [`docs/10_codigo.md`](docs/10_codigo.md) | O código: camadas, o caminho de um crachá, as garantias sob carga |
+| [`CONTRIBUTING.md`](CONTRIBUTING.md) | Como contribuir: rodar sem hardware, testar, e o que uma falha em sala pede antes do conserto |
+| [`SECURITY.md`](SECURITY.md) | Como avisar de uma falha de segurança, e o que o Adsum protege |
 
 ## Estado e próximos passos
 
