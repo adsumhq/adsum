@@ -90,7 +90,7 @@ sai do código **antes** da transferência.
   nenhum site no domínio, outra conta podia tomá-lo. Na janela, o domínio
   sai dela antes de entrar no app, e ela é arquivada.
 - [x] Itens 1 e 2 do código, abaixo.
-- [ ] Verificar o domínio na organização, quando o `TXT` estiver certo.
+- [x] Verificar o domínio na organização: feito em 27/10/2026, depois de o helpdesk corrigir o nome do `TXT`.
 
 ## Estado em 27/10/2026
 
