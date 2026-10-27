@@ -1,11 +1,11 @@
 import { afterEach, describe, expect, it, vi } from 'vitest'
+import { ORIGEM as ADSUM, SITE } from '../nucleo/endereco.ts'
 import { mensagemDeLeitura, mensagemDePlano, mensagemDePronto } from '../nucleo/lancar/protocolo.ts'
 import { brutoDaLeitura, gerarCenario } from '../testes/planilhaSigaa.ts'
 import { PaginaSigaaFalsa } from '../testes/paginaSigaaFalsa.ts'
 import { lancarPeloFavorito } from './ligacao.ts'
 
-const ADSUM = 'https://willianrupert.github.io'
-const DESTINO = { origem: ADSUM, url: `${ADSUM}/adsum/#/sigaa` }
+const DESTINO = { origem: ADSUM, url: `${SITE}#/sigaa` }
 
 /** Depois de todas as aulas dos cenários: nada é futuro. */
 const AGORA = () => new Date('2026-12-20T12:00:00')
@@ -36,7 +36,7 @@ describe('o favorito na planilha', () => {
   it('abre a janela do Adsum encostada, e só manda a leitura quando ela avisa que está pronta', () => {
     const { abrir, popup, chegar, pagina } = montar()
     // Cada clique, um endereço: a janela do Adsum deixada aberta recarrega, em vez de mostrar a leitura velha.
-    expect(abrir).toHaveBeenCalledWith(`${ADSUM}/adsum/?leitura=l-1#/sigaa`, 'adsum-sigaa', expect.stringContaining('popup'))
+    expect(abrir).toHaveBeenCalledWith(`${SITE}?leitura=l-1#/sigaa`, 'adsum-sigaa', expect.stringContaining('popup'))
     expect(popup.postMessage).not.toHaveBeenCalled()
     chegar(mensagemDePronto())
     expect(popup.postMessage).toHaveBeenCalledWith(mensagemDeLeitura('l-1', pagina.extrair()), ADSUM)

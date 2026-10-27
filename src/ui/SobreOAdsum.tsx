@@ -3,7 +3,7 @@
 //
 // Os links só saem do computador com o clique de quem lê, como todo o resto.
 
-import { REPOSITORIO_URL } from '../nucleo/cofre.ts'
+import { REPOSITORIO_URL } from '../nucleo/endereco.ts'
 import { Ondas } from './componentes/Simbolos.tsx'
 
 type Pessoa = {

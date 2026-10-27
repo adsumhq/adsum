@@ -132,7 +132,7 @@ exportação é manual e o app cobra enquanto houver aula por salvar.
 
 O envio ao Web App do Apps Script não foi feito, e não vai ser: seria dado
 saindo do computador sem gesto do professor. PWA instalável e publicado em
-`willianrupert.github.io/adsum/`; `#/vitrine` mostra todas as telas com gente
+`adsum.cin.ufpe.br`; `#/vitrine` mostra todas as telas com gente
 inventada.
 
 O nome continua não trafegando para fora do computador. O que o professor

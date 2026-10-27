@@ -15,7 +15,7 @@ import { calcularUidHash } from '../nucleo/hash.ts'
 import { hexParaUid } from '../nucleo/uid.ts'
 import type { Matriculado } from '../nucleo/tipos.ts'
 import * as arquivos from '../ambiente/arquivos.ts'
-import { GUIA_URL } from '../nucleo/cofre.ts'
+import { GUIA_URL, REPOSITORIO_URL } from '../nucleo/endereco.ts'
 import { diaLocal } from '../nucleo/faltas.ts'
 import { NOVIDADES } from '../nucleo/novidades.ts'
 
@@ -1340,7 +1340,7 @@ describe('rodapé de Ajustes', () => {
     expect(rotulos).toEqual(['Diagnóstico', 'Guia', 'GitHub'])
 
     const linkGitHub = within(rodape).getByRole('link', { name: 'GitHub' })
-    expect(linkGitHub).toHaveAttribute('href', 'https://github.com/willianrupert/adsum')
+    expect(linkGitHub).toHaveAttribute('href', REPOSITORIO_URL)
     expect(linkGitHub).toHaveAttribute('target', '_blank')
     expect(linkGitHub).toHaveAttribute('rel', 'noopener noreferrer')
 

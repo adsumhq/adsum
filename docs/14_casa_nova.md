@@ -1,0 +1,278 @@
+# Casa nova: `adsumhq` e `adsum.cin.ufpe.br`
+
+O plano para tirar o Adsum da conta pessoal e publicá-lo no domínio do CIn,
+sem que nenhum professor perca a base no caminho. Escrito em 01/10/2026, antes
+de qualquer mudança no site: o que está aqui ainda não foi ao ar.
+
+## A decisão
+
+Combinado entre Willian Rupert e o Prof. Paulo Freitas em 29/09/2026: o Adsum
+é um presente aos professores, aberto, para qualquer um no Brasil usar. Três
+consequências:
+
+- **O endereço é do CIn**, `adsum.cin.ufpe.br`. Um professor de outra
+  universidade reconhece `cin.ufpe.br`; não reconhece um domínio pessoal. E o
+  domínio da universidade não vence por falta de renovação.
+- **O código sai da conta pessoal** para a organização `adsumhq`, com Willian
+  e Paulo como donos. Quem quer contribuir enxerga um projeto, e o projeto
+  não depende de uma conta só. Commits e o copyright do `LICENSE` continuam
+  com quem os escreveu.
+- **Os créditos aparecem**: Willian Rupert e Paulo Freitas, CIn UFPE.
+
+Alternativas avaliadas: ficar em `willianrupert.github.io` (funciona, mas
+amarra o projeto a uma pessoa) e `adsum.rlight.com.br` (domínio pessoal, que
+troca "projeto de aluno" por "domínio desconhecido" e depende de renovação
+anual). O `rlight.com.br` continua servindo de página pessoal que aponta para
+cá. O nome `adsum` no GitHub pertence a uma conta inativa desde 2016; `hq` é
+a convenção de "casa oficial do projeto".
+
+## Por que é delicado: a origem prende os dados
+
+IndexedDB, o handle da pasta, o service worker, o armazenamento persistente e
+o PWA instalado pertencem à **origem**, não ao app. Em
+`adsum.cin.ufpe.br` cada professor abre uma base vazia:
+
+- **Chrome e Edge**: a pasta continua no disco. Escolhê-la de novo traz tudo
+  de volta.
+- **Safari e Firefox**: não há pasta. Sem levar os dados, o cadastro fica na
+  origem antiga.
+- **PWA instalado**: o service worker antigo serve o app do cache. Se o
+  `sw.js` antigo responder com redirecionamento ou 404, a atualização falha
+  e o app fica congelado na versão velha, calado.
+- **O favorito do SIGAA** (v2) grava a origem dentro dele
+  (`src/favorito/destino.ts`). Um favorito arrastado para a barra não se
+  atualiza nunca.
+
+Daí as três regras deste plano:
+
+1. **A origem muda uma vez só.** Nada de endereço intermediário
+   (`adsumhq.github.io/adsum/`), e o caminho do app (`/` ou `/app/`) se
+   decide antes.
+2. **Antes do favorito chegar aos professores.** Hoje só o Paulo usa o
+   Adsum, e nenhum favorito foi distribuído. Mais barato não fica.
+3. **O endereço antigo nunca dá 404.** Ele vira a ponte (abaixo).
+
+## O que o GitHub faz, e o que não faz
+
+Transferir o repositório preserva histórico, issues, estrelas e autoria, e
+redireciona `github.com/willianrupert/adsum`, o `git clone` e o
+`raw.githubusercontent.com`. **O GitHub Pages não é redirecionado**:
+`willianrupert.github.io/adsum/` dá 404 no instante da transferência.
+
+E recriar `willianrupert/adsum` para servir a ponte desliga os
+redirecionamentos do repositório. Por isso todo endereço da conta pessoal
+sai do código **antes** da transferência.
+
+## Estado em 01/10/2026
+
+- [x] Organização `adsumhq` criada, como "My personal account". "A business
+  or institution" aceitaria termos corporativos em nome da UFPE, e isso não
+  é decisão de formulário. Dá para converter depois, por quem puder assinar.
+- [x] Domínio `adsum.cin.ufpe.br` adicionado para verificação na
+  organização. Não clicar em Verify antes de o registro existir.
+- [x] `cin.ufpe.br` tem registro CAA autorizando `letsencrypt.org`, que é o
+  que o GitHub Pages usa para o HTTPS. O bloqueio mais comum em domínio de
+  universidade não existe aqui. A confirmação só vem com o certificado
+  emitido.
+- [ ] GitHub do Paulo, para o convite de owner.
+- [ ] Pedido à TI do CIn (DNS) e à Ascom (logo).
+- [ ] Código da mudança, nesta branch.
+- [ ] Janela da migração.
+
+## Estado em 26/10/2026
+
+- [x] O helpdesk do CIn (chamado #13178) criou o `CNAME`, certo. O `TXT` saiu
+  com a zona duplicada no nome (`...adsum.cin.ufpe.br.cin.ufpe.br`, falta do
+  ponto final no arquivo do BIND); a correção foi pedida no mesmo chamado.
+- [x] O domínio está reivindicado: `adsumhq/pagina-provisoria` serve
+  `adsum.cin.ufpe.br` com HTTPS, uma página sem script nem service worker que
+  só aponta para o endereço de hoje. Com o `CNAME` apontando para o GitHub e
+  nenhum site no domínio, outra conta podia tomá-lo. Na janela, o domínio
+  sai dela antes de entrar no app, e ela é arquivada.
+- [x] Itens 1 e 2 do código, abaixo.
+- [x] Verificar o domínio na organização: feito em 27/10/2026, depois de o helpdesk corrigir o nome do `TXT`.
+
+## Estado em 27/10/2026
+
+- [x] Item 3 do código, a ponte, com o ensaio de duas origens
+  (`e2e/mudanca.spec.ts`) passando sobre a cópia real de um cofre. O porquê
+  de cada escolha está no `04_historico.md`, 27/10/2026.
+- [x] O caminho do backup ensaiado no WebKit (`e2e/mudancaNoSafari.spec.ts`).
+- [x] Item 5, menos os testes em todo PR: `CONTRIBUTING.md`, `SECURITY.md`,
+  `CITATION.cff`, os modelos de issue e o `CODEOWNERS`. Os testes no PR mexem
+  no CI que publica, e ficam para depois da janela.
+- [x] A janela da migração passo a passo, abaixo. Ao escrevê-la, a ordem de
+  antes publicava um site quebrado no endereço antigo: o merge na `main`
+  disparava o deploy de um app montado para `/`. Agora o merge leva `[skip ci]`.
+
+## O pedido ao CIn
+
+O DNS de `cin.ufpe.br` é da TI do CIn (`dns1`, `dns2`, `dns3.cin.ufpe.br`).
+O pedido vai pelo Paulo: pedido de docente anda mais rápido.
+
+| Tipo | Nome | Valor |
+|---|---|---|
+| `CNAME` | `adsum.cin.ufpe.br` | `adsumhq.github.io` |
+| `TXT` | `_github-pages-challenge-adsumhq.adsum.cin.ufpe.br` | `dfc47e2bde078959ae0b59471d850a` |
+
+O valor do `TXT` não é segredo: ele fica público no DNS de qualquer jeito.
+Junto com os registros:
+
+- **DNS puro.** Sem proxy, firewall de aplicação ou certificado da UFPE na
+  frente. Se o tráfego for interceptado, o GitHub não emite o certificado.
+- **O registro não é apagado nem alterado sem falar com o Paulo.** Mudar a
+  origem tira dos professores o acesso às bases deles.
+- **O argumento:** nenhum servidor, custo ou manutenção para o CIn, e nenhum
+  dado de aluno no lado da universidade. Tudo fica no computador do
+  professor.
+
+À Ascom do CIn, separado: podemos usar o logo do CIn na tela de créditos? Sem
+permissão, fica o texto "CIn UFPE".
+
+## O código da mudança
+
+Tudo nesta branch, sem merge na `main` até a janela: qualquer push na `main`
+reconstrói o site.
+
+1. **Um ponto só para o endereço.** Feito: `src/nucleo/endereco.ts` guarda a
+   origem, o caminho, o repositório e o link do guia, e o favorito, os
+   Ajustes, o LEIA-ME, os testes, o e2e e os geradores do guia e do manual
+   leem de lá. O `endereco.test.ts` falha se o endereço aparecer escrito à
+   mão noutro arquivo do app. Ficam de fora o README, o `CLAUDE.md` e os
+   `docs/`, que mudam à mão na janela.
+2. **O `base` do Vite.** Feito: vem de `CAMINHO`, em `endereco.ts`, e não
+   mais do nome do repositório no `publicar.yml`. No domínio próprio vira
+   `/`, ou `/app/` se houver landing.
+3. **A ponte.** Feito: `npm run build:ponte` gera `dist-ponte/`, que vai
+   para `willianrupert.github.io/adsum/`. Os dois endereços vêm de `MUDANCA`,
+   em `endereco.ts`; o ensaio os troca por origens locais com `ADSUM_MUDANCA`.
+   O app recebe em `#/chegada` (`ui/Chegada.tsx`), só em base vazia. O
+   desenho, como foi pensado:
+   - avisa que o Adsum mudou para `adsum.cin.ufpe.br`;
+   - **Levar meus dados**: abre o endereço novo e entrega a base por
+     `postMessage`, de janela para janela, sem rede, com a origem conferida
+     dos dois lados. Mesmo desenho do protocolo do favorito
+     (`nucleo/lancar/`). O sal vai junto, como já vai no backup, e entra no
+     chaveiro do endereço novo sem descartar nenhum;
+   - **Baixar o backup**, para quem prefere o caminho manual;
+   - serve um `sw.js` de verdade, para o PWA instalado se atualizar e mostrar
+     o aviso em vez de congelar.
+
+   Fica no ar por pelo menos um semestre. Não custa nada mantê-la.
+4. **Créditos.** Uma linha no pé da tela de repouso, "Willian Rupert e Paulo
+   Freitas · CIn UFPE", e um "Sobre o Adsum" em Ajustes. Nunca durante a
+   chamada. O cartão de cada um (foto, papel, e-mail, LinkedIn, GitHub, Lattes)
+   abre no `Sheet`. Fotos dentro do app, nunca puxadas de fora: fonte remota
+   avisaria a outro servidor que o professor abriu o Adsum. Foto e contatos
+   do Paulo entram com o sim dele. Isto reverte o "© 2026 Adsum" de
+   `f25b58a`, e o porquê vai para o `04_historico.md`.
+5. **Arquivos de comunidade.** Feito em 27/10/2026, menos os testes em todo
+   PR. O desenho: `CONTRIBUTING.md` (as regras do `CLAUDE.md` e
+   "como uma mudança chega à sala", e que dá para desenvolver sem dongle com o
+   `LeitorSimulado`), `SECURITY.md` (sal e `auditoria/uids.csv` pedem canal
+   privado), `CITATION.cff`, templates de issue (o de "falha em sala" já pede
+   o `anonimizar_cofre.py`), `CODEOWNERS` e testes rodando em todo PR.
+
+### Em discussão
+
+- **O app fica em `/`**, decidido pelo autor em 26/10/2026: o mais simples.
+  Sem landing na frente, `adsum.cin.ufpe.br` abre o próprio Adsum, e na
+  janela `CAMINHO` (`src/nucleo/endereco.ts`) vira `/`. Quem ainda não
+  conhece o Adsum o conhece pela `#/vitrine` e pelo guia. A ideia da landing
+  (o que é, o que é preciso, uma ação "Abrir o Adsum", no visual do app com o
+  CIn como assinatura) fica guardada; se um dia voltar, terá de morar noutro
+  caminho, porque o do app não muda mais.
+- **Windows e Linux.** O desenho não depende de sistema, mas nunca foi
+  ensaiado neles. Até ser, o guia diz "Chrome ou Edge no computador".
+
+## A janela da migração
+
+Longe de aula, pelas regras do `CLAUDE.md`: logo depois de uma, nunca na
+véspera. Cada passo diz como desfazê-lo.
+
+### Antes do dia
+
+1. **Domínio verificado na organização**: `TXT` no nome certo, e Verify em
+   `adsumhq` › Settings › Pages. Sem isso, os minutos sem site no passo 4
+   deixam o subdomínio livre para outra conta.
+2. **O Paulo como owner** da `adsumhq`.
+3. **Ensaios verdes** sobre o zip mais recente de um professor:
+   `npm run verificar` nas últimas 24 horas, sem teste pulado (ele roda
+   `e2e/mudanca.spec.ts` e `e2e/mudancaNoSafari.spec.ts` junto). E à mão, com
+   o Safari de verdade: o app instalado no Dock, a ponte e o backup.
+4. **Avisar quem usa** (hoje, o Paulo): o dia, e que no primeiro uso depois
+   dele o Adsum pede para levar os dados.
+
+### Na branch
+
+5. Em `src/nucleo/endereco.ts`: `CASA = CIN` e `REPOSITORIO =
+   'adsumhq/adsum'`. O `endereco.test.ts` garante que nenhum outro arquivo do
+   app ficou com o endereço antigo.
+6. À mão, o que o teste não vê: os links do `README.md`, o `CLAUDE.md` (a
+   pendência do `base` do Vite) e o `docs/README.md`. Os documentos de
+   registro (`04`, `05`) ficam como estão: contam o que era.
+7. `npm run verificar` de novo, já com o endereço novo.
+8. **A ponte**: `npm run build:ponte`, e uma cópia de `dist-ponte/` fora do
+   git (`fora-do-git/casa-nova/ponte-<commit>/`). A ponte lê só `MUDANCA`,
+   que não muda com `CASA`.
+
+### A troca
+
+9. **Tirar o domínio da página provisória**: `adsumhq/pagina-provisoria` ›
+   Settings › Pages › Custom domain › Remove. Desfazer: pô-lo de volta. Daqui
+   até o passo 12, `adsum.cin.ufpe.br` não tem site, e o domínio verificado
+   é o que o protege.
+10. **Merge na `main` com `[skip ci]` na mensagem**, e push. Sem o `[skip
+    ci]`, o push publicaria no endereço antigo um app montado para `/`: o
+    Pages o serviria em `/adsum/`, sem os arquivos. Desfazer: reverter o
+    merge, também com `[skip ci]`.
+11. **Transferir** `willianrupert/adsum` para `adsumhq`: Settings › Danger
+    Zone › Transfer. O endereço antigo passa a dar 404, e quem está com o
+    app aberto não percebe (o service worker serve do cache). Desfazer:
+    transferir de volta.
+12. **O app no endereço novo**: em `adsumhq/adsum`, Settings › Pages, Source
+    "GitHub Actions" e Custom domain `adsum.cin.ufpe.br`. Depois, Actions ›
+    publicar › Run workflow. Quando o certificado sair, **Enforce HTTPS**.
+    Desfazer: tirar o domínio e voltar ao passo 9 na página provisória.
+13. **A ponte no endereço antigo**: criar o repositório público
+    `willianrupert/adsum`, com o conteúdo de `dist-ponte/` na raiz da `main`
+    e um `.nojekyll`, e Pages em "Deploy from a branch", `main`, `/`. Isso
+    desliga os redirecionamentos do repositório transferido, e por isso vem
+    depois do passo 5. Desfazer: apagar este repositório antes de transferir
+    o outro de volta.
+14. **Arquivar** `adsumhq/pagina-provisoria`.
+
+### Conferir
+
+15. `npm run conferir-no-ar`, que agora lê o endereço novo.
+16. No endereço antigo: `/adsum/`, `/adsum/#/vitrine` e `/adsum/#/sigaa`
+    mostram a ponte, e `/adsum/sw.js` responde 200. Nunca 404.
+17. O ensaio abaixo.
+
+Até o passo 11, desfazer é reverter. Depois dele, cada passo tem a sua volta.
+A base de quem já levou os dados não volta sozinha, e por isso a ponte só
+copia: a base antiga continua no navegador, e voltar o endereço antigo ao app
+a devolve inteira.
+
+## O ensaio
+
+O do `07_ensaio_antes_da_aula.md`, com a cópia do cofre e o dongle, em
+`adsum.cin.ufpe.br`, e mais:
+
+- **Chrome**: Levar meus dados, depois escolher a mesma pasta, e conferir que
+  nada duplicou. Roda sozinho em `e2e/mudanca.spec.ts`, com o service worker
+  de verdade.
+- **Safari**, com base só no navegador: Baixar o backup na ponte, e "Tenho um
+  backup do Adsum" no endereço novo. Roda sozinho no WebKit em
+  `e2e/mudancaNoSafari.spec.ts`.
+- **O app instalado no endereço antigo**, no Chrome e no Dock do Safari:
+  abrir, ver a ponte, levar os dados. Ainda só à mão: o Playwright não
+  instala app.
+- **O endereço antigo nunca dá 404**, nem em `#/vitrine` ou `#/sigaa`.
+- **Os botões Guia e GitHub** abrem `adsumhq`.
+
+## Se precisar voltar atrás
+
+Cada passo da janela diz a sua volta. O que não volta sozinho é a base de
+quem já levou os dados para o endereço novo: por isso a ponte só **copia**,
+nunca apaga a base antiga.

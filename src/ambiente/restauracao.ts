@@ -8,6 +8,7 @@ import { NOMES, deJsonConfig, deJsonGrade, deJsonTurma, deJsonVinculos } from '.
 import { CABECALHO, deCsv } from '../nucleo/csv.ts'
 import { saisConhecidos, salValido } from '../nucleo/hash.ts'
 import { CABECALHO_DA_AUDITORIA, deCsvDaAuditoria } from '../nucleo/lancar/auditoria.ts'
+import { deJsonBackup, type ArquivoDoCofre } from '../nucleo/mudanca.ts'
 import type { Repositorio } from '../portas/Repositorio.ts'
 import { conferirAuditoriaSigaa, problemaDeTurma, trazerAuditoria, turmasPorNomeDeArquivo } from './auditoriaSigaaNaPasta.ts'
 import { importarEventos } from './logDaPasta.ts'
@@ -116,10 +117,17 @@ type Papel = 'config' | 'vinculos' | 'grade' | 'turma' | 'log' | 'sigaa' | 'fora
 /** Pastas do cofre que não são fonte de dado: relatório, diário, auditoria. */
 const PASTAS_FORA = new Set(['faltas', 'diagnostico', 'auditoria'])
 
-function papelDoArquivo(arquivo: File, texto: string): Papel {
-  const partes = (arquivo.webkitRelativePath ?? '').split('/')
-  const pasta = partes.length > 2 ? partes[partes.length - 2] : undefined
-  const nome = arquivo.name
+/** Um arquivo a restaurar: o caminho dentro do cofre decide o papel, o nome é o que se mostra. */
+interface Entrada {
+  caminho: string
+  nome: string
+  texto: string
+}
+
+function papelDoArquivo({ caminho, texto }: Entrada): Papel {
+  const partes = caminho.split('/')
+  const pasta = partes.length > 1 ? partes[partes.length - 2] : undefined
+  const nome = partes[partes.length - 1]
   if (pasta === 'registros') return nome.endsWith('.csv') ? 'log' : 'desconhecido'
   if (pasta === 'turmas') return nome.endsWith('.json') ? 'turma' : 'desconhecido'
   if (pasta === 'sigaa') return nome.endsWith('.csv') ? 'sigaa' : 'desconhecido'
@@ -141,74 +149,97 @@ function papelDoArquivo(arquivo: File, texto: string): Papel {
 /**
  * Restaura de arquivos soltos (Safari e Firefox, `webkitdirectory`), onde o
  * nome não identifica: o log e a planilha de faltas de uma turma têm o mesmo.
- * O sal vem antes de tudo, como em `restaurar`.
+ * O backup da ponte (`nucleo/mudanca.ts`) se abre aqui também, em arquivos.
  */
 export async function restaurarDeArquivos(
   repositorio: Repositorio,
   arquivos: File[],
 ): Promise<Resumo> {
+  const entradas: Entrada[] = []
+  const problemas: string[] = []
+  for (const arquivo of arquivos) {
+    const texto = await arquivo.text()
+    const backup = arquivo.name.endsWith('.json') ? deJsonBackup(texto) : undefined
+    if (backup) {
+      entradas.push(...backup.arquivos.map((a) => ({ ...a, nome: a.caminho })))
+      problemas.push(...backup.problemas)
+      continue
+    }
+    // `webkitRelativePath` começa pela pasta escolhida, que não faz parte do cofre.
+    const relativo = arquivo.webkitRelativePath?.split('/').slice(1).join('/')
+    entradas.push({ caminho: relativo || arquivo.name, nome: arquivo.webkitRelativePath || arquivo.name, texto })
+  }
+  const resumo = await restaurarEntradas(repositorio, entradas)
+  return { arquivos: resumo.arquivos, problemas: [...problemas, ...resumo.problemas] }
+}
+
+/** Restaura os arquivos que a ponte trouxe do endereço antigo. Ver `ambiente/mudanca.ts`. */
+export const restaurarDoCofre = (repositorio: Repositorio, arquivos: ArquivoDoCofre[]) =>
+  restaurarEntradas(repositorio, arquivos.map((a) => ({ ...a, nome: a.caminho })))
+
+/** O sal vem antes de tudo, como em `restaurar`. */
+async function restaurarEntradas(repositorio: Repositorio, entradas: Entrada[]): Promise<Resumo> {
   const problemas: string[] = []
   const lidos: string[] = []
 
-  const porPapel = new Map<Papel, { arquivo: File; texto: string }[]>()
-  for (const arquivo of arquivos) {
-    const texto = await arquivo.text()
-    const papel = papelDoArquivo(arquivo, texto)
-    porPapel.set(papel, [...(porPapel.get(papel) ?? []), { arquivo, texto }])
+  const porPapel = new Map<Papel, Entrada[]>()
+  for (const entrada of entradas) {
+    const papel = papelDoArquivo(entrada)
+    porPapel.set(papel, [...(porPapel.get(papel) ?? []), entrada])
   }
   const doPapel = (papel: Papel) => porPapel.get(papel) ?? []
-  const nomeDe = (arquivo: File) => arquivo.webkitRelativePath || arquivo.name
+  const ultimo = (caminho: string) => caminho.split('/').pop()!
 
   // O sal antes de tudo: ver `adotarSal`.
-  for (const { arquivo, texto } of doPapel('config')) {
+  for (const { nome, texto } of doPapel('config')) {
     await adotarSal(repositorio, texto, problemas)
-    lidos.push(nomeDe(arquivo))
+    lidos.push(nome)
   }
 
-  for (const { arquivo, texto } of doPapel('vinculos')) {
+  for (const { nome, texto } of doPapel('vinculos')) {
     const { conteudo: lista, problemas: falhas } = deJsonVinculos(texto)
     for (const vinculo of lista ?? []) await repositorio.gravarVinculo(vinculo)
     problemas.push(...falhas.map((f) => f.motivo))
-    lidos.push(nomeDe(arquivo))
+    lidos.push(nome)
   }
 
-  for (const { arquivo, texto } of doPapel('grade')) {
+  for (const { nome, texto } of doPapel('grade')) {
     const { conteudo: lista, problemas: falhas } = deJsonGrade(texto)
     for (const aula of lista ?? []) await repositorio.gravarAula({ ...aula, id: undefined })
     problemas.push(...falhas.map((f) => f.motivo))
-    lidos.push(nomeDe(arquivo))
+    lidos.push(nome)
   }
 
-  for (const { arquivo, texto } of doPapel('turma')) {
-    const { conteudo: pessoas, problemas: falhas } = deJsonTurma(texto, arquivo.name)
+  for (const { caminho, nome, texto } of doPapel('turma')) {
+    const { conteudo: pessoas, problemas: falhas } = deJsonTurma(texto, ultimo(caminho))
     if (pessoas?.length) await repositorio.salvarTurma(pessoas[0].turma, pessoas)
     problemas.push(...falhas.map((f) => f.motivo))
-    lidos.push(nomeDe(arquivo))
+    lidos.push(nome)
   }
 
-  for (const { arquivo, texto } of doPapel('log')) {
+  for (const { nome, texto } of doPapel('log')) {
     const { itens, problemas: falhas } = deCsv(texto)
     await importarEventos(repositorio, itens)
-    problemas.push(...falhas.map((f) => `${nomeDe(arquivo)}, linha ${f.linha}: ${f.motivo}`))
-    lidos.push(nomeDe(arquivo))
+    problemas.push(...falhas.map((f) => `${nome}, linha ${f.linha}: ${f.motivo}`))
+    lidos.push(nome)
   }
 
   // Depois das turmas e dos logs: a turma sai do nome do arquivo.
   const porNome = doPapel('sigaa').length > 0 ? await turmasPorNomeDeArquivo(repositorio) : new Map<string, string[]>()
-  for (const { arquivo, texto } of doPapel('sigaa')) {
-    const candidatas = porNome.get(arquivo.name)
+  for (const { caminho, nome, texto } of doPapel('sigaa')) {
+    const candidatas = porNome.get(ultimo(caminho))
     if (candidatas?.length !== 1) {
-      problemas.push(problemaDeTurma(nomeDe(arquivo), candidatas))
+      problemas.push(problemaDeTurma(nome, candidatas))
       continue
     }
     const { itens, problemas: falhas } = deCsvDaAuditoria(texto, candidatas[0])
     await trazerAuditoria(repositorio, candidatas[0], itens)
-    problemas.push(...falhas.map((f) => `${nomeDe(arquivo)}, linha ${f.linha}: ${f.motivo}`))
-    lidos.push(nomeDe(arquivo))
+    problemas.push(...falhas.map((f) => `${nome}, linha ${f.linha}: ${f.motivo}`))
+    lidos.push(nome)
   }
 
-  for (const { arquivo } of doPapel('desconhecido')) {
-    problemas.push(`${nomeDe(arquivo)}: não parece um arquivo do Adsum, ficou de fora.`)
+  for (const { nome } of doPapel('desconhecido')) {
+    problemas.push(`${nome}: não parece um arquivo do Adsum, ficou de fora.`)
   }
 
   if (lidos.length === 0) {

@@ -7,6 +7,7 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
+    "build:ponte": "tsc -b && vite build -c vite.ponte.config.ts",
     "lint": "oxlint",
     "preview": "vite preview",
     "test": "vitest run",

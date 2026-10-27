@@ -3,6 +3,8 @@ import { ProvedorAdsum } from './ui/ProvedorAdsum.tsx'
 import { Fluxo } from './ui/Fluxo.tsx'
 import { Vitrine } from './ui/Vitrine.tsx'
 import { JanelaSigaa } from './ui/sigaa/JanelaSigaa.tsx'
+import { CANAL_DA_MUDANCA, Chegada } from './ui/Chegada.tsx'
+import { chamadaViva } from './ambiente/chamadaViva.ts'
 
 export default function App() {
   // A rota do app decide sozinha qual tela mostrar — ótimo para quem usa, ruim
@@ -26,12 +28,32 @@ export default function App() {
     return () => window.removeEventListener('hashchange', ouvir)
   }, [])
 
+  // A base que a mudança trouxe noutra janela (`#/chegada`) não está no que
+  // esta janela leu ao abrir, nem o sal dela: relê tudo, se não houver chamada.
+  useEffect(() => {
+    if (typeof BroadcastChannel !== 'function') return
+    const canal = new BroadcastChannel(CANAL_DA_MUDANCA)
+    canal.onmessage = () => {
+      if (!chamadaViva() && window.location.hash !== '#/chegada') window.location.reload()
+    }
+    return () => canal.close()
+  }, [])
+
   // A janela do favorito do SIGAA não monta o provedor: não liga leitor nem
   // fecha a chamada da janela principal. Ver `abrirBaseDaJanelaSigaa`.
   if (hash === '#/sigaa') {
     return (
       <div className="app">
         <JanelaSigaa />
+      </div>
+    )
+  }
+
+  // A janela que a ponte do endereço antigo abre. Ver `Chegada.tsx`.
+  if (hash === '#/chegada') {
+    return (
+      <div className="app">
+        <Chegada />
       </div>
     )
   }

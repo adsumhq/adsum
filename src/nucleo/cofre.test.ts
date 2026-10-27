@@ -1,6 +1,5 @@
 import { describe, expect, it } from 'vitest'
 import {
-  GUIA_URL,
   NOMES,
   VERSAO,
   deJsonCompartilhado,
@@ -9,6 +8,7 @@ import {
   paraJsonVinculos,
   paraLeiaMe,
 } from './cofre.ts'
+import { GUIA_URL } from './endereco.ts'
 import type { Vinculo } from './tipos.ts'
 
 const VINCULOS: Vinculo[] = [
