@@ -36,7 +36,7 @@ describe('o favorito na planilha', () => {
   it('abre a janela do Adsum encostada, e só manda a leitura quando ela avisa que está pronta', () => {
     const { abrir, popup, chegar, pagina } = montar()
     // Cada clique, um endereço: a janela do Adsum deixada aberta recarrega, em vez de mostrar a leitura velha.
-    expect(abrir).toHaveBeenCalledWith(`${ADSUM}/adsum/?leitura=l-1#/sigaa`, 'adsum-sigaa', expect.stringContaining('popup'))
+    expect(abrir).toHaveBeenCalledWith(`${SITE}?leitura=l-1#/sigaa`, 'adsum-sigaa', expect.stringContaining('popup'))
     expect(popup.postMessage).not.toHaveBeenCalled()
     chegar(mensagemDePronto())
     expect(popup.postMessage).toHaveBeenCalledWith(mensagemDeLeitura('l-1', pagina.extrair()), ADSUM)

@@ -10,13 +10,13 @@ O aluno encosta o crachá, a presença é registrada, e no fim da aula existe um
 planilha. Os dados ficam numa pasta do computador do professor, e é dela que
 tudo volta.
 
-[**Abrir o app**](https://willianrupert.github.io/adsum/) ·
-[**Ver todas as telas**](https://willianrupert.github.io/adsum/#/vitrine) ·
+[**Abrir o app**](https://adsum.cin.ufpe.br/) ·
+[**Ver todas as telas**](https://adsum.cin.ufpe.br/#/vitrine) ·
 [**Guia de uso**](docs/Adsum-guia.pdf) ·
 [**Manual e LGPD**](docs/Adsum-manual-e-LGPD.docx) ·
 [**Documentação**](docs/README.md)
 
-[![publicar](https://github.com/willianrupert/adsum/actions/workflows/publicar.yml/badge.svg)](https://github.com/willianrupert/adsum/actions/workflows/publicar.yml)
+[![publicar](https://github.com/adsumhq/adsum/actions/workflows/publicar.yml/badge.svg)](https://github.com/adsumhq/adsum/actions/workflows/publicar.yml)
 ![PWA](https://img.shields.io/badge/PWA-offline-0071e3)
 ![React · TypeScript](https://img.shields.io/badge/React%20%C2%B7%20TypeScript-1d1d1f)
 ![testes: vitest · jsdom](https://img.shields.io/badge/testes-vitest%20%C2%B7%20jsdom-0071e3)
@@ -27,7 +27,7 @@ tudo volta.
 
 <img src="docs/leque.png" alt="Três janelas do Adsum: a tela inicial com a turma do dia, a chamada com dois nomes entrando, e o favorito do SIGAA com uma aula para lançar" width="900">
 
-<sub>Antes, durante e depois da aula. Gente inventada, da <a href="https://willianrupert.github.io/adsum/#/vitrine">vitrine</a>.</sub>
+<sub>Antes, durante e depois da aula. Gente inventada, da <a href="https://adsum.cin.ufpe.br/#/vitrine">vitrine</a>.</sub>
 
 </div>
 
@@ -149,10 +149,10 @@ crachá é procurado em todos os que a instalação já teve.
 
 ## Começar
 
-**Para dar aula:** abra [o app](https://willianrupert.github.io/adsum/) no
+**Para dar aula:** abra [o app](https://adsum.cin.ufpe.br/) no
 Chrome ou no Edge, escolha uma pasta, cole a página de participantes do SIGAA,
 e ligue o dongle. O [manual](docs/Adsum-manual-e-LGPD.docx) cobre o resto, e
-[`#/vitrine`](https://willianrupert.github.io/adsum/#/vitrine) mostra todas as
+[`#/vitrine`](https://adsum.cin.ufpe.br/#/vitrine) mostra todas as
 telas com gente inventada.
 
 **Para desenvolver:**

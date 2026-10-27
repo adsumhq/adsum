@@ -371,11 +371,12 @@ a entender que os dados estão seguros** neles.
   instalado. Sem ele o navegador pode apagar a base sob pressão de espaço — por
   isso o diagnóstico mostra o estado e oferece o botão de pedir.
 - **O endereço do Adsum mora em `src/nucleo/endereco.ts`**: origem, caminho
-  (o `base` do Vite, hoje `/adsum/`), repositório e o link do guia. O
+  (o `base` do Vite, hoje `/`), repositório e o link do guia. O
   `endereco.test.ts` falha se ele aparecer escrito à mão noutro arquivo do
-  app. A mudança para `adsum.cin.ufpe.br` está em `docs/14_casa_nova.md`: a
-  origem prende a base e o favorito, e por isso muda uma vez só, numa janela.
-  No endereço antigo fica a **ponte** (`npm run build:ponte`, `src/ponte/`),
+  app. Desde 27/10/2026 o app mora em `adsum.cin.ufpe.br`, no repositório
+  `adsumhq/adsum` (`docs/14_casa_nova.md`): a origem prende a base e o
+  favorito, e por isso não muda de novo sem motivo forte.
+  No endereço antigo (`willianrupert.github.io/adsum/`) fica a **ponte** (`npm run build:ponte`, `src/ponte/`),
   que só lê a base e a copia para `#/chegada` no novo. Ela não é um segundo
   Adsum: não liga leitor, não abre chamada, não toca na pasta.
 - **O firmware ainda não é repositório.** Se um dia for, `adsum` já estará

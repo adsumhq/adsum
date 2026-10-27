@@ -322,7 +322,7 @@ javascript:(() => {
 #### Por que ele resolve o problema
 
 O problema de fundo é que **os dados estão num lugar e a página está em
-outro**. As presenças moram no Adsum (`willianrupert.github.io`); a planilha
+outro**. As presenças moram no Adsum (`adsum.cin.ufpe.br`); a planilha
 mora no SIGAA (`sigaa.ufpe.br`). O navegador separa sites diferentes de
 propósito: o Adsum não pode tocar na página do SIGAA, e o SIGAA não pode ler
 a base do Adsum. Qualquer ponte precisa atravessar essa parede sem abri-la.
@@ -512,7 +512,7 @@ Sem botão: o gesto está onde o Gravar mora.
 
 **Na planilha, favorito → janela.** Uma janela de verdade do sistema, aberta
 em modo popup encostada à direita (~420 × 640), com
-`willianrupert.github.io` na barra — o selo de que aquilo é o Adsum. Arrasta,
+`adsum.cin.ufpe.br` na barra — o selo de que aquilo é o Adsum. Arrasta,
 redimensiona, minimiza e fecha. Dentro, uma folha:
 
 - *Tudo confere* — um visto e "SIGAA e Adsum iguais em 12 aulas". Fechar.

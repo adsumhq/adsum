@@ -14,8 +14,8 @@ export interface Casa {
 const PESSOAL: Casa = { origem: 'https://willianrupert.github.io', caminho: '/adsum/' }
 const CIN: Casa = { origem: 'https://adsum.cin.ufpe.br', caminho: '/' }
 
-/** Onde o app mora hoje. Na janela da migração, vira `CIN`. */
-const CASA = PESSOAL
+/** Onde o app mora. Desde 27/10/2026, o CIn; o endereço pessoal é a ponte. */
+const CASA = CIN
 
 export const ORIGEM = CASA.origem
 
@@ -37,7 +37,7 @@ export const MUDANCA: Mudanca = { de: PESSOAL, para: CIN }
 
 export const urlDaCasa = (casa: Casa) => `${casa.origem}${casa.caminho}`
 
-const REPOSITORIO = 'willianrupert/adsum'
+const REPOSITORIO = 'adsumhq/adsum'
 
 export const REPOSITORIO_URL = `https://github.com/${REPOSITORIO}`
 
