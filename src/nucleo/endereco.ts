@@ -5,12 +5,37 @@
 // numa janela combinada (`docs/14_casa_nova.md`), e o `endereco.test.ts` acusa
 // endereço escrito à mão em qualquer outro arquivo do app.
 
-export const ORIGEM = 'https://willianrupert.github.io'
+export interface Casa {
+  origem: string
+  /** O caminho do app na origem, com as duas barras. */
+  caminho: string
+}
+
+const PESSOAL: Casa = { origem: 'https://willianrupert.github.io', caminho: '/adsum/' }
+const CIN: Casa = { origem: 'https://adsum.cin.ufpe.br', caminho: '/' }
+
+/** Onde o app mora hoje. Na janela da migração, vira `CIN`. */
+const CASA = PESSOAL
+
+export const ORIGEM = CASA.origem
 
 /** O caminho do app na origem, com as duas barras. É o `base` do Vite. */
-export const CAMINHO = '/adsum/'
+export const CAMINHO = CASA.caminho
 
 export const SITE = `${ORIGEM}${CAMINHO}`
+
+/**
+ * A mudança: a ponte fica em `de` e entrega a base em `para`. Cada lado só
+ * conversa com a origem do outro.
+ */
+export interface Mudanca {
+  de: Casa
+  para: Casa
+}
+
+export const MUDANCA: Mudanca = { de: PESSOAL, para: CIN }
+
+export const urlDaCasa = (casa: Casa) => `${casa.origem}${casa.caminho}`
 
 const REPOSITORIO = 'willianrupert/adsum'
 

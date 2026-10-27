@@ -4,6 +4,8 @@ import react from '@vitejs/plugin-react'
 import { VitePWA } from 'vite-plugin-pwa'
 import { pluginDoFavorito } from './src/favorito/construir.ts'
 import { CAMINHO } from './src/nucleo/endereco.ts'
+import { mudancaDoBuild } from './src/ponte/construir.ts'
+import { MANIFESTO } from './manifesto.ts'
 
 // O `base` do build é o caminho do app no endereço publicado. `BASE_ADSUM`
 // troca só para ensaio (um build servido noutro caminho).
@@ -35,7 +37,11 @@ function commitDaBuild(): string {
 const COMMIT = commitDaBuild()
 
 export default defineConfig(({ command, isPreview }) => ({
-  define: { __CARIMBO__: JSON.stringify(CARIMBO), __COMMIT__: JSON.stringify(COMMIT) },
+  define: {
+    __CARIMBO__: JSON.stringify(CARIMBO),
+    __COMMIT__: JSON.stringify(COMMIT),
+    __MUDANCA__: JSON.stringify(mudancaDoBuild()),
+  },
   // Em desenvolvimento o site é a raiz, que é o confortável. No `preview` o
   // `base` volta a valer — sem isso, o preview serve tudo em `/` e passa por
   // bom um build que o Pages serviria quebrado.
@@ -53,30 +59,7 @@ export default defineConfig(({ command, isPreview }) => ({
       registerType: 'autoUpdate',
       injectRegister: null,
       includeAssets: ['icone.svg', 'apple-touch-icon.png'],
-      manifest: {
-        name: 'Adsum — frequência por crachá',
-        short_name: 'Adsum',
-        description:
-          'Registro de frequência em sala por leitura de crachá. Os dados ficam no seu computador.',
-        lang: 'pt-BR',
-        start_url: '.',
-        scope: '.',
-        display: 'standalone',
-        // O fundo do app é branco no claro e preto no escuro; o splash não sabe
-        // qual será, e branco é o que combina com a maioria das telas.
-        background_color: '#ffffff',
-        theme_color: '#ffffff',
-        icons: [
-          { src: 'icone-192.png', sizes: '192x192', type: 'image/png' },
-          { src: 'icone-512.png', sizes: '512x512', type: 'image/png' },
-          {
-            src: 'icone-512-maskable.png',
-            sizes: '512x512',
-            type: 'image/png',
-            purpose: 'maskable',
-          },
-        ],
-      },
+      manifest: MANIFESTO,
       workbox: {
         globPatterns: ['**/*.{js,css,html,svg,png,woff2}'],
         // Sem cache de rede: o app não fala com servidor nenhum. Se um dia falar,

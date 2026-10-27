@@ -6,6 +6,7 @@
 import { NOMES, paraJsonConfig, paraJsonGrade, paraJsonTurma, paraJsonVinculos, paraLeiaMe } from '../nucleo/cofre.ts'
 import { nomeDoArquivo, nomeSeguroDeTurma } from '../nucleo/csv.ts'
 import { planilhaDeFaltas, paraCsvDeFaltas } from '../nucleo/faltas.ts'
+import type { ArquivoDoCofre } from '../nucleo/mudanca.ts'
 import type { Repositorio } from '../portas/Repositorio.ts'
 import { escrever } from './pasta.ts'
 
@@ -57,15 +58,11 @@ export async function gravarFaltas(
 }
 
 /**
- * Reescreve o cadastro na pasta: LEIA-ME, config, vínculos, grade e turmas.
- * O log não passa por aqui. Com `turma`, só o arquivo dela entre as turmas;
- * os outros são pequenos e sempre regravados.
+ * O cadastro como a pasta o guarda: LEIA-ME, config, vínculos, grade e
+ * turmas. Com `turma`, só o arquivo dela entre as turmas; os outros são
+ * pequenos e sempre vão inteiros.
  */
-export async function sincronizar(
-  repositorio: Repositorio,
-  pasta: FileSystemDirectoryHandle,
-  turma?: string,
-): Promise<Resumo> {
+export async function arquivosDoCadastro(repositorio: Repositorio, turma?: string): Promise<ArquivoDoCofre[]> {
   const [config, vinculos, aulas, matriculados] = await Promise.all([
     repositorio.lerConfig(),
     repositorio.listarVinculos(),
@@ -73,24 +70,32 @@ export async function sincronizar(
     turma ? repositorio.listarMatriculados(turma) : repositorio.listarMatriculados(),
   ])
 
-  const arquivos: string[] = []
-  const gravar = async (caminho: string, texto: string) => {
-    await escrever(pasta, caminho, texto)
-    arquivos.push(caminho)
-  }
-
-  await gravar(NOMES.leiaMe, paraLeiaMe())
-  await gravar(NOMES.config, paraJsonConfig(config))
-  await gravar(NOMES.vinculos, paraJsonVinculos(vinculos))
-  await gravar(NOMES.grade, paraJsonGrade(aulas))
-
+  const arquivos: ArquivoDoCofre[] = [
+    { caminho: NOMES.leiaMe, texto: paraLeiaMe() },
+    { caminho: NOMES.config, texto: paraJsonConfig(config) },
+    { caminho: NOMES.vinculos, texto: paraJsonVinculos(vinculos) },
+    { caminho: NOMES.grade, texto: paraJsonGrade(aulas) },
+  ]
   const turmas = new Map<string, typeof matriculados>()
   for (const pessoa of matriculados) {
     turmas.set(pessoa.turma, [...(turmas.get(pessoa.turma) ?? []), pessoa])
   }
   for (const [t, pessoas] of turmas) {
-    await gravar(NOMES.turma(t), paraJsonTurma(pessoas))
+    arquivos.push({ caminho: NOMES.turma(t), texto: paraJsonTurma(pessoas) })
   }
+  return arquivos
+}
 
+/** Reescreve o cadastro na pasta. O log não passa por aqui. */
+export async function sincronizar(
+  repositorio: Repositorio,
+  pasta: FileSystemDirectoryHandle,
+  turma?: string,
+): Promise<Resumo> {
+  const arquivos: string[] = []
+  for (const { caminho, texto } of await arquivosDoCadastro(repositorio, turma)) {
+    await escrever(pasta, caminho, texto)
+    arquivos.push(caminho)
+  }
   return { arquivos, problemas: [] }
 }

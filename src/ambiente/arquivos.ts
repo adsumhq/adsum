@@ -130,3 +130,14 @@ export async function abrirVarios(): Promise<File[]> {
     campo.click()
   })
 }
+
+/** Um arquivo só, pelo seletor comum: o backup da ponte (`nucleo/mudanca.ts`). */
+export async function abrirUm(aceita: string): Promise<File | undefined> {
+  return await new Promise<File | undefined>((resolver) => {
+    const campo = document.createElement('input')
+    campo.type = 'file'
+    campo.accept = aceita
+    campo.onchange = () => resolver(campo.files?.[0])
+    campo.click()
+  })
+}

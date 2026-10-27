@@ -149,6 +149,13 @@ export async function abrirBaseDaJanelaSigaa(): Promise<Repositorio> {
   return repositorio
 }
 
+/** A janela de chegada da mudança (`Chegada.tsx`): só a base, como a do SIGAA. */
+export async function abrirBaseDaChegada(): Promise<Repositorio> {
+  const repositorio = new RepositorioDexie()
+  await repositorio.abrir()
+  return repositorio
+}
+
 export const ponteDaJanela = (): PonteSigaa =>
   new PonteJanela(window, import.meta.env.DEV && naBancada() ? ORIGEM_DA_BANCADA : ORIGEM_SIGAA)
 

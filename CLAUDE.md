@@ -375,6 +375,9 @@ a entender que os dados estão seguros** neles.
   `endereco.test.ts` falha se ele aparecer escrito à mão noutro arquivo do
   app. A mudança para `adsum.cin.ufpe.br` está em `docs/14_casa_nova.md`: a
   origem prende a base e o favorito, e por isso muda uma vez só, numa janela.
+  No endereço antigo fica a **ponte** (`npm run build:ponte`, `src/ponte/`),
+  que só lê a base e a copia para `#/chegada` no novo. Ela não é um segundo
+  Adsum: não liga leitor, não abre chamada, não toca na pasta.
 - **O firmware ainda não é repositório.** Se um dia for, `adsum` já estará
   ocupado por este — o nome natural para ele é `adsum-a1`, que é a nomenclatura
   do próprio projeto: Adsum é o sistema, Adsum A1 é o aparelho.

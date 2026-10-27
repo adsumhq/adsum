@@ -79,6 +79,8 @@ declare global {
   const __CARIMBO__: string
   /** O commit da build (7 caracteres). Ver `vite.config.ts`. */
   const __COMMIT__: string
+  /** Os dois endereços da mudança, como o build os viu. Ver `ponte/construir.ts`. */
+  const __MUDANCA__: import('../nucleo/endereco.ts').Mudanca
 
   /**
    * `beforeinstallprompt` é do Chromium e não está na lib padrão do TypeScript.

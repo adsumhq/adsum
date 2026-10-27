@@ -64,6 +64,39 @@ export function versao(referencia: string): Versao {
 }
 
 /**
+ * O app e a ponte de um commit, montados para uma mudança entre duas origens
+ * locais (`e2e/mudanca.spec.ts`), os dois no caminho `/adsum/` que a
+ * hospedagem serve.
+ */
+export function versoesDaMudanca(referencia: string, mudanca: object): { app: Versao; ponte: Versao } {
+  const commit = git('rev-parse', referencia)
+  const chave = createHash('md5').update(JSON.stringify(mudanca)).digest('hex').slice(0, 8)
+  const pasta = join(CACHE, `mudanca-${commit}-${chave}`)
+  if (!existsSync(join(pasta, 'ponte', 'index.html'))) {
+    const fonte = join(CACHE, `fonte-mudanca-${commit}`)
+    rmSync(fonte, { recursive: true, force: true })
+    mkdirSync(CACHE, { recursive: true })
+    git('worktree', 'add', '--detach', fonte, commit)
+    try {
+      const env = { ...process.env, BASE_ADSUM: '/adsum/', ADSUM_MUDANCA: JSON.stringify(mudanca) }
+      execFileSync('npm', ['ci', '--silent', '--no-audit', '--no-fund'], { cwd: fonte, stdio: 'ignore' })
+      execFileSync('npm', ['run', 'build'], { cwd: fonte, stdio: 'ignore', env })
+      execFileSync('npm', ['run', 'build:ponte'], { cwd: fonte, stdio: 'ignore', env })
+      cpSync(join(fonte, 'dist'), join(pasta, 'app'), { recursive: true })
+      cpSync(join(fonte, 'dist-ponte'), join(pasta, 'ponte'), { recursive: true })
+    } finally {
+      git('worktree', 'remove', '--force', fonte)
+    }
+  }
+  const montada = (sub: string): Versao => {
+    const entrada = /src="\/adsum\/assets\/(index-[^"]+\.js)"/.exec(readFileSync(join(pasta, sub, 'index.html'), 'utf-8'))?.[1]
+    if (!entrada) throw new Error(`build de ${sub} (${commit}) sem script de entrada`)
+    return { commit, pasta: join(pasta, sub), entrada }
+  }
+  return { app: montada('app'), ponte: montada('ponte') }
+}
+
+/**
  * O mesmo build publicado de novo, com um `index.html` que se distingue
  * (`<meta name="adsum-publicacao">`) e o service worker que o anuncia: para o
  * navegador, uma versão nova. É como se testa a atualização com o código de

@@ -92,6 +92,12 @@ sai do código **antes** da transferência.
 - [x] Itens 1 e 2 do código, abaixo.
 - [ ] Verificar o domínio na organização, quando o `TXT` estiver certo.
 
+## Estado em 27/10/2026
+
+- [x] Item 3 do código, a ponte, com o ensaio de duas origens
+  (`e2e/mudanca.spec.ts`) passando sobre a cópia real de um cofre. O porquê
+  de cada escolha está no `04_historico.md`, 27/10/2026.
+
 ## O pedido ao CIn
 
 O DNS de `cin.ufpe.br` é da TI do CIn (`dns1`, `dns2`, `dns3.cin.ufpe.br`).
@@ -130,7 +136,11 @@ reconstrói o site.
 2. **O `base` do Vite.** Feito: vem de `CAMINHO`, em `endereco.ts`, e não
    mais do nome do repositório no `publicar.yml`. No domínio próprio vira
    `/`, ou `/app/` se houver landing.
-3. **A ponte**, uma build à parte que fica em `willianrupert.github.io/adsum/`:
+3. **A ponte.** Feito: `npm run build:ponte` gera `dist-ponte/`, que vai
+   para `willianrupert.github.io/adsum/`. Os dois endereços vêm de `MUDANCA`,
+   em `endereco.ts`; o ensaio os troca por origens locais com `ADSUM_MUDANCA`.
+   O app recebe em `#/chegada` (`ui/Chegada.tsx`), só em base vazia. O
+   desenho, como foi pensado:
    - avisa que o Adsum mudou para `adsum.cin.ufpe.br`;
    - **Levar meus dados**: abre o endereço novo e entrega a base por
      `postMessage`, de janela para janela, sem rede, com a origem conferida
@@ -173,9 +183,11 @@ Longe de aula, pelas regras do `CLAUDE.md`. Tudo de uma vez:
 
 1. Registros do CIn no ar; domínio verificado na organização.
 2. Merge desta branch, ainda no repositório pessoal, com o endereço novo já
-   no código.
+   no código: `CASA = CIN` em `endereco.ts`.
 3. Transferir `willianrupert/adsum` para `adsumhq`.
-4. Recriar `willianrupert/adsum` e publicar a ponte nele.
+4. Recriar `willianrupert/adsum` e publicar a ponte nele: `npm run
+   build:ponte` com `CASA` ainda em `PESSOAL` ou já em `CIN` (a ponte só lê
+   `MUDANCA`), e o conteúdo de `dist-ponte/` no Pages do repositório novo.
 5. Em `adsumhq/adsum`: Pages por GitHub Actions, domínio
    `adsum.cin.ufpe.br`, **Enforce HTTPS** assim que o certificado sair.
 6. O ensaio.
@@ -193,7 +205,8 @@ O do `07_ensaio_antes_da_aula.md`, com a cópia do cofre e o dongle, em
 - **Safari**, com base só no navegador: Levar meus dados, e conferir turmas,
   vínculos e presenças contra o backup.
 - **PWA instalado no endereço antigo**: abrir, ver o aviso da ponte, levar os
-  dados.
+  dados. O caso do Chrome, sem o app instalado, já roda sozinho em
+  `e2e/mudanca.spec.ts`; o app instalado e o Safari, ainda não.
 - **O endereço antigo nunca dá 404**, nem em `#/vitrine`.
 - **Os botões Manual e GitHub** abrem `adsumhq`.
 

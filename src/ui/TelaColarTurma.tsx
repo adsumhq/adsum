@@ -9,7 +9,7 @@ import { Creditos } from './componentes/Creditos.tsx'
 import { useCallback, useState } from 'react'
 import { prepararLista } from '../nucleo/nomes.ts'
 import { interpretarParticipantes } from '../nucleo/sigaa.ts'
-import { abrirVarios } from '../ambiente/arquivos.ts'
+import { abrirUm, abrirVarios } from '../ambiente/arquivos.ts'
 import { pastaDisponivel } from '../ambiente/pasta.ts'
 import { restaurarDeArquivos } from '../ambiente/restauracao.ts'
 import type { Matriculado } from '../nucleo/tipos.ts'
@@ -51,8 +51,7 @@ export function TelaColarTurma({
   const [problemas, setProblemas] = useState<string[]>([])
   const [recado, setRecado] = useState<{ tom: 'ok' | 'grave' | 'alerta'; texto: string }>()
 
-  const abrirPastaExistente = useCallback(async () => {
-    const arquivos = await abrirVarios()
+  const restaurarEscolhidos = useCallback(async (arquivos: File[]) => {
     if (arquivos.length === 0) return
     const { arquivos: lidos, problemas: falhas } = await restaurarDeArquivos(repositorio, arquivos)
     setProblemas(falhas)
@@ -63,6 +62,12 @@ export function TelaColarTurma({
     setRecado({ tom: 'ok', texto: `${lidos.length} arquivos lidos.` })
     aoMudarBase?.()
   }, [repositorio, aoMudarBase])
+
+  const abrirPastaExistente = useCallback(async () => restaurarEscolhidos(await abrirVarios()), [restaurarEscolhidos])
+  const abrirBackup = useCallback(async () => {
+    const arquivo = await abrirUm('.json,application/json')
+    await restaurarEscolhidos(arquivo ? [arquivo] : [])
+  }, [restaurarEscolhidos])
 
   const interpretar = useCallback(async () => {
     if (!turma.trim()) {
@@ -157,6 +162,8 @@ export function TelaColarTurma({
             <button onClick={() => void abrirPastaExistente()}>
               Já tenho uma pasta do Adsum
             </button>
+            {/* O backup que a ponte do endereço antigo baixa (`docs/14`). */}
+            <button onClick={() => void abrirBackup()}>Tenho um backup do Adsum</button>
           </div>
         )}
 

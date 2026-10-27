@@ -910,3 +910,47 @@ com o recarregar; o clique é no "Encerrar" do topo, que nenhum recado
 esconde; e a espera ganhou teste próprio, com HEAD dos dois lados
 (`republicar` publica o mesmo build com outro `index.html`). Ele falhou
 antes do conserto, apontando a recarga no meio da chamada.
+
+## 27/10/2026 — a ponte do endereço antigo
+
+O item 3 do código da mudança (`docs/14_casa_nova.md`), na `casa-nova-2`,
+fora do ar até a janela. A ponte é um build à parte (`npm run build:ponte`,
+`ponte/` e `src/ponte/`) que vai para o endereço antigo no lugar do app.
+
+O que viaja é a pasta que a base escreveria: cadastro, log de cada turma e
+auditoria do SIGAA (`arquivosDoCofre`). Por isso o endereço novo não ganhou
+leitor próprio: `#/chegada` restaura com a mesma função dos arquivos soltos
+do Safari, agora sobre `{ caminho, texto }`, e o backup em arquivo
+(`adsum-backup.json`) é a mesma lista num JSON. Três caminhos, uma
+restauração. O `auditoria/uids.csv` não vai: mora só na pasta.
+
+Decisões, com o porquê:
+
+- **Só em base vazia.** Com dados no endereço novo (a pasta escolhida antes,
+  ou a mudança repetida) a chegada responde `ja_tinha` e não toca em nada:
+  aula não tem chave natural, e restaurar por cima duplicaria a grade.
+- **A ponte só copia.** A base antiga fica como estava. É o que deixa voltar
+  atrás depois da transferência do repositório.
+- **O sal entra no chaveiro**, pelo `adotarSal` de sempre: base vazia adota o
+  do cofre e guarda o próprio, sorteado ao abrir. Nenhum sal descartado.
+- **O app instalado no Safari leva pelo arquivo.** O app instalado tem
+  armazenamento próprio, e a janela que ele abre cai no Safari: os dados
+  chegariam ao Safari, não ao app novo instalado. A tela de colar a turma
+  ganhou "Tenho um backup do Adsum", porque "Já tenho uma pasta" só aceita
+  pasta inteira (`webkitdirectory`).
+- **Mesmo `sw.js` e mesmo manifesto** (`manifesto.ts`) no mesmo caminho: o
+  service worker do app antigo troca de versão como numa atualização, e a
+  aba esquecida aberta vira a ponte em vez de ficar presa no cache.
+- **Outra janela do app novo aberta** relê a base quando a mudança chega
+  (`BroadcastChannel`), senão seguiria com o sal sorteado ao abrir.
+- **O favorito antigo do SIGAA** abre a ponte em `#/sigaa`, que diz para
+  arrastar o novo.
+
+O ensaio (`e2e/mudanca.spec.ts`) junta o que nenhum teste de unidade junta:
+a versão do ar com a cópia real do cofre em `localhost`, a ponte publicada no
+mesmo endereço entrando pelo service worker de verdade, a base levada a
+`127.0.0.1`, a mesma pasta escolhida lá sem duplicar nada, e uma chamada no
+endereço novo com os crachás do cofre: cada um reconhecido, e a mesma pessoa
+que era no antigo. Passou com o cofre de 19/10 (2 turmas, 133 crachás, 512
+registros). O de unidade (`ambiente/mudanca.test.ts`) roda sobre o cofre
+anonimizado de 22/09, com os `evento_id` renumerados e auditoria do SIGAA.
