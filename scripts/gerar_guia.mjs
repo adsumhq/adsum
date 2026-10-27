@@ -21,6 +21,9 @@ import { spawn } from 'node:child_process'
 import { join, resolve } from 'node:path'
 import { REPOSITORIO_URL, SITE } from '../src/nucleo/endereco.ts'
 
+// A organização, que guarda o Adsum e o que mais vier dele.
+const ORGANIZACAO_URL = REPOSITORIO_URL.replace(/\/[^/]+$/, '')
+
 const RAIZ = fileURLToPath(new URL('..', import.meta.url))
 const SAIDA = fileURLToPath(new URL('../docs/Adsum-guia.pdf', import.meta.url))
 const ICONE = readFileSync(new URL('../public/icone-512.png', import.meta.url)).toString('base64')
@@ -225,6 +228,11 @@ function guia(t) {
   p { margin: 0 0 2.2mm; }
   .lead { font-size: 12.5pt; color: var(--fraca); line-height: 1.4; margin-bottom: 7mm; max-width: 150mm; }
   .sobretitulo { font-size: 9pt; font-weight: 600; color: var(--acao); text-transform: uppercase; letter-spacing: .08em; margin-bottom: 2mm; }
+  /* O endereço é a primeira coisa que o professor precisa: grande, azul, clicável no PDF. */
+  .endereco { display: inline-block; margin-top: 5mm; padding: 2.2mm 6mm; border-radius: 99mm;
+    background: var(--acao-fraca); color: var(--acao); font-size: 17pt; font-weight: 650;
+    letter-spacing: -.01em; text-decoration: none; }
+  .endereco--passo { margin: 1mm 0 2mm; font-size: 13pt; padding: 1.6mm 5mm; }
   kbd, .mono { font-family: ui-monospace, 'SF Mono', Menlo, monospace; font-size: 9pt;
     background: var(--fundo-alt); border-radius: 4px; padding: 0 1.2mm; }
   b { font-weight: 600; }
@@ -336,6 +344,7 @@ function guia(t) {
     ${img(ICONE, 'icone')}
     <h1>Adsum</h1>
     <p class="lead">A chamada por crachá, do primeiro dia de aula até a frequência lançada no SIGAA.</p>
+    <a class="endereco" href="${SITE}">${ENDERECO_DO_SITE}</a>
   </div>
   <div class="leque">
     ${janela(t.repouso, 'Adsum', 'esq')}
@@ -387,7 +396,7 @@ function guia(t) {
     <div class="numero"><strong>Chrome</strong><span>ou Edge, no computador que o professor já usa em sala</span></div>
     <div class="numero"><strong>0 instalação</strong><span>o endereço abre o Adsum; instalar como app é opcional e leva um clique</span></div>
   </div>
-  <p style="color:var(--fraca); font-size:9.4pt">Em uso real desde setembro de 2026 na turma do Prof. Paulo. Em 22/10/2026, na sala do Prof. Paulo, o Adsum conferiu a turma contra o SIGAA, apontou cada diferença e lançou as faltas na planilha de frequência, que o professor gravou. O código é aberto e cada versão passa por testes automáticos com o leitor de verdade antes de ir ao ar.</p>
+  <p style="color:var(--fraca); font-size:9.4pt">Em uso real desde setembro de 2026 na turma do Prof. Paulo. Em 22/10/2026, na sala do Prof. Paulo, o Adsum conferiu a turma contra o SIGAA, apontou cada diferença e lançou as faltas na planilha de frequência, que o professor gravou. O código é aberto, em <a class="mono" href="${ORGANIZACAO_URL}">${ORGANIZACAO_URL.replace(/^https:\/\//, '')}</a>, e cada versão passa por testes automáticos com o leitor de verdade antes de ir ao ar.</p>
   <div class="rodape"><span>Adsum · guia de uso</span><span>2</span></div>
 </div>
 
@@ -398,7 +407,8 @@ function guia(t) {
   <p class="lead">Dez minutos, uma vez por computador. Nada aqui se repete nas aulas seguintes.</p>
   <div class="passos">
     ${passo(1, 'Abra no Chrome', `
-      <p>Abra <span class="mono">${ENDERECO_DO_SITE}</span> no <b>Chrome</b> (ou no Edge). Só eles deixam o Adsum gravar direto numa pasta do computador.</p>
+      <p>Abra o endereço oficial do Adsum no <b>Chrome</b> (ou no Edge). Só eles deixam o Adsum gravar direto numa pasta do computador.</p>
+      <a class="endereco endereco--passo" href="${SITE}">${ENDERECO_DO_SITE}</a>
       <p>Ligue o leitor numa porta USB. Não há o que instalar: ele se apresenta ao computador como um teclado.</p>
       ${dica('Uma vez só, o Adsum oferece abrir em janela própria, com ícone no Dock ou na barra de tarefas. Toque em <b>Instalar</b>: ele passa a abrir num clique, sem procurar entre as abas.')}`,
       `<div class="dupla" style="grid-template-columns:1fr">${janela(t.leitor, 'Ajustes · O leitor de crachá')}</div>`)}
