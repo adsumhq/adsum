@@ -370,10 +370,11 @@ a entender que os dados estão seguros** neles.
 - **Armazenamento persistente costuma ser recusado** enquanto o app não é
   instalado. Sem ele o navegador pode apagar a base sob pressão de espaço — por
   isso o diagnóstico mostra o estado e oferece o botão de pedir.
-- **`base` do Vite é `/adsum/`**, para `github.com/willianrupert/adsum`. A pasta
-  local continua `Adsum_web` — nome de pasta e nome de repositório não precisam
-  bater, e o do site é o que aparece na URL. Renomear o repositório sem ajustar
-  `vite.config.ts` publica um site que não carrega nada.
+- **O endereço do Adsum mora em `src/nucleo/endereco.ts`**: origem, caminho
+  (o `base` do Vite, hoje `/adsum/`), repositório e o link do guia. O
+  `endereco.test.ts` falha se ele aparecer escrito à mão noutro arquivo do
+  app. A mudança para `adsum.cin.ufpe.br` está em `docs/14_casa_nova.md`: a
+  origem prende a base e o favorito, e por isso muda uma vez só, numa janela.
 - **O firmware ainda não é repositório.** Se um dia for, `adsum` já estará
   ocupado por este — o nome natural para ele é `adsum-a1`, que é a nomenclatura
   do próprio projeto: Adsum é o sistema, Adsum A1 é o aparelho.

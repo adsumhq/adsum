@@ -1,7 +1,7 @@
 // O guia não vem embutido: é baixado da `main` na hora (`GUIA_URL`). É o
 // único gesto do Adsum que usa a rede, e só quando o professor pede.
 
-import { GUIA_URL } from '../nucleo/cofre.ts'
+import { GUIA_URL } from '../nucleo/endereco.ts'
 import { salvarBinario } from './arquivos.ts'
 
 /** Baixa e salva o guia. Devolve o que dizer na tela, ou nada se cancelado. */

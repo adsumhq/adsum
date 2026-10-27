@@ -4,7 +4,7 @@
 import { type ComponentProps, useState } from 'react'
 import { semDono } from '../ambiente/diario.ts'
 import { baixarGuia } from '../ambiente/guia.ts'
-import { REPOSITORIO_URL } from '../nucleo/cofre.ts'
+import { REPOSITORIO_URL } from '../nucleo/endereco.ts'
 import { TelaRepositorio } from './TelaRepositorio.tsx'
 
 export function FolhaDeAjustes({

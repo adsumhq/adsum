@@ -27,6 +27,8 @@
 
 const fs = require('fs')
 const path = require('path')
+const { REPOSITORIO_URL, SITE } = require('../src/nucleo/endereco.ts')
+const semProtocolo = (url) => url.replace(/^https:\/\//, '')
 
 const RAIZ = path.join(__dirname, '..', 'docs')
 const DIAGRAMA = path.join(RAIZ, 'cracha-para-hash.png')
@@ -188,7 +190,7 @@ const corpo = [
   destaque([
     p([t('Todas as telas, numa página só. ', { bold: true }),
        t('Antes de cadastrar qualquer turma, dá para conhecer o Adsum inteiro em '),
-       mono('willianrupert.github.io/adsum/#/vitrine'),
+       mono(`${semProtocolo(SITE)}#/vitrine`),
        t('. Os nomes ali são inventados e nada é gravado — é a maneira de ver, de uma vez, telas que de outro modo só apareceriam no meio de uma aula. Se alguma delas parecer confusa, é o melhor momento para dizer.')],
       { spacing: { after: 0 } }),
   ]),
@@ -443,7 +445,7 @@ const corpo = [
 
   new Paragraph({ spacing: { before: 500 }, children: [
     t('Código-fonte e histórico de decisões: ', { color: FRACA, size: 20 }),
-    new TextRun({ text: 'github.com/willianrupert/adsum', font: 'Courier New', size: 20, color: FRACA }),
+    new TextRun({ text: semProtocolo(REPOSITORIO_URL), font: 'Courier New', size: 20, color: FRACA }),
   ]}),
 ]
 

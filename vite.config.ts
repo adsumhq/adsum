@@ -3,11 +3,11 @@ import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 import { VitePWA } from 'vite-plugin-pwa'
 import { pluginDoFavorito } from './src/favorito/construir.ts'
+import { CAMINHO } from './src/nucleo/endereco.ts'
 
-// O GitHub Pages serve o site em `/<repositório>/`, então o `base` do build
-// precisa casar com o nome do repositório. Renomeou o repositório? Ajuste aqui,
-// ou passe `BASE_ADSUM` no ambiente do workflow.
-const base = process.env.BASE_ADSUM ?? '/adsum/'
+// O `base` do build é o caminho do app no endereço publicado. `BASE_ADSUM`
+// troca só para ensaio (um build servido noutro caminho).
+const base = process.env.BASE_ADSUM ?? CAMINHO
 
 /**
  * Carimbo da build, para os Ajustes poderem responder "esta cópia é a atual?".

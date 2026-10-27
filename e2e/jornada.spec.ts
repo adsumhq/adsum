@@ -6,7 +6,7 @@
 // professor deixou na folha. O teto do SIGAA não é o que aconteceu: a aula
 // de 14/10 teve 4 aulas e ele sobe para 4; a de 18/11 fica com 2.
 //
-// Tudo local: o Chrome pede `willianrupert.github.io` e `sigaa.ufpe.br`, e
+// Tudo local: o Chrome pede o site publicado e `sigaa.ufpe.br`, e
 // quem responde é o teste (`apoio/enderecos.ts`), com o build do commit e a
 // planilha anonimizada da bancada. Com `ADSUM_RIG`, os crachás passam pelo
 // rig S3, como teclado USB de verdade (`apoio/dongle.ts`).

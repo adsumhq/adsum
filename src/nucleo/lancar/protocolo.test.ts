@@ -9,10 +9,10 @@ import {
   receberPlano,
   receberPronto,
 } from './protocolo.ts'
+import { ORIGEM as ADSUM } from '../endereco.ts'
 import { validarPlano } from './plano.ts'
 import { comoDia, type LeituraPlanilha } from './tipos.ts'
 
-const ADSUM = 'https://willianrupert.github.io'
 const sigaa = { nome: 'janela do SIGAA' }
 const adsum = { nome: 'janela do Adsum' }
 const BRUTO = { qualquer: 'coisa que a leitura vai interpretar' }
@@ -84,7 +84,7 @@ describe('Adsum → favorito: o plano', () => {
   })
 
   it('recusa outra origem e outra janela', () => {
-    expect(receberPlano(evento(mensagemDePlano('l-1', [instrucao]), 'https://willianrupert.github.io.exemplo.com'), esperado)).toEqual({
+    expect(receberPlano(evento(mensagemDePlano('l-1', [instrucao]), `${ADSUM}.exemplo.com`), esperado)).toEqual({
       ok: false,
       motivo: 'origem',
     })

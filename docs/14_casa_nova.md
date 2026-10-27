@@ -79,6 +79,19 @@ sai do código **antes** da transferência.
 - [ ] Código da mudança, nesta branch.
 - [ ] Janela da migração.
 
+## Estado em 26/10/2026
+
+- [x] O helpdesk do CIn (chamado #13178) criou o `CNAME`, certo. O `TXT` saiu
+  com a zona duplicada no nome (`...adsum.cin.ufpe.br.cin.ufpe.br`, falta do
+  ponto final no arquivo do BIND); a correção foi pedida no mesmo chamado.
+- [x] O domínio está reivindicado: `adsumhq/pagina-provisoria` serve
+  `adsum.cin.ufpe.br` com HTTPS, uma página sem script nem service worker que
+  só aponta para o endereço de hoje. Com o `CNAME` apontando para o GitHub e
+  nenhum site no domínio, outra conta podia tomá-lo. Na janela, o domínio
+  sai dela antes de entrar no app, e ela é arquivada.
+- [x] Itens 1 e 2 do código, abaixo.
+- [ ] Verificar o domínio na organização, quando o `TXT` estiver certo.
+
 ## O pedido ao CIn
 
 O DNS de `cin.ufpe.br` é da TI do CIn (`dns1`, `dns2`, `dns3.cin.ufpe.br`).
@@ -108,14 +121,15 @@ permissão, fica o texto "CIn UFPE".
 Tudo nesta branch, sem merge na `main` até a janela: qualquer push na `main`
 reconstrói o site.
 
-1. **Um ponto só para o endereço.** Hoje a origem está espalhada:
-   `REPOSITORIO_URL` e `MANUAL_URL` (`nucleo/cofre.ts`), `ORIGEM` do favorito
-   (`favorito/destino.ts`, na v2), README, `scripts/gerar_manual.cjs` e os
-   testes. Juntar numa constante, e um teste que falha se sobrar
-   `willianrupert` fora do histórico.
-2. **`BASE_ADSUM`.** O `publicar.yml` monta o `base` pelo nome do
-   repositório (`/adsum/`). No domínio próprio vira `/`, ou `/app/` se houver
-   landing. Esquecer isso publica um site que não carrega nada.
+1. **Um ponto só para o endereço.** Feito: `src/nucleo/endereco.ts` guarda a
+   origem, o caminho, o repositório e o link do guia, e o favorito, os
+   Ajustes, o LEIA-ME, os testes, o e2e e os geradores do guia e do manual
+   leem de lá. O `endereco.test.ts` falha se o endereço aparecer escrito à
+   mão noutro arquivo do app. Ficam de fora o README, o `CLAUDE.md` e os
+   `docs/`, que mudam à mão na janela.
+2. **O `base` do Vite.** Feito: vem de `CAMINHO`, em `endereco.ts`, e não
+   mais do nome do repositório no `publicar.yml`. No domínio próprio vira
+   `/`, ou `/app/` se houver landing.
 3. **A ponte**, uma build à parte que fica em `willianrupert.github.io/adsum/`:
    - avisa que o Adsum mudou para `adsum.cin.ufpe.br`;
    - **Levar meus dados**: abre o endereço novo e entrega a base por

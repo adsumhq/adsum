@@ -4,10 +4,10 @@
 
 import { execFileSync } from 'node:child_process'
 import { expect, test, type Page } from '@playwright/test'
-import { GUIA_URL } from '../../src/nucleo/cofre.ts'
+import { GUIA_URL, SITE as NO_AR_SITE } from '../../src/nucleo/endereco.ts'
 
 // `ADSUM_SITE` aponta para outro endereço (um build servido localmente, para conferir este próprio teste).
-const SITE = process.env.ADSUM_SITE ?? 'https://willianrupert.github.io/adsum/'
+const SITE = process.env.ADSUM_SITE ?? NO_AR_SITE
 const NO_AR = !process.env.ADSUM_SITE
 
 const git = (...args: string[]) => execFileSync('git', args, { encoding: 'utf-8' }).trim()

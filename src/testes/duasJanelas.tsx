@@ -7,12 +7,12 @@ import { render } from '@testing-library/react'
 import { PonteJanela } from '../adaptadores/sigaa/PonteJanela.ts'
 import type { PaginaDePlanilha } from '../favorito/pagina.ts'
 import { lancarPeloFavorito, type Destino } from '../favorito/ligacao.ts'
+import { ORIGEM as ADSUM, SITE } from '../nucleo/endereco.ts'
 import { ORIGEM_SIGAA } from '../nucleo/lancar/protocolo.ts'
 import type { Repositorio } from '../portas/Repositorio.ts'
 import { FolhaSigaa } from '../ui/sigaa/FolhaSigaa.tsx'
 
-const ADSUM = 'https://willianrupert.github.io'
-const DESTINO: Destino = { origem: ADSUM, url: `${ADSUM}/adsum/#/sigaa` }
+const DESTINO: Destino = { origem: ADSUM, url: `${SITE}#/sigaa` }
 
 export function clicarNoFavorito(repositorio: Repositorio, pagina: PaginaDePlanilha, agora?: Date) {
   const naPlanilha = new EventTarget()

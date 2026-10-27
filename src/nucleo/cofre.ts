@@ -12,6 +12,7 @@
 
 import type { Aula, Config, Matriculado, Vinculo } from './tipos.ts'
 import { nomeSeguroDeTurma } from './csv.ts'
+import { GUIA_URL } from './endereco.ts'
 
 export const VERSAO = 1
 
@@ -77,22 +78,6 @@ export const NOMES = {
   turma: (turma: string) => `turmas/${nomeSeguroDeTurma(turma)}.json`,
   leiaMe: 'LEIA-ME.txt',
 } as const
-
-/**
- * O guia de uso não vem embutido no app — ele vive no GitHub, versionado junto
- * com o código, e o botão "Guia" em Ajustes busca uma cópia de lá na hora.
- * O manual com o tratamento de dados (LGPD) continua no repositório, mas o app
- * não o oferece: o professor aprende pelo guia. Único lugar do Adsum que precisa de internet: todo o resto
- * — chamada, planilha, cofre — continua funcionando offline. `raw.
- * githubusercontent.com` serve o arquivo puro, sem a página do GitHub em
- * volta, e libera o pedido de qualquer origem (CORS), como qualquer
- * arquivo público de um repositório.
- */
-export const GUIA_URL = 'https://raw.githubusercontent.com/willianrupert/adsum/main/docs/Adsum-guia.pdf'
-
-/** O botão "GitHub" do rodapé de Ajustes — a página do repositório, não o
-    arquivo cru como `GUIA_URL`: aqui quem abre é gente, não `fetch`. */
-export const REPOSITORIO_URL = 'https://github.com/willianrupert/adsum'
 
 /**
  * A pasta se explica sozinha.
