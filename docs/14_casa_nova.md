@@ -157,14 +157,15 @@ reconstrói o site.
 
 ### Em discussão
 
-- **Landing em `/` e app em `/app/`.** Uma página para quem ainda não conhece
-  o Adsum: o que é, como funciona, o que é preciso, nenhum dado sai do
-  computador, e uma ação, "Abrir o Adsum". No visual do Adsum, com o CIn como
-  assinatura. O portal do CIn e os subdomínios não têm visual único
-  (`cinopenday` é roxo), e o vermelho institucional colidiria com o vermelho
-  de "destrutivo" do app. A landing fica fora do caminho do crachá.
+- **O app fica em `/`**, decidido pelo autor em 26/10/2026: o mais simples.
+  Sem landing na frente, `adsum.cin.ufpe.br` abre o próprio Adsum, e na
+  janela `CAMINHO` (`src/nucleo/endereco.ts`) vira `/`. Quem ainda não
+  conhece o Adsum o conhece pela `#/vitrine` e pelo guia. A ideia da landing
+  (o que é, o que é preciso, uma ação "Abrir o Adsum", no visual do app com o
+  CIn como assinatura) fica guardada; se um dia voltar, terá de morar noutro
+  caminho, porque o do app não muda mais.
 - **Windows e Linux.** O desenho não depende de sistema, mas nunca foi
-  ensaiado neles. Até ser, a landing diz "Chrome ou Edge no computador".
+  ensaiado neles. Até ser, o guia diz "Chrome ou Edge no computador".
 
 ## A janela da migração
 
