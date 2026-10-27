@@ -229,7 +229,7 @@ function guia(t) {
   .lead { font-size: 12.5pt; color: var(--fraca); line-height: 1.4; margin-bottom: 7mm; max-width: 150mm; }
   .sobretitulo { font-size: 9pt; font-weight: 600; color: var(--acao); text-transform: uppercase; letter-spacing: .08em; margin-bottom: 2mm; }
   /* O endereço é a primeira coisa que o professor precisa: grande, azul, clicável no PDF. */
-  .endereco { display: block; width: fit-content; margin: 5mm auto 0; padding: 2.2mm 6mm; border-radius: 99mm;
+  .endereco { display: block; width: fit-content; margin: 10mm auto 9mm; padding: 2.2mm 6mm; border-radius: 99mm;
     background: var(--acao-fraca); color: var(--acao); font-size: 17pt; font-weight: 650;
     letter-spacing: -.01em; text-decoration: none; }
   .endereco--passo { margin: 1mm auto 2mm; font-size: 13pt; padding: 1.6mm 5mm; }
@@ -238,7 +238,7 @@ function guia(t) {
   b { font-weight: 600; }
 
   /* Capa */
-  .capa { justify-content: space-between; padding-top: 34mm; }
+  .capa { justify-content: space-between; padding-top: 24mm; }
   /* Sem sombra com desfoque: o Chrome a grava como imagem com máscara, e o
      Pré-Visualização do Mac pinta a máscara inteira de cinza. */
   .capa .icone { width: 30mm; height: 30mm; border-radius: 7mm; }
@@ -246,10 +246,11 @@ function guia(t) {
   .capa .lead { font-size: 17pt; max-width: 150mm; color: var(--fraca); }
   .capa .leque { margin: 0 -18mm; display: flex; justify-content: center; align-items: flex-start; gap: 0; }
   .capa .leque .janela { width: 64mm; }
-  .capa .leque .janela img { max-height: 98mm; object-fit: cover; object-position: top; }
+  .capa .leque .janela img { max-height: 90mm; object-fit: cover; object-position: top; }
   .capa .leque .meio { width: 76mm; z-index: 2; margin: 0 -8mm; }
   .capa .leque .esq { transform: rotate(-4deg); margin-top: 10mm; }
   .capa .leque .dir { transform: rotate(4deg); margin-top: 10mm; }
+  .capa .leque { margin-bottom: 8mm; }
   .capa .pe { display: flex; justify-content: space-between; align-items: center; font-size: 9.5pt; color: var(--fraca); }
   .capa .pe b { color: var(--tinta); }
   /* O cartão de créditos da tela inicial do app (Creditos.tsx), sem a seta. */
@@ -293,6 +294,8 @@ function guia(t) {
   /* Passos */
   .passos { display: flex; flex-direction: column; gap: 7mm; flex: 1; }
   .passo { display: grid; grid-template-columns: 1fr 1.05fr; gap: 8mm; align-items: start; }
+  /* Figura mais baixa que o texto fica no meio dele, sem um vão embaixo. */
+  .passo__figura { align-self: center; }
   .passo--largo { grid-template-columns: 1fr; gap: 4mm; }
   .passo--largo .passo__figura { max-width: 150mm; }
   .passo__n { display: inline-grid; place-items: center; width: 7mm; height: 7mm; border-radius: 50%;
