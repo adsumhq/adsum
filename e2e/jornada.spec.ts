@@ -18,6 +18,7 @@ import { join } from 'node:path'
 import { expect, test, type Page } from '@playwright/test'
 import { PASTA_DA_BANCADA } from '../playwright.config.ts'
 import { versao, type Versao } from './apoio/versoes.ts'
+import { CAMINHO } from '../src/nucleo/endereco.ts'
 import { lerPasta, trocarSeletor } from './apoio/cofre.ts'
 import { atenderEnderecos, SIGAA, SITE } from './apoio/enderecos.ts'
 import { COM_RIG, desligarDongle, encostar, encostarJuntos, ligarDongle } from './apoio/dongle.ts'
@@ -34,7 +35,7 @@ let alunos: AlunoDaBancada[]
 let codigo: string
 
 test.beforeAll(async () => {
-  nova = versao(process.env.ADSUM_NOVA ?? 'HEAD')
+  nova = versao(process.env.ADSUM_NOVA ?? 'HEAD', CAMINHO)
   alunos = alunosDaBancada(PASTA_DA_BANCADA)
   codigo = codigoDaBancada(PASTA_DA_BANCADA)
   await ligarDongle()

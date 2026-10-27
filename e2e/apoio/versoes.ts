@@ -41,10 +41,14 @@ export function commitNoAr(): string {
   return 'origin/main'
 }
 
-/** Monta um commit como o deploy monta (`base` `/adsum/`), uma vez só por commit. */
-export function versao(referencia: string): Versao {
+/**
+ * Monta um commit, uma vez só por commit e caminho. O padrão é `/adsum/`, o
+ * caminho que a hospedagem local (`hospedar`) serve; quem atende o endereço
+ * de verdade (`apoio/enderecos.ts`) pede o `CAMINHO` do app.
+ */
+export function versao(referencia: string, base = '/adsum/'): Versao {
   const commit = git('rev-parse', referencia)
-  const pasta = join(CACHE, commit)
+  const pasta = join(CACHE, base === '/adsum/' ? commit : `${commit}${base.replaceAll('/', '_')}`)
   if (!existsSync(join(pasta, 'index.html'))) {
     const fonte = join(CACHE, `fonte-${commit}`)
     rmSync(fonte, { recursive: true, force: true })
@@ -52,13 +56,13 @@ export function versao(referencia: string): Versao {
     git('worktree', 'add', '--detach', fonte, commit)
     try {
       execFileSync('npm', ['ci', '--silent', '--no-audit', '--no-fund'], { cwd: fonte, stdio: 'ignore' })
-      execFileSync('npm', ['run', 'build'], { cwd: fonte, stdio: 'ignore', env: { ...process.env, BASE_ADSUM: '/adsum/' } })
+      execFileSync('npm', ['run', 'build'], { cwd: fonte, stdio: 'ignore', env: { ...process.env, BASE_ADSUM: base } })
       cpSync(join(fonte, 'dist'), pasta, { recursive: true })
     } finally {
       git('worktree', 'remove', '--force', fonte)
     }
   }
-  const entrada = /src="\/adsum\/assets\/(index-[^"]+\.js)"/.exec(readFileSync(join(pasta, 'index.html'), 'utf-8'))?.[1]
+  const entrada = new RegExp(`src="${base}assets/(index-[^"]+\\.js)"`).exec(readFileSync(join(pasta, 'index.html'), 'utf-8'))?.[1]
   if (!entrada) throw new Error(`build de ${commit} sem script de entrada`)
   return { commit, pasta, entrada }
 }
